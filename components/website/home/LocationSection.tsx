@@ -105,7 +105,7 @@ const LocationSection = () => {
               {"LOCATIONS".split("").map((letter, index) => (
                 <span
                   key={index}
-                  className="text-[clamp(3rem,12vw,8.5rem)] font-bold text-black tracking-tight leading-[1.1]"
+                  className="text-[clamp(3rem,12vw,8.5rem)] font-bold text-black tracking-tight leading-[1.12]"
                 >
                   {letter}
                 </span>
@@ -118,7 +118,7 @@ const LocationSection = () => {
           <div className="col-span-12 md:col-span-5 flex md:justify-end order-1 md:order-3">
             <div className="space-y-1 text-right">
               {/*==================== Locations stack ====================*/}
-              <div className="space-y-17">
+              <div className="space-y-18">
                 {locations.map((location) => (
                   <button
                     key={location.id}
