@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function CommunitySection() {
   return (
-    <section className="min-h-screen py-32 px-4 bg-white">
+    <section className="min-h-screen py-32 px-4 bg-cream">
       <div className="mx-auto">
         <div className="grid grid-cols-12 gap-8">
           {/*==================== Left side ====================*/}
@@ -32,7 +32,7 @@ export default function CommunitySection() {
 
           {/*==================== Right side ====================*/}
           <div className="col-span-12 md:col-span-5 flex justify-end">
-            <p className="text-sm uppercase tracking-[0.3em] text-navy/60">
+            <p className="text-sm uppercase tracking-[0.3em] text-black/80">
               | Community |
             </p>
           </div>
