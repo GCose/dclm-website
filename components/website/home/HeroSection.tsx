@@ -4,13 +4,13 @@ const HeroSection = () => {
   return (
     <section className="min-h-screen pt-25 pb-20 px-6 md:px-8 bg-cream">
       <div className="mx-auto">
-        <h1 className="text-[clamp(3rem,12vw,9rem)] font-semibold leading-[1.2] tracking-tight mb-10">
+        <h1 className="text-[clamp(3rem,12vw,8.5rem)] font-semibold leading-[1.2] tracking-tight mb-10">
           WELCOME TO DCLM
           <br />
           BRIKAMA REGION
         </h1>
 
-        <div className="relative w-full h-screen mb-16">
+        <div className="relative w-full h-screen mb-10">
           <Image
             fill
             priority
@@ -20,7 +20,7 @@ const HeroSection = () => {
           />
         </div>
 
-        <div className="max-w-4xl ml-auto">
+        <div className="max-w-6xl ml-auto">
           <p className="text-[clamp(1.5rem,4vw,2.5rem)] leading-[1.1] text-black">
             <span className="pl-30">
               A vibrant community of believers in Brikama
