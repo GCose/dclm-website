@@ -22,7 +22,7 @@ export default function Navigation() {
           : "bg-transparent py-6"
       }`}
     >
-      <div className="mx-auto px-6 md:px-8 flex justify-between items-center">
+      <div className="mx-auto px-4 md:px-6 flex justify-between items-center">
         <Link href="/" className="group">
           <h2 className="text-xl md:text-2xl font-light tracking-tight hover:text-terracotta transition-colors duration-300">
             DCLM
