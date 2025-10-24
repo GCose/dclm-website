@@ -1,6 +1,7 @@
 import Head from "next/head";
 import HeroSection from "@/components/website/home/HeroSection";
 import Navigation from "@/components/website/layout/Navigation";
+import CommunitySection from "@/components/website/home/CommunitySection";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
 
       <Navigation />
       <HeroSection />
+      <CommunitySection />
     </>
   );
 }
