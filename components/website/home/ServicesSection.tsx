@@ -39,7 +39,7 @@ const ServicesSection = () => {
           {/*==================== Right side - Content ====================*/}
           <div className="col-span-12 md:col-span-10">
             {/*==================== Header ====================*/}
-            <div className="mb-35">
+            <div className="mb-20 md:mb-35">
               <h2 className="text-[clamp(3rem,8vw,8.5rem)] font-semibold leading-[1.1] tracking-tight text-black mb-4">
                 OUR MEETING DAYS
               </h2>
@@ -47,20 +47,20 @@ const ServicesSection = () => {
             {/*==================== End of Header ====================*/}
 
             {/*==================== Services list ====================*/}
-            <div className="space-y-35">
+            <div className="space-y-20 md:space-y-35">
               {services.map((service) => (
                 <div
                   key={service.id}
                   className="border-b border-black pb-8 lg:mr-18 flex flex-col items-end"
                 >
-                  <h3 className="text-[clamp(2rem,5vw,4rem)] font-heading leading-[1.1] tracking-tight text-black mb-2">
+                  <h3 className="text-[clamp(1.5rem,5vw,4rem)] font-heading leading-[1.1] tracking-tight text-black mb-2">
                     {service.day}
                   </h3>
                   <p className="font-body text-[clamp(1.25rem,2vw,1.75rem)] text-black/80 mb-2">
                     {service.time}
                   </p>
                   {service.description && (
-                    <p className="font-body text-[clamp(1.5rem,4vw,1.9rem)] text-black/60 mt-4">
+                    <p className="font-body text-[clamp(1.2rem,4vw,1.9rem)] text-black/60 mt-4">
                       {service.description}
                     </p>
                   )}

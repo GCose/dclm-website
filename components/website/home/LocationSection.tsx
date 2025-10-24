@@ -76,7 +76,7 @@ const LocationSection = () => {
       <div className="mx-auto">
         <div className="grid grid-cols-12 gap-0">
           {/*==================== Left side - 40% ====================*/}
-          <div className="col-span-12 md:col-span-5 space-y-10 order-2 md:order-1">
+          <div className="col-span-12 md:col-span-5 space-y-10 order-2 mt-10 md:mt-0 md:order-1">
             {/*==================== Editorial image ====================*/}
             <div className="relative w-full h-screen">
               <Image
