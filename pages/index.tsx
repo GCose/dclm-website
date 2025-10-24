@@ -12,7 +12,7 @@ export default function Home() {
           content="Where faith meets community in the heart of Brikama, The Gambia. Join us for worship, fellowship, and spiritual growth."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/images/favicon.png" />
       </Head>
 
       <Navigation />
