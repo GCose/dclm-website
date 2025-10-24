@@ -2,6 +2,7 @@ import Head from "next/head";
 import HeroSection from "@/components/website/home/HeroSection";
 import Navigation from "@/components/website/layout/Navigation";
 import LocationSection from "@/components/website/home/LocationSection";
+import ServicesSection from "@/components/website/home/ServicesSection";
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
       <Navigation />
       <HeroSection />
       <LocationSection />
+      <ServicesSection />
     </>
   );
 }

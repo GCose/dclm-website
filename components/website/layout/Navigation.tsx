@@ -19,7 +19,7 @@ export default function Navigation() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
         scrolled
-          ? "bg-off-white/95 backdrop-blur-xl py-2"
+          ? "bg-white backdrop-blur-xl py-2"
           : "bg-transparent py-2"
       }`}
     >
