@@ -4,7 +4,7 @@ const HeroSection = () => {
   return (
     <section className="min-h-screen pt-25 pb-20 px-4 md:px-6 bg-cream">
       <div className="mx-auto">
-        <h1 className="text-[clamp(3rem,12vw,8.5rem)] font-semibold leading-[1.2] tracking-tight mb-10">
+        <h1 className="text-[clamp(3rem,12vw,8.5rem)] text-black font-semibold leading-[1.2] tracking-tight mb-10">
           WELCOME TO DCLM
           <br />
           BRIKAMA REGION
