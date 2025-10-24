@@ -2,18 +2,20 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <section className="min-h-screen pb-20 px-6 md:px-12 lg:px-16 bg-cream">
+    <section className="min-h-screen pt-25 pb-20 px-6 md:px-8 bg-cream">
       <div className="mx-auto">
-        <h1 className="text-[clamp(4rem,12vw,8rem)] font-semibold leading-[1.2] tracking-tight mb-16 md:mb-24">
-          DEEPER CHRISTIAN <br /> LIFE MINISTRY
+        <h1 className="text-[clamp(3rem,12vw,8rem)] font-semibold leading-[1.2] tracking-tight mb-3">
+          WELCOME TO DCLM
+          <br />
+          BRIKAMA REGION
         </h1>
 
-        <div className="relative w-full p-4 h-[70vh] md:h-[80vh] mb-16">
+        <div className="relative w-full h-screen mb-16">
           <Image
             fill
             priority
+            src="/images/hero.jpg"
             className="object-cover"
-            src="/images/worship.jpg"
             alt="DCLM Brikama congregation"
           />
         </div>
@@ -30,11 +32,11 @@ export default function HeroSection() {
             <span className="flex items-center gap-2">
               Join Us This Sunday
               <svg
-                className="w-4 h-4 group-hover:translate-x-1 transition-transform"
                 fill="none"
+                strokeWidth={2}
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                strokeWidth={2}
+                className="w-4 h-4 group-hover:translate-x-1 transition-transform"
               >
                 <path
                   strokeLinecap="round"

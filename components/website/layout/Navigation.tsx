@@ -18,45 +18,45 @@ export default function Navigation() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
         scrolled
-          ? "bg-off-white/95 backdrop-blur-xl py-8 shadow-sm"
-          : "bg-transparent py-10"
+          ? "bg-off-white/95 backdrop-blur-xl py-4 shadow-sm"
+          : "bg-transparent py-6"
       }`}
     >
-      <div className="max-w-[1800px] mx-auto px-6 md:px-12 lg:px-16 flex justify-between items-center">
+      <div className="mx-auto px-6 md:px-8 flex justify-between items-center">
         <Link href="/" className="group">
           <h2 className="text-xl md:text-2xl font-light tracking-tight hover:text-terracotta transition-colors duration-300">
             DCLM
           </h2>
         </Link>
 
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden md:flex items-center gap-8">
           <Link
             href="/about"
-            className="text-sm uppercase tracking-widest hover:text-terracotta transition-colors duration-300"
+            className="text-base uppercase tracking-widest hover:text-terracotta transition-colors duration-300"
           >
             About
           </Link>
           <Link
             href="/events"
-            className="text-sm uppercase tracking-widest hover:text-terracotta transition-colors duration-300"
+            className="text-base uppercase tracking-widest hover:text-terracotta transition-colors duration-300"
           >
             Events
           </Link>
           <Link
             href="/ministries"
-            className="text-sm uppercase tracking-widest hover:text-terracotta transition-colors duration-300"
+            className="text-base uppercase tracking-widest hover:text-terracotta transition-colors duration-300"
           >
             Ministries
           </Link>
           <Link
             href="/sermons"
-            className="text-sm uppercase tracking-widest hover:text-terracotta transition-colors duration-300"
+            className="text-base uppercase tracking-widest hover:text-terracotta transition-colors duration-300"
           >
             Sermons
           </Link>
           <Link
             href="/contact"
-            className="text-sm uppercase tracking-widest hover:text-terracotta transition-colors duration-300"
+            className="text-base uppercase tracking-widest hover:text-terracotta transition-colors duration-300"
           >
             Contact
           </Link>
