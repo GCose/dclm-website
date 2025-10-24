@@ -4,7 +4,7 @@ export default function HeroSection() {
   return (
     <section className="min-h-screen pt-25 pb-20 px-6 md:px-8 bg-cream">
       <div className="mx-auto">
-        <h1 className="text-[clamp(3rem,12vw,8rem)] font-semibold leading-[1.2] tracking-tight mb-3">
+        <h1 className="text-[clamp(3rem,12vw,8rem)] font-semibold leading-[1.2] tracking-tight mb-10">
           WELCOME TO DCLM
           <br />
           BRIKAMA REGION
@@ -20,32 +20,12 @@ export default function HeroSection() {
           />
         </div>
 
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-          <div className="space-y-2">
-            <p className="text-gold uppercase tracking-[0.2em] text-sm font-medium">
-              Brikama, The Gambia
-            </p>
-            <p className="text-text-gray text-lg">Sundays at 9:00 AM</p>
-          </div>
-
-          <button className="group bg-terracotta text-white px-8 py-4 rounded-full font-medium tracking-wide hover:scale-[1.02] transition-all duration-300">
-            <span className="flex items-center gap-2">
-              Join Us This Sunday
-              <svg
-                fill="none"
-                strokeWidth={2}
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </span>
-          </button>
+        <div className="max-w-4xl ml-auto">
+          <p className="text-[clamp(1.2rem,2vw,1.9rem)] leading-[1.7] tracking-wider text-black">
+            A vibrant community of believers in Brikama, The Gambia, united in
+            faith and fellowship. With a commitment to holiness and spiritual
+            growth, we create a space where faith meets life.
+          </p>
         </div>
       </div>
     </section>

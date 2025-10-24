@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  /*========== Colors ==========*/
   --gold: #d4a574;
   --navy: #1a1f3a;
   --cream: #f5f3f0;
@@ -9,6 +10,10 @@
   --warm-gray: #e8e6e3;
   --off-white: #fafaf8;
   --terracotta: #c85a3e;
+
+  /*========== Font families ==========*/
+  --font-heading: "Clash Display", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Cabinet Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 @theme inline {
@@ -20,6 +25,9 @@
   --color-off-white: var(--off-white);
   --color-text-gray: var(--text-gray);
   --color-terracotta: var(--terracotta);
+
+  --font-family-heading: var(--font-heading);
+  --font-family-body: var(--font-body);
 }
 
 html {
@@ -28,8 +36,17 @@ html {
 
 body {
   color: var(--navy);
+  font-family: var(--font-body);
   background-color: var(--cream);
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  font-family: "Clash Display", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
 }
