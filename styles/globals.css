@@ -13,13 +13,20 @@
 
 @theme inline {
   --color-navy: var(--navy);
-  --color-burgundy: var(--burgundy);
   --color-gold: var(--gold);
-  --color-terracotta: var(--terracotta);
   --color-cream: var(--cream);
+  --color-burgundy: var(--burgundy);
   --color-warm-gray: var(--warm-gray);
   --color-off-white: var(--off-white);
   --color-text-gray: var(--text-gray);
+  --color-terracotta: var(--terracotta);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
 }
 
 * {
@@ -33,10 +40,9 @@ html {
 }
 
 body {
-  font-family: "Clash Display", -apple-system, BlinkMacSystemFont, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--cream);
   color: var(--navy);
+  background-color: var(--cream);
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Clash Display", -apple-system, BlinkMacSystemFont, sans-serif;
 }
-  
