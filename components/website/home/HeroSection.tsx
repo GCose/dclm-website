@@ -1,16 +1,58 @@
 import Image from "next/image";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
 
 const HeroSection = () => {
+  const titleWordsRef = useRef<(HTMLSpanElement | null)[]>([]);
+  const imageRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ delay: 1.8 });
+
+      tl.from(titleWordsRef.current, {
+        y: 100,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.15,
+        ease: "power3.out",
+      }).from(
+        imageRef.current,
+        {
+          scale: 0.6,
+          opacity: 0,
+          duration: 1.5,
+          ease: "power3.out",
+        },
+        "-=0.3"
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
+
+  const titleWords = ["WELCOME", "TO", "DCLM", "BRIKAMA", "REGION"];
+
   return (
     <section className="min-h-screen pt-32 pb-20 px-4 bg-cream">
       <div className="mx-auto">
         <h1 className="text-[clamp(3rem,7vw,8.5rem)] [word-spacing:20px] text-black font-semibold leading-[1.2] tracking-tight mb-10">
-          WELCOME TO DCLM
-          <br />
-          BRIKAMA REGION
+          {titleWords.map((word, index) => (
+            <span
+              key={index}
+              ref={(el) => {
+                titleWordsRef.current[index] = el;
+              }}
+              className="inline-block"
+              style={{ marginRight: index === 2 ? "0" : "20px" }}
+            >
+              {word}
+              {index === 2 && <br />}
+            </span>
+          ))}
         </h1>
 
-        <div className="relative w-full h-screen mb-10">
+        <div ref={imageRef} className="relative w-full h-screen mb-10">
           <Image
             fill
             priority

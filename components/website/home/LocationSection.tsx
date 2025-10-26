@@ -1,5 +1,9 @@
+import { gsap } from "gsap";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const locations = [
   {
@@ -59,7 +63,7 @@ const locations = [
       "A gathering place for fervent prayer and fellowship, where faith meets community in transformative ways.",
   },
   {
-    id: "kti",
+    id: "kiti",
     name: "KITI",
     label: "Kitti 2",
     image: "/images/location-3.jpg",
@@ -70,15 +74,56 @@ const locations = [
 
 const LocationSection = () => {
   const [activeLocation, setActiveLocation] = useState(locations[0]);
+  const sectionRef = useRef(null);
+  const lettersRef = useRef<(HTMLSpanElement | null)[]>([]);
+  const imageRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const locationsListRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          end: "top 20%",
+          toggleActions: "play none none reverse",
+        },
+      });
+
+      // Animate letters first
+      tl.from(lettersRef.current, {
+        y: -100,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.08,
+        ease: "power3.out",
+      })
+        // Then reveal content after letters are done
+        .from(
+          [imageRef.current, descriptionRef.current, locationsListRef.current],
+          {
+            opacity: 0,
+            y: 50,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power3.out",
+          },
+          "-=0.4" // Start slightly before letters finish
+        );
+    }, sectionRef);
+
+    return () => ctx.revert(); // Cleanup
+  }, []);
 
   return (
-    <section className="min-h-screen py-32 px-4 bg-cream">
+    <section ref={sectionRef} className="min-h-screen py-32 px-4 bg-cream">
       <div className="mx-auto">
         <div className="grid grid-cols-12 gap-0">
-          {/*==================== Left side - 40% ====================*/}
+          {/*==================== Left side ====================*/}
           <div className="col-span-12 md:col-span-5 space-y-10 order-2 mt-10 md:mt-0 md:order-1">
             {/*==================== Editorial image ====================*/}
-            <div className="relative w-full h-screen">
+            <div ref={imageRef} className="relative w-full h-screen">
               <Image
                 fill
                 key={activeLocation.id}
@@ -90,7 +135,7 @@ const LocationSection = () => {
             {/*==================== End of Editorial image ====================*/}
 
             {/*==================== Text content ====================*/}
-            <div className="max-w-6xl ml-auto">
+            <div ref={descriptionRef} className="max-w-6xl ml-auto">
               <p className="font-body text-[clamp(1.5rem,4vw,1.8rem)] leading-[1.1] text-black">
                 {activeLocation.description}
               </p>
@@ -105,6 +150,9 @@ const LocationSection = () => {
               {"LOCATIONS".split("").map((letter, index) => (
                 <span
                   key={index}
+                  ref={(el) => {
+                    lettersRef.current[index] = el;
+                  }}
                   className="text-[clamp(3rem,8vw,8.5rem)] font-bold text-black tracking-tight leading-[1.12]"
                 >
                   {letter}
@@ -115,7 +163,10 @@ const LocationSection = () => {
           {/*==================== End of Middle column ====================*/}
 
           {/*==================== Right side ====================*/}
-          <div className="col-span-12 md:col-span-5 flex md:justify-end order-1 md:order-3">
+          <div
+            ref={locationsListRef}
+            className="col-span-12 md:col-span-5 flex md:justify-end order-3"
+          >
             <div className="space-y-1 text-right">
               {/*==================== Locations stack ====================*/}
               <div className="space-y-18">
@@ -129,7 +180,7 @@ const LocationSection = () => {
                         : "text-black/60 hover:text-black"
                     }`}
                   >
-                    <h3 className="text-[clamp(1.5rem,5vw,2.5rem)] font-heading leading-[1.1] tracking-tight">
+                    <h3 className="text-[clamp(2rem,5vw,3.5rem)] font-heading leading-[1.1] tracking-tight">
                       {location.name}
                     </h3>
                     <p className="text-sm uppercase tracking-[0.2em] mt-1 border-b">
