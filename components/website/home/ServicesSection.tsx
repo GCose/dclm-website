@@ -37,7 +37,7 @@ const ServicesSection = () => {
           {/*==================== Left side - Content ====================*/}
           <div className="col-span-12 md:col-span-6">
             {/*==================== Header ====================*/}
-            <div className="mb-20 md:mb-35">
+            <div className="mb-20 md:mb-85">
               <h2 className="text-[clamp(3rem,5vw,8.5rem)] font-semibold leading-[1.1] tracking-tight text-black mb-4">
                 OUR MEETING DAYS
               </h2>
@@ -45,7 +45,7 @@ const ServicesSection = () => {
             {/*==================== End of Header ====================*/}
 
             {/*==================== Services list ====================*/}
-            <div className="space-y-20 md:space-y-35">
+            <div className="space-y-20 md:space-y-85">
               {services.map((service) => (
                 <div key={service.id} className="pb-8">
                   <h3 className="text-[clamp(1.5rem,5vw,2.5rem)] font-heading leading-[1.1] tracking-tight text-black mb-2">
