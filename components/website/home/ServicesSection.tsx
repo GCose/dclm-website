@@ -40,7 +40,7 @@ const ServicesSection = () => {
           <div className="col-span-12 md:col-span-10">
             {/*==================== Header ====================*/}
             <div className="mb-20 md:mb-35">
-              <h2 className="text-[clamp(3rem,8vw,8.5rem)] font-semibold leading-[1.1] tracking-tight text-black mb-4">
+              <h2 className="text-[clamp(3rem,7vw,8.5rem)] font-semibold leading-[1.1] tracking-tight text-black mb-4">
                 OUR MEETING DAYS
               </h2>
             </div>

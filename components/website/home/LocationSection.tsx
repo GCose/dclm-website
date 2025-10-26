@@ -105,7 +105,7 @@ const LocationSection = () => {
               {"LOCATIONS".split("").map((letter, index) => (
                 <span
                   key={index}
-                  className="text-[clamp(3rem,12vw,8.5rem)] font-bold text-black tracking-tight leading-[1.12]"
+                  className="text-[clamp(3rem,8vw,8.5rem)] font-bold text-black tracking-tight leading-[1.12]"
                 >
                   {letter}
                 </span>
