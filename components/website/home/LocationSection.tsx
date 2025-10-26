@@ -91,7 +91,7 @@ const LocationSection = () => {
 
             {/*==================== Text content ====================*/}
             <div className="max-w-6xl ml-auto">
-              <p className="font-body text-[clamp(1.5rem,4vw,2.5rem)] leading-[1.1] text-black">
+              <p className="font-body text-[clamp(1.5rem,4vw,1.8rem)] leading-[1.1] text-black">
                 {activeLocation.description}
               </p>
             </div>
@@ -114,7 +114,7 @@ const LocationSection = () => {
           </div>
           {/*==================== End of Middle column ====================*/}
 
-          {/*==================== Right side - 50% ====================*/}
+          {/*==================== Right side ====================*/}
           <div className="col-span-12 md:col-span-5 flex md:justify-end order-1 md:order-3">
             <div className="space-y-1 text-right">
               {/*==================== Locations stack ====================*/}
@@ -129,7 +129,7 @@ const LocationSection = () => {
                         : "text-black/60 hover:text-black"
                     }`}
                   >
-                    <h3 className="text-[clamp(2rem,5vw,4.5rem)] font-heading leading-[1.1] tracking-tight">
+                    <h3 className="text-[clamp(2rem,5vw,3.5rem)] font-heading leading-[1.1] tracking-tight">
                       {location.name}
                     </h3>
                     <p className="text-sm uppercase tracking-[0.2em] mt-1 border-b">

@@ -53,7 +53,7 @@ const ServicesSection = () => {
                   key={service.id}
                   className="border-b border-black pb-8 lg:mr-18 flex flex-col items-end"
                 >
-                  <h3 className="text-[clamp(1.5rem,5vw,4rem)] font-heading leading-[1.1] tracking-tight text-black mb-2">
+                  <h3 className="text-[clamp(1.5rem,5vw,3.5rem)] font-heading leading-[1.1] tracking-tight text-black mb-2">
                     {service.day}
                   </h3>
                   <p className="font-body text-[clamp(1.25rem,2vw,1.75rem)] text-black/80 mb-2">
