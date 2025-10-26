@@ -7,28 +7,36 @@ const HeroSection = () => {
   const imageRef = useRef(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 1.8 });
+    // Wait for loading screen to complete
+    const timer = setTimeout(() => {
+      const ctx = gsap.context(() => {
+        const tl = gsap.timeline();
 
-      tl.from(titleWordsRef.current, {
-        y: 100,
-        opacity: 0,
-        duration: 1.2,
-        stagger: 0.15,
-        ease: "power3.out",
-      }).from(
-        imageRef.current,
-        {
-          scale: 0.6,
+        // Each word reveals one after another
+        tl.from(titleWordsRef.current, {
+          y: 100,
           opacity: 0,
-          duration: 1.5,
+          duration: 1.2,
+          stagger: 0.15,
           ease: "power3.out",
-        },
-        "-=0.3"
-      );
-    });
+        })
+          // Image scales in
+          .from(
+            imageRef.current,
+            {
+              scale: 0.6,
+              opacity: 0,
+              duration: 1.8,
+              ease: "power3.out",
+            },
+            "-=0.3"
+          );
+      });
 
-    return () => ctx.revert();
+      return () => ctx.revert();
+    }, 1800);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const titleWords = ["WELCOME", "TO", "DCLM", "BRIKAMA", "REGION"];
@@ -62,7 +70,7 @@ const HeroSection = () => {
           />
         </div>
 
-        <div className="max-w-4xl ml-auto">
+        <div className="max-w-6xl ml-auto">
           <p className="text-[clamp(1.5rem,4vw,1.9rem)] leading-[1.1] text-black">
             <span className="pl-30">
               A vibrant community of believers in Brikama
