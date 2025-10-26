@@ -20,7 +20,7 @@ const HeroSection = () => {
           />
         </div>
 
-        <div className="max-w-6xl ml-auto">
+        <div className="max-w-4xl ml-auto">
           <p className="text-[clamp(1.5rem,4vw,1.9rem)] leading-[1.1] text-black">
             <span className="pl-30">
               A vibrant community of believers in Brikama

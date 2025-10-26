@@ -129,7 +129,7 @@ const LocationSection = () => {
                         : "text-black/60 hover:text-black"
                     }`}
                   >
-                    <h3 className="text-[clamp(2rem,5vw,3.5rem)] font-heading leading-[1.1] tracking-tight">
+                    <h3 className="text-[clamp(1.5rem,5vw,2.5rem)] font-heading leading-[1.1] tracking-tight">
                       {location.name}
                     </h3>
                     <p className="text-sm uppercase tracking-[0.2em] mt-1 border-b">
