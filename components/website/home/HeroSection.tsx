@@ -1,40 +1,36 @@
+import { gsap } from "gsap";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
 
 const HeroSection = () => {
   const titleWordsRef = useRef<(HTMLSpanElement | null)[]>([]);
   const imageRef = useRef(null);
 
   useEffect(() => {
-    // Wait for loading screen to complete
     const timer = setTimeout(() => {
       const ctx = gsap.context(() => {
         const tl = gsap.timeline();
 
-        // Each word reveals one after another
         tl.from(titleWordsRef.current, {
           y: 100,
           opacity: 0,
           duration: 1.2,
           stagger: 0.15,
           ease: "power3.out",
-        })
-          // Image scales in
-          .from(
-            imageRef.current,
-            {
-              scale: 0.6,
-              opacity: 0,
-              duration: 1.8,
-              ease: "power3.out",
-            },
-            "-=0.3"
-          );
+        }).from(
+          imageRef.current,
+          {
+            scale: 0.6,
+            opacity: 0,
+            duration: 1.8,
+            ease: "power3.out",
+          },
+          "-=0.3"
+        );
       });
 
       return () => ctx.revert();
-    }, 1800);
+    }, 1200);
 
     return () => clearTimeout(timer);
   }, []);
@@ -70,7 +66,7 @@ const HeroSection = () => {
           />
         </div>
 
-        <div className="max-w-6xl ml-auto">
+        <div className="max-w-4xl ml-auto">
           <p className="text-[clamp(1.5rem,4vw,1.9rem)] leading-[1.1] text-black">
             <span className="pl-30">
               A vibrant community of believers in Brikama
