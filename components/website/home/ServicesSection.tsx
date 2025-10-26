@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const ServicesSection = () => {
   const services = [
     {
@@ -32,15 +34,11 @@ const ServicesSection = () => {
     <section className="min-h-screen py-32 px-4 bg-cream">
       <div className="mx-auto">
         <div className="grid grid-cols-12 gap-0">
-          {/*==================== Left side - Empty whitespace ====================*/}
-          <div className="hidden md:block md:col-span-2"></div>
-          {/*==================== End of Left side ====================*/}
-
-          {/*==================== Right side - Content ====================*/}
-          <div className="col-span-12 md:col-span-10">
+          {/*==================== Left side - Content ====================*/}
+          <div className="col-span-12 md:col-span-6">
             {/*==================== Header ====================*/}
             <div className="mb-20 md:mb-35">
-              <h2 className="text-[clamp(3rem,7vw,8.5rem)] font-semibold leading-[1.1] tracking-tight text-black mb-4">
+              <h2 className="text-[clamp(3rem,5vw,8.5rem)] font-semibold leading-[1.1] tracking-tight text-black mb-4">
                 OUR MEETING DAYS
               </h2>
             </div>
@@ -49,18 +47,15 @@ const ServicesSection = () => {
             {/*==================== Services list ====================*/}
             <div className="space-y-20 md:space-y-35">
               {services.map((service) => (
-                <div
-                  key={service.id}
-                  className="border-b border-black pb-8 lg:mr-18 flex flex-col items-end"
-                >
-                  <h3 className="text-[clamp(1.5rem,5vw,3.5rem)] font-heading leading-[1.1] tracking-tight text-black mb-2">
+                <div key={service.id} className="pb-8">
+                  <h3 className="text-[clamp(1.5rem,5vw,2.5rem)] font-heading leading-[1.1] tracking-tight text-black mb-2">
                     {service.day}
                   </h3>
                   <p className="font-body text-[clamp(1.25rem,2vw,1.75rem)] text-black/80 mb-2">
                     {service.time}
                   </p>
                   {service.description && (
-                    <p className="font-body text-[clamp(1.2rem,4vw,1.9rem)] text-black/60 mt-4">
+                    <p className="font-body text-[clamp(1.2rem,4vw,1.5rem)] text-black/60 mt-4">
                       {service.description}
                     </p>
                   )}
@@ -68,6 +63,25 @@ const ServicesSection = () => {
               ))}
             </div>
             {/*==================== End of Services list ====================*/}
+          </div>
+          {/*==================== End of Left side ====================*/}
+
+          {/*==================== Middle - Empty whitespace ====================*/}
+          <div className="hidden md:block md:col-span-2"></div>
+          {/*==================== End of Middle ====================*/}
+
+          {/*==================== Right side - Sticky image ====================*/}
+          <div className="hidden md:block md:col-span-4">
+            <div className="sticky top-0 h-screen">
+              <div className="relative w-full h-screen">
+                <Image
+                  fill
+                  className="object-cover"
+                  src="/images/services.jpg"
+                  alt="DCLM Brikama worship service"
+                />
+              </div>
+            </div>
           </div>
           {/*==================== End of Right side ====================*/}
         </div>

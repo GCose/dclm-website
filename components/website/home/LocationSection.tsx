@@ -100,8 +100,8 @@ const LocationSection = () => {
           {/*==================== End of Left side ====================*/}
 
           {/*==================== Middle column with vertical stacked text ====================*/}
-          <div className="hidden md:flex md:col-span-2 order-2 items-start justify-center">
-            <div className="flex flex-col items-center">
+          <div className="col-span-12 md:col-span-2 flex order-1 md:order-2 items-start justify-start md:justify-center mb-10 md:mb-0">
+            <div className="flex md:flex-col items-center">
               {"LOCATIONS".split("").map((letter, index) => (
                 <span
                   key={index}
