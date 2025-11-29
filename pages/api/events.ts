@@ -19,7 +19,7 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
 
         res.setHeader('Allow', ['GET', 'POST']);
         res.status(405).end(`Method ${req.method} Not Allowed`);
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: "Server error" });
     }
 }
