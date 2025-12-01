@@ -4,24 +4,36 @@ import { useEffect, useState } from "react";
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      const currentScrollY = window.scrollY;
+
+      setScrolled(currentScrollY > 50);
+
+      if (currentScrollY < lastScrollY) {
+        setVisible(true);
+      } else if (currentScrollY > lastScrollY) {
+        setVisible(false);
+      }
+
+      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   return (
     <nav
-      className={`fixed top-0 border-b left-0 right-0 z-50 transition-all duration-500 ease-out ${
+      className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-300 ease-out ${
         scrolled
-          ? "bg-cream backdrop-blur-xl py-2"
+          ? "bg-off-white/95 backdrop-blur-xl py-2"
           : "bg-transparent py-2"
-      }`}
+      } ${visible ? "translate-y-0" : "-translate-y-full"}`}
     >
       <div className="mx-auto px-4 flex justify-between items-center">
         <Link href="/" className="group">
