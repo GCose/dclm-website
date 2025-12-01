@@ -47,7 +47,7 @@ const ServicesSection = () => {
             {/*==================== Services list ====================*/}
             <div className="space-y-20 md:space-y-85">
               {services.map((service) => (
-                <div key={service.id} className="pb-8">
+                <div key={service.id} className="pb-8 border-b">
                   <h3 className="text-[clamp(1.5rem,5vw,2.5rem)] font-heading leading-[1.1] tracking-tight text-black mb-2">
                     {service.day}
                   </h3>

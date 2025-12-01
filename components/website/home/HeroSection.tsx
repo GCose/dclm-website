@@ -38,9 +38,9 @@ const HeroSection = () => {
   const titleWords = ["WELCOME", "TO", "DCLM", "BRIKAMA", "REGION"];
 
   return (
-    <section className="min-h-screen pt-32 pb-20 px-4 bg-cream">
+    <section className="min-h-screen pt-32 pb-50 px-4 bg-cream ">
       <div className="mx-auto">
-        <h1 className="text-[clamp(3rem,7vw,8.5rem)] [word-spacing:20px] text-black font-semibold leading-[1.2] tracking-tight mb-10">
+        <h1 className="text-[clamp(3rem,7vw,8.5rem)] [word-spacing:20px] text-black font-semibold leading-[1.2] tracking-tighter mb-10">
           {titleWords.map((word, index) => (
             <span
               key={index}
@@ -48,7 +48,7 @@ const HeroSection = () => {
                 titleWordsRef.current[index] = el;
               }}
               className="inline-block"
-              style={{ marginRight: index === 2 ? "0" : "20px" }}
+              style={{ marginRight: index === 2 ? "0" : "30px" }}
             >
               {word}
               {index === 2 && <br />}
@@ -67,7 +67,7 @@ const HeroSection = () => {
         </div>
 
         <div className="max-w-4xl ml-auto">
-          <p className="text-[clamp(1.5rem,4vw,1.9rem)] leading-[1.1] text-black">
+          <p className="text-[clamp(1.5rem,4vw,2.5rem)] leading-[1.1] text-black">
             <span className="pl-30">
               A vibrant community of believers in Brikama
             </span>{" "}

@@ -72,7 +72,7 @@ const LocationSection = () => {
   const [activeLocation, setActiveLocation] = useState(locations[0]);
 
   return (
-    <section className="min-h-screen py-32 px-4 bg-cream">
+    <section className="min-h-screen py-32 pb-50 px-4 bg-cream">
       <div className="mx-auto">
         <div className="grid grid-cols-12 gap-0">
           {/*==================== Left side ====================*/}
