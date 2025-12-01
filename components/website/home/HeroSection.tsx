@@ -40,7 +40,7 @@ const HeroSection = () => {
   return (
     <section className="min-h-screen pt-32 pb-50 px-4 bg-cream ">
       <div className="mx-auto">
-        <h1 className="text-[clamp(3rem,8vw,11rem)] [word-spacing:20px] text-black font-bold leading-[1.2] tracking-tighter mb-10">
+        <h1 className="text-[clamp(3rem,8.1vw,11rem)] [word-spacing:20px] text-black font-semibold leading-[1.2] tracking-tighter mb-10">
           {titleWords.map((word, index) => (
             <span
               key={index}
@@ -60,7 +60,7 @@ const HeroSection = () => {
           <Image
             fill
             priority
-            src="/images/hero.jpg"
+            src="/images/home/hero.jpg"
             className="object-cover"
             alt="DCLM Brikama congregation"
           />

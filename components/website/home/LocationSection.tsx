@@ -15,7 +15,7 @@ const LocationSection = () => {
       id: "santosu",
       name: "SANTOSU",
       label: "HeadQuarters Location",
-      image: "/images/location-1.jpg",
+      image: "/images/home/location-1.jpg",
       description:
         "Our foundation rests on biblical truth—salvation through Christ alone, righteous living, fervent prayer, and the Great Commission.",
     },
@@ -23,7 +23,7 @@ const LocationSection = () => {
       id: "college",
       name: "COLLEGE",
       label: "Mbali junction",
-      image: "/images/location-2.jpg",
+      image: "/images/home/location-2.jpg",
       description:
         "A thriving community dedicated to discipleship and spiritual growth through systematic study of God's Word.",
     },
@@ -31,7 +31,7 @@ const LocationSection = () => {
       id: "medina",
       name: "MEDINA",
       label: "Medina Road",
-      image: "/images/location-1.jpg",
+      image: "/images/home/location-1.jpg",
       description:
         "Our foundation rests on biblical truth—salvation through Christ alone, righteous living, fervent prayer, and the Great Commission.",
     },
@@ -39,7 +39,7 @@ const LocationSection = () => {
       id: "kartong",
       name: "KARTONG",
       label: "Kartong Village",
-      image: "/images/location-4.jpg",
+      image: "/images/home/location-4.jpg",
       description:
         "A gathering place for fervent prayer and fellowship, where faith meets community in transformative ways.",
     },
@@ -47,7 +47,7 @@ const LocationSection = () => {
       id: "jalangba",
       name: "JALANGBA",
       label: "Medina Highway",
-      image: "/images/location-3.jpg",
+      image: "/images/home/location-3.jpg",
       description:
         "Committed to holiness and authentic worship, building believers who walk in righteousness and truth.",
     },
@@ -55,7 +55,7 @@ const LocationSection = () => {
       id: "kasakunda",
       name: "KASAKUNDA",
       label: "Mbali junction",
-      image: "/images/location-2.jpg",
+      image: "/images/home/location-2.jpg",
       description:
         "A thriving community dedicated to discipleship and spiritual growth through systematic study of God's Word.",
     },
@@ -63,7 +63,7 @@ const LocationSection = () => {
       id: "kabeke",
       name: "KABEKE",
       label: "Kabeke Village",
-      image: "/images/location-4.jpg",
+      image: "/images/home/location-4.jpg",
       description:
         "A gathering place for fervent prayer and fellowship, where faith meets community in transformative ways.",
     },
@@ -71,7 +71,7 @@ const LocationSection = () => {
       id: "kiti",
       name: "KITI",
       label: "Kitti Village",
-      image: "/images/location-3.jpg",
+      image: "/images/home/location-3.jpg",
       description:
         "Committed to holiness and authentic worship, building believers who walk in righteousness and truth.",
     },
@@ -120,22 +120,22 @@ const LocationSection = () => {
   return (
     <section
       ref={sectionRef}
-      className={`relative overflow-hidden transition-colors duration-500 ${
-        isDark ? "bg-black" : "bg-cream"
+      className={`relative overflow-hidden md:transition-colors md:duration-500 bg-cream ${
+        isDark ? "md:bg-black" : ""
       }`}
     >
       <div className="hidden md:block h-screen py-20 px-8">
         <div className="flex items-center h-full gap-12">
           <div className="shrink-0 w-[55vw] flex flex-col items-start justify-center pr-12">
             <h2
-              className={`text-[clamp(3rem,6vw,7rem)] font-semibold leading-[1.1] tracking-tight transition-colors duration-500 whitespace-nowrap ${
+              className={`text-[clamp(3rem,6.5vw,9rem)] font-semibold leading-[1.1] tracking-tight transition-colors duration-500 whitespace-nowrap ${
                 isDark ? "text-white" : "text-black"
               }`}
             >
               OUR LOCATIONS
             </h2>
             <p
-              className={`text-lg mt-4 transition-colors duration-500 ${
+              className={`text-[clamp(1.1rem,6vw,1.8rem)] mt-4 transition-colors duration-500 ${
                 isDark ? "text-white/70" : "text-black/70"
               }`}
             >
@@ -174,7 +174,7 @@ const LocationSection = () => {
                     {location.label}
                   </p>
                   <p
-                    className={`text-base leading-relaxed transition-colors duration-500 ${
+                    className={`text-[clamp(1.3rem,6.5vw,1.5rem)] leading-tight transition-colors duration-500 ${
                       isDark ? "text-white/80" : "text-black/80"
                     }`}
                   >
@@ -184,7 +184,7 @@ const LocationSection = () => {
 
                 <div
                   className={`absolute bottom-8 right-0 text-6xl font-bold transition-colors duration-500 ${
-                    isDark ? "text-white/30" : "text-black/10"
+                    isDark ? "text-white/20" : "text-black/10"
                   }`}
                 >
                   {String(index + 1).padStart(2, "0")}
@@ -195,8 +195,8 @@ const LocationSection = () => {
         </div>
       </div>
 
-      <div className="md:hidden py-20 px-6 space-y-16">
-        <div className="text-center mb-12">
+      <div className="md:hidden py-20 px-6 space-y-16 bg-cream">
+        <div className="text-left mb-12">
           <h2 className="text-5xl font-semibold leading-[1.1] tracking-tight text-black mb-4">
             OUR LOCATIONS
           </h2>

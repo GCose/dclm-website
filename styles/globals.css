@@ -13,8 +13,8 @@
   --terracotta: #c85a3e;
 
   /*========== Font families ==========*/
-  --font-heading: "Bespoke Serif", serif;
-  --font-body: "Tanker", sans-serif;
+  --font-heading: "Clash Display", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Cabinet Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 @theme inline {

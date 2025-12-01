@@ -15,7 +15,7 @@ const CommunityHighlight = () => {
       id: 1,
       startCol: 2,
       spanCols: 3,
-      image: "/images/highlight-1.jpg",
+      image: "/images/home/highlight-1.jpg",
       title: "SUNDAY WORSHIP",
       description: "Powerful worship services filled with the presence of God",
     },
@@ -23,33 +23,57 @@ const CommunityHighlight = () => {
       id: 2,
       startCol: 8,
       spanCols: 4,
-      image: "/images/highlight-2.jpg",
+      image: "/images/home/highlight-2.jpg",
       title: "YOUTH FELLOWSHIP",
-      description: "Young believers growing together in faith and purpose",
+      description: "Young believers growing together in faith.",
     },
     {
       id: 3,
       startCol: 1,
       spanCols: 3,
-      image: "/images/highlight-3.jpg",
+      image: "/images/home/highlight-3.jpg",
       title: "OUTREACH PROGRAMS",
-      description: "Reaching the community with the love of Christ",
+      description: "Reaching all with the love of Christ",
     },
     {
       id: 4,
-      startCol: 6,
-      spanCols: 4,
-      image: "/images/highlight-4.jpg",
+      startCol: 9,
+      spanCols: 3,
+      image: "/images/home/highlight-4.jpg",
       title: "PRAYER MEETINGS",
       description: "United in fervent prayer and intercession",
     },
     {
       id: 5,
-      startCol: 3,
+      startCol: 2,
       spanCols: 4,
-      image: "/images/highlight-5.jpg",
+      image: "/images/home/highlight-5.jpg",
       title: "COMMUNITY SERVICE",
       description: "Serving the people of Brikama with compassion",
+    },
+    {
+      id: 6,
+      startCol: 7,
+      spanCols: 4,
+      image: "/images/home/highlight-6.jpg",
+      title: "BIBLE STUDY",
+      description: "Deepening our understanding of God's Word together",
+    },
+    {
+      id: 7,
+      startCol: 3,
+      spanCols: 3,
+      image: "/images/home/highlight-7.jpg",
+      title: "CHILDREN'S MINISTRY",
+      description: "Nurturing young hearts in faith and knowledge",
+    },
+    {
+      id: 8,
+      startCol: 8,
+      spanCols: 4,
+      image: "/images/home/highlight-8.jpg",
+      title: "EVANGELISM",
+      description: "Spreading the Gospel throughout Brikama and beyond",
     },
   ];
 
@@ -59,7 +83,7 @@ const CommunityHighlight = () => {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=5000",
+          end: "+=6000",
           pin: true,
           scrub: 1,
           onUpdate: (self) => {
@@ -81,8 +105,8 @@ const CommunityHighlight = () => {
         tl.fromTo(
           `#highlight-${highlight.id}`,
           { yPercent: 100 },
-          { yPercent: -100, duration: 30 },
-          50 + index * 5
+          { yPercent: -100, duration: 35 },
+          50 + index * 8
         );
       });
     }, sectionRef);
@@ -113,7 +137,7 @@ const CommunityHighlight = () => {
         className="absolute top-0 left-0 right-0 flex justify-center pt-20 z-20"
       >
         <h2
-          className={`text-[clamp(3rem,6vw,7rem)] font-semibold leading-[1.1] tracking-tight transition-colors duration-500 ${
+          className={`text-[clamp(2rem,6vw,7rem)] md:text-[clamp(3rem,6vw,7rem)] font-semibold leading-[1.1] tracking-tight transition-colors duration-500 ${
             isDark ? "text-white" : "text-black"
           }`}
         >
@@ -129,13 +153,13 @@ const CommunityHighlight = () => {
           <div
             key={highlight.id}
             id={`highlight-${highlight.id}`}
-            className="absolute h-screen flex flex-col justify-center px-4 z-30"
+            className="absolute h-screen flex flex-col justify-center px-2 md:px-4 z-30"
             style={{
               left: `${leftPercent}%`,
               width: `${widthPercent}%`,
             }}
           >
-            <div className="relative w-full aspect-3/4 mb-4">
+            <div className="relative w-full aspect-3/4 mb-2 md:mb-4">
               <Image
                 fill
                 src={highlight.image}
@@ -144,16 +168,16 @@ const CommunityHighlight = () => {
               />
             </div>
 
-            <div className="text-center">
+            <div className="md:text-center">
               <h3
-                className={`text-lg font-semibold mb-2 transition-colors duration-500 ${
+                className={`text-[clamp(1.4rem,3vw,1.8rem)] font-semibold mb-1 md:mb-2 transition-colors duration-500 ${
                   isDark ? "text-white" : "text-black"
                 }`}
               >
                 {highlight.title}
               </h3>
               <p
-                className={`text-sm transition-colors duration-500 ${
+                className={`text-[clamp(1.1rem,3vw,1.4rem)] transition-colors duration-500 ${
                   isDark ? "text-white/70" : "text-black/70"
                 }`}
               >

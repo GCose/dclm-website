@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface IEvent {
     eventId: string;
     title: string;
@@ -10,4 +12,10 @@ export interface IEvent {
 export interface IAdmin {
     email: string;
     password: string;
+}
+
+export interface LayoutProps {
+    title?: string;
+    children: ReactNode;
+    description?: string;
 }

@@ -34,17 +34,22 @@ const ServicesSection = () => {
     <section className="min-h-screen py-32 px-4 bg-cream">
       <div className="mx-auto">
         <div className="grid grid-cols-12 gap-0">
-          {/*==================== Left side - Content ====================*/}
           <div className="col-span-12 md:col-span-6">
-            {/*==================== Header ====================*/}
             <div className="mb-20 md:mb-85">
               <h2 className="text-[clamp(3rem,5vw,8.5rem)] font-semibold leading-[1.1] tracking-tight text-black mb-4">
                 OUR MEETING DAYS
               </h2>
             </div>
-            {/*==================== End of Header ====================*/}
 
-            {/*==================== Services list ====================*/}
+            <div className="md:hidden relative w-full h-[60vh] mb-12">
+              <Image
+                fill
+                className="object-cover"
+                src="/images/home/services.jpg"
+                alt="DCLM Brikama worship service"
+              />
+            </div>
+
             <div className="space-y-20 md:space-y-85">
               {services.map((service) => (
                 <div key={service.id} className="pb-8 border-b">
@@ -62,15 +67,10 @@ const ServicesSection = () => {
                 </div>
               ))}
             </div>
-            {/*==================== End of Services list ====================*/}
           </div>
-          {/*==================== End of Left side ====================*/}
 
-          {/*==================== Middle - Empty whitespace ====================*/}
           <div className="hidden md:block md:col-span-2"></div>
-          {/*==================== End of Middle ====================*/}
 
-          {/*==================== Right side - Sticky image ====================*/}
           <div className="hidden md:block md:col-span-4">
             <div className="sticky top-0 h-screen">
               <div className="relative w-full h-screen">
@@ -83,7 +83,6 @@ const ServicesSection = () => {
               </div>
             </div>
           </div>
-          {/*==================== End of Right side ====================*/}
         </div>
       </div>
     </section>
