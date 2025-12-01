@@ -67,7 +67,7 @@ const HeroSection = () => {
         </div>
 
         <div className="max-w-4xl ml-auto">
-          <p className="text-[clamp(1.5rem,4vw,2.5rem)] leading-[1.1] text-black">
+          <p className="text-[clamp(1.5rem,4vw,2.1rem)] leading-[1.1] text-black">
             <span className="pl-30">
               A vibrant community of believers in Brikama
             </span>{" "}

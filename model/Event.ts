@@ -1,14 +1,40 @@
-import { IEvent } from '@/types';
-import { Schema, model, models } from 'mongoose';
+import mongoose from "mongoose";
 
-const EventSchema = new Schema<IEvent>({
-    title: { type: String, required: true },
-    venue: { type: String, required: true },
-    image: { type: String, required: true },
-    description: {
-        type: String,
-        required: false
+const eventSchema = new mongoose.Schema(
+    {
+        title: {
+            type: String,
+            required: true,
+        },
+        venue: {
+            type: String,
+            required: true,
+        },
+        image: {
+            type: String,
+            required: true,
+        },
+        description: {
+            type: String,
+        },
+        dateFrom: {
+            type: Date,
+            required: true,
+        },
+        dateTo: {
+            type: Date,
+        },
+        timeFrom: {
+            type: String,
+            required: true,
+        },
+        timeTo: {
+            type: String,
+        },
     },
-    date: { type: Date, required: true },
-});
-export default models.Event || model<IEvent>('Event', EventSchema);
+    {
+        timestamps: true,
+    }
+);
+
+export default mongoose.models.Event || mongoose.model("Event", eventSchema);

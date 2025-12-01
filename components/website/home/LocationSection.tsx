@@ -183,7 +183,7 @@ const LocationSection = () => {
                 </div>
 
                 <div
-                  className={`absolute bottom-8 right-0 text-6xl font-bold transition-colors duration-500 ${
+                  className={`absolute bottom-0 right-0 text-6xl font-bold transition-colors duration-500 ${
                     isDark ? "text-white/20" : "text-black/10"
                   }`}
                 >
@@ -229,7 +229,7 @@ const LocationSection = () => {
               {location.description}
             </p>
 
-            <div className="absolute bottom-8 right-0 text-6xl font-bold text-black/10">
+            <div className="absolute bottom-0 right-0 text-6xl font-bold text-black/10">
               {String(index + 1).padStart(2, "0")}
             </div>
           </div>

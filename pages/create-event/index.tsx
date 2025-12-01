@@ -1,8 +1,13 @@
+import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
+import { toast, Toaster } from "sonner";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Navigation from "@/components/website/layout/Navigation";
+import ConfirmationModal from "@/components/dashboard/ConfirmationModal";
+import EventForm from "@/components/dashboard/EventForm";
+import Modal from "@/components/dashboard/Modal";
 
 interface Event {
   _id: string;
@@ -10,25 +15,58 @@ interface Event {
   venue: string;
   image: string;
   description?: string;
-  date: string;
+  dateFrom: string;
+  dateTo?: string;
+  timeFrom: string;
+  timeTo?: string;
   createdAt: string;
 }
 
-export default function CreateEvent() {
+interface EventFormData {
+  title: string;
+  venue: string;
+  image: string;
+  description: string;
+  dateFrom: string;
+  dateTo: string;
+  timeFrom: string;
+  timeTo: string;
+}
+
+interface EventSubmitData {
+  title: string;
+  venue: string;
+  image: string;
+  description: string;
+  dateFrom: string;
+  timeFrom: string;
+  dateTo?: string;
+  timeTo?: string;
+}
+
+const CreateEvent = () => {
   const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    isOpen: boolean;
+    eventId: string | null;
+  }>({ isOpen: false, eventId: null });
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<EventFormData>({
     title: "",
     venue: "",
     image: "",
     description: "",
-    date: "",
+    dateFrom: "",
+    dateTo: "",
+    timeFrom: "",
+    timeTo: "",
   });
 
   useEffect(() => {
@@ -37,14 +75,9 @@ export default function CreateEvent() {
 
   const checkAuth = async () => {
     try {
-      const res = await fetch("/api/events");
-      if (res.ok) {
-        setAuthenticated(true);
-        const data = await res.json();
-        setEvents(data);
-      } else {
-        setAuthenticated(false);
-      }
+      const { data } = await axios.get("/api/events");
+      setAuthenticated(true);
+      setEvents(data.reverse());
     } catch {
       setAuthenticated(false);
     }
@@ -52,13 +85,11 @@ export default function CreateEvent() {
 
   const fetchEvents = async () => {
     try {
-      const res = await fetch("/api/events");
-      if (res.ok) {
-        const data = await res.json();
-        setEvents(data);
-      }
+      const { data } = await axios.get("/api/events");
+      setEvents(data.reverse());
     } catch (error) {
       console.error("Error fetching events:", error);
+      toast.error("Failed to fetch events");
     }
   };
 
@@ -70,30 +101,25 @@ export default function CreateEvent() {
       .value;
 
     try {
-      const res = await fetch("/api/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (res.ok) {
-        setAuthenticated(true);
-        fetchEvents();
-      } else {
-        alert("Invalid credentials");
-      }
+      await axios.post("/api/auth", { email, password });
+      setAuthenticated(true);
+      fetchEvents();
+      toast.success("Logged in successfully");
     } catch (error) {
+      toast.error("Invalid credentials");
       console.error("Login error:", error);
     }
   };
 
   const handleLogout = async () => {
     try {
-      await fetch("/api/logout", { method: "POST" });
+      await axios.post("/api/logout");
       setAuthenticated(false);
       router.reload();
+      toast.success("Logged out successfully");
     } catch (error) {
       console.error("Logout error:", error);
+      toast.error("Failed to logout");
     }
   };
 
@@ -103,28 +129,83 @@ export default function CreateEvent() {
       venue: "",
       image: "",
       description: "",
-      date: "",
+      dateFrom: "",
+      dateTo: "",
+      timeFrom: "",
+      timeTo: "",
     });
+  };
+
+  const handleFormChange = (field: keyof EventFormData, value: string) => {
+    setFormData({ ...formData, [field]: value });
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const uploadToast = toast.loading("Uploading image...");
+
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append("file", file);
+      uploadFormData.append("folder", "dclm-events");
+
+      const { data } = await axios.post(
+        "https://jeetix-file-service.onrender.com/api/storage/upload",
+        uploadFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (data.status === "success") {
+        setFormData({ ...formData, image: data.data.fileUrl });
+        toast.success("Image uploaded successfully", { id: uploadToast });
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error("Failed to upload image", { id: uploadToast });
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.image) {
+      toast.error("Please upload an image");
+      return;
+    }
+
     setLoading(true);
+    const createToast = toast.loading("Creating event...");
 
     try {
-      const res = await fetch("/api/events", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const submitData: EventSubmitData = {
+        title: formData.title,
+        venue: formData.venue,
+        image: formData.image,
+        description: formData.description,
+        dateFrom: formData.dateFrom,
+        timeFrom: formData.timeFrom,
+      };
 
-      if (res.ok) {
-        resetForm();
-        setShowCreateModal(false);
-        fetchEvents();
-      }
+      if (formData.dateTo) submitData.dateTo = formData.dateTo;
+      if (formData.timeTo) submitData.timeTo = formData.timeTo;
+
+      await axios.post("/api/events", submitData);
+      resetForm();
+      setShowCreateModal(false);
+      fetchEvents();
+      toast.success("Event created successfully", { id: createToast });
     } catch (error) {
       console.error("Error creating event:", error);
+      toast.error("Failed to create event", { id: createToast });
     } finally {
       setLoading(false);
     }
@@ -133,23 +214,37 @@ export default function CreateEvent() {
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingEvent) return;
+
+    if (!formData.image) {
+      toast.error("Please upload an image");
+      return;
+    }
+
     setLoading(true);
+    const updateToast = toast.loading("Updating event...");
 
     try {
-      const res = await fetch(`/api/events/${editingEvent._id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const submitData: EventSubmitData = {
+        title: formData.title,
+        venue: formData.venue,
+        image: formData.image,
+        description: formData.description,
+        dateFrom: formData.dateFrom,
+        timeFrom: formData.timeFrom,
+      };
 
-      if (res.ok) {
-        resetForm();
-        setShowEditModal(false);
-        setEditingEvent(null);
-        fetchEvents();
-      }
+      if (formData.dateTo) submitData.dateTo = formData.dateTo;
+      if (formData.timeTo) submitData.timeTo = formData.timeTo;
+
+      await axios.patch(`/api/events/${editingEvent._id}`, submitData);
+      resetForm();
+      setShowEditModal(false);
+      setEditingEvent(null);
+      fetchEvents();
+      toast.success("Event updated successfully", { id: updateToast });
     } catch (error) {
       console.error("Error updating event:", error);
+      toast.error("Failed to update event", { id: updateToast });
     } finally {
       setLoading(false);
     }
@@ -162,25 +257,68 @@ export default function CreateEvent() {
       venue: event.venue,
       image: event.image,
       description: event.description || "",
-      date: event.date.split("T")[0],
+      dateFrom: event.dateFrom.split("T")[0],
+      dateTo: event.dateTo ? event.dateTo.split("T")[0] : "",
+      timeFrom: event.timeFrom,
+      timeTo: event.timeTo || "",
     });
     setShowEditModal(true);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Delete this event?")) return;
+  const handleDeleteClick = (id: string) => {
+    setDeleteConfirm({ isOpen: true, eventId: id });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteConfirm.eventId) return;
+
+    const deleteToast = toast.loading("Deleting event...");
 
     try {
-      const res = await fetch(`/api/events/${id}`, {
-        method: "DELETE",
-      });
-
-      if (res.ok) {
-        fetchEvents();
-      }
+      await axios.delete(`/api/events/${deleteConfirm.eventId}`);
+      fetchEvents();
+      toast.success("Event deleted successfully", { id: deleteToast });
     } catch (error) {
       console.error("Error deleting event:", error);
+      toast.error("Failed to delete event", { id: deleteToast });
+    } finally {
+      setDeleteConfirm({ isOpen: false, eventId: null });
     }
+  };
+
+  const formatDateRange = (dateFrom: string, dateTo?: string) => {
+    const from = new Date(dateFrom);
+    const fromFormatted = from.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    if (!dateTo || dateFrom === dateTo) {
+      return fromFormatted;
+    }
+
+    const to = new Date(dateTo);
+    const toFormatted = to.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    return `${fromFormatted} - ${toFormatted}`;
+  };
+
+  const formatTimeRange = (timeFrom: string, timeTo?: string) => {
+    const formatTime = (time: string) => {
+      const [hours, minutes] = time.split(":");
+      const hour = parseInt(hours);
+      const ampm = hour >= 12 ? "PM" : "AM";
+      const displayHour = hour % 12 || 12;
+      return `${displayHour}:${minutes} ${ampm}`;
+    };
+
+    if (!timeTo) return formatTime(timeFrom);
+    return `${formatTime(timeFrom)} - ${formatTime(timeTo)}`;
   };
 
   if (!authenticated) {
@@ -189,6 +327,7 @@ export default function CreateEvent() {
         <Head>
           <title>Admin Login | DCLM Brikama</title>
         </Head>
+        <Toaster position="top-right" richColors />
         <div className="min-h-screen bg-cream flex items-center justify-center px-4">
           <div className="w-full max-w-md">
             <h1 className="text-[clamp(2.5rem,5vw,4rem)] font-heading text-center mb-8">
@@ -238,88 +377,68 @@ export default function CreateEvent() {
       <Head>
         <title>Manage Events | DCLM Brikama</title>
       </Head>
-
+      <Toaster position="top-right" richColors />
       <Navigation />
-
-      <div className="min-h-screen bg-cream pt-32 px-4 pb-20">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="flex justify-between items-center mb-12">
-            <div>
-              <h1 className="text-[clamp(3rem,5vw,6rem)] font-heading leading-[1.1] tracking-tight">
-                Events
-              </h1>
+      <div className="min-h-screen pt-32 pb-20 px-8 bg-cream">
+        <div className="w-full">
+          <div className="flex justify-between items-center mb-16">
+            <h1 className="text-[clamp(3rem,6vw,5rem)] font-heading leading-tight">
+              Events Inventory
+            </h1>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className="px-8 py-4 bg-terracotta text-white text-sm uppercase tracking-widest cursor-pointer hover:bg-terracotta/90 transition-colors"
+              >
+                New Event
+              </button>
               <button
                 onClick={handleLogout}
-                className="mt-2 text-sm uppercase tracking-widest text-black/60 hover:text-black"
+                className="px-8 py-4 bg-navy text-white text-sm uppercase tracking-widest cursor-pointer hover:bg-navy/90 transition-colors"
               >
                 Logout
               </button>
             </div>
-            <button
-              onClick={() => {
-                resetForm();
-                setShowCreateModal(true);
-              }}
-              className="bg-terracotta text-white px-8 py-4 uppercase tracking-widest hover:bg-terracotta/90 transition-colors"
-            >
-              Create Event
-            </button>
           </div>
 
-          {/* Events Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-20">
             {events.map((event) => (
-              <div
-                key={event._id}
-                className="bg-off-white overflow-hidden group cursor-pointer"
-              >
-                {/* Image */}
-                <div className="relative h-64 w-full overflow-hidden">
+              <div key={event._id} className="group">
+                <div className="relative w-full aspect-3/2 mb-6 overflow-hidden bg-warm-gray">
                   <Image
+                    fill
                     src={event.image}
                     alt={event.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/images/favicon.png";
+                    }}
                   />
                 </div>
-
-                {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-2xl font-heading mb-2">{event.title}</h3>
-
-                  {event.description && (
-                    <p className="text-sm text-black/70 mb-4 line-clamp-2">
-                      {event.description}
-                    </p>
-                  )}
-
-                  <div className="space-y-2 mb-6">
-                    <p className="text-sm">
-                      <span className="font-semibold">Venue:</span>{" "}
-                      {event.venue}
-                    </p>
-                    <p className="text-sm text-black/60">
-                      {new Date(event.date).toLocaleDateString("en-US", {
-                        weekday: "long",
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </p>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex gap-3 pt-4 border-t border-warm-gray">
+                <div className="space-y-3">
+                  <p className="text-sm uppercase tracking-[0.3em] text-black/50">
+                    {event.venue}
+                  </p>
+                  <h3 className="text-3xl font-heading leading-tight text-black">
+                    {event.title}
+                  </h3>
+                  <p className="text-xl text-black/70">
+                    {formatDateRange(event.dateFrom, event.dateTo)}
+                  </p>
+                  <p className="text-xl text-black/70">
+                    {formatTimeRange(event.timeFrom, event.timeTo)}
+                  </p>
+                  <div className="flex gap-3 pt-4">
                     <button
                       onClick={() => openEditModal(event)}
-                      className="text-sm uppercase tracking-widest text-terracotta hover:underline"
+                      className="flex-1 px-6 py-3 border border-black text-black text-base uppercase tracking-wider cursor-pointer hover:bg-black hover:text-white transition-colors"
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(event._id)}
-                      className="text-sm uppercase tracking-widest text-black/60 hover:text-black"
+                      onClick={() => handleDeleteClick(event._id)}
+                      className="flex-1 px-6 py-3 bg-black text-white text-base uppercase tracking-wider cursor-pointer hover:bg-black/80 transition-colors"
                     >
                       Delete
                     </button>
@@ -329,239 +448,67 @@ export default function CreateEvent() {
             ))}
           </div>
 
-          {events.length === 0 && (
-            <div className="text-center py-20">
-              <p className="text-xl text-black/60">
-                No events yet. Create your first event!
-              </p>
-            </div>
-          )}
+          <Modal
+            isOpen={showCreateModal}
+            onClose={() => {
+              setShowCreateModal(false);
+              resetForm();
+            }}
+            title="CREATE EVENT"
+          >
+            <EventForm
+              formData={formData}
+              onSubmit={handleCreateSubmit}
+              onChange={handleFormChange}
+              onImageUpload={handleImageUpload}
+              onCancel={() => {
+                setShowCreateModal(false);
+                resetForm();
+              }}
+              loading={loading}
+              uploading={uploading}
+              submitText="Create Event"
+            />
+          </Modal>
+
+          <Modal
+            isOpen={showEditModal}
+            onClose={() => {
+              setShowEditModal(false);
+              setEditingEvent(null);
+              resetForm();
+            }}
+            title="EDIT EVENT"
+          >
+            <EventForm
+              formData={formData}
+              onSubmit={handleEditSubmit}
+              onChange={handleFormChange}
+              onImageUpload={handleImageUpload}
+              onCancel={() => {
+                setShowEditModal(false);
+                setEditingEvent(null);
+                resetForm();
+              }}
+              loading={loading}
+              uploading={uploading}
+              submitText="Update Event"
+            />
+          </Modal>
+
+          <ConfirmationModal
+            isOpen={deleteConfirm.isOpen}
+            onClose={() => setDeleteConfirm({ isOpen: false, eventId: null })}
+            onConfirm={confirmDelete}
+            title="Delete Event"
+            message="Are you sure you want to delete this event? This action cannot be undone."
+            confirmText="Delete"
+            cancelText="Cancel"
+          />
         </div>
       </div>
-
-      {/* Create Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-off-white max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-3xl font-heading">Create Event</h2>
-              <button
-                onClick={() => setShowCreateModal(false)}
-                className="text-2xl hover:text-terracotta"
-              >
-                ×
-              </button>
-            </div>
-
-            <form onSubmit={handleCreateSubmit} className="space-y-6">
-              <div>
-                <label className="block text-sm uppercase tracking-widest mb-2">
-                  Title *
-                </label>
-                <input
-                  type="text"
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  required
-                  className="w-full px-4 py-3 bg-cream border border-warm-gray focus:border-terracotta outline-none transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm uppercase tracking-widest mb-2">
-                  Venue *
-                </label>
-                <input
-                  type="text"
-                  value={formData.venue}
-                  onChange={(e) =>
-                    setFormData({ ...formData, venue: e.target.value })
-                  }
-                  required
-                  className="w-full px-4 py-3 bg-cream border border-warm-gray focus:border-terracotta outline-none transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm uppercase tracking-widest mb-2">
-                  Image *
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="w-full px-4 py-3 bg-cream border border-warm-gray focus:border-terracotta outline-none transition-colors"
-                />
-                <p className="text-xs text-black/60 mt-2">
-                  Upload image (will be implemented with file server)
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm uppercase tracking-widest mb-2">
-                  Description
-                </label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  rows={4}
-                  className="w-full px-4 py-3 bg-cream border border-warm-gray focus:border-terracotta outline-none transition-colors resize-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm uppercase tracking-widest mb-2">
-                  Date *
-                </label>
-                <input
-                  type="date"
-                  value={formData.date}
-                  onChange={(e) =>
-                    setFormData({ ...formData, date: e.target.value })
-                  }
-                  required
-                  className="w-full px-4 py-3 bg-cream border border-warm-gray focus:border-terracotta outline-none transition-colors"
-                />
-              </div>
-
-              <div className="flex gap-4 pt-4">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="flex-1 bg-terracotta text-white py-3 uppercase tracking-widest hover:bg-terracotta/90 transition-colors disabled:opacity-50"
-                >
-                  {loading ? "Creating..." : "Create Event"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowCreateModal(false)}
-                  className="px-8 py-3 bg-warm-gray uppercase tracking-widest hover:bg-warm-gray/80 transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Edit Modal */}
-      {showEditModal && editingEvent && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-off-white max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-3xl font-heading">Edit Event</h2>
-              <button
-                onClick={() => {
-                  setShowEditModal(false);
-                  setEditingEvent(null);
-                }}
-                className="text-2xl hover:text-terracotta"
-              >
-                ×
-              </button>
-            </div>
-
-            <form onSubmit={handleEditSubmit} className="space-y-6">
-              <div>
-                <label className="block text-sm uppercase tracking-widest mb-2">
-                  Title *
-                </label>
-                <input
-                  type="text"
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  required
-                  className="w-full px-4 py-3 bg-cream border border-warm-gray focus:border-terracotta outline-none transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm uppercase tracking-widest mb-2">
-                  Venue *
-                </label>
-                <input
-                  type="text"
-                  value={formData.venue}
-                  onChange={(e) =>
-                    setFormData({ ...formData, venue: e.target.value })
-                  }
-                  required
-                  className="w-full px-4 py-3 bg-cream border border-warm-gray focus:border-terracotta outline-none transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm uppercase tracking-widest mb-2">
-                  Image *
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="w-full px-4 py-3 bg-cream border border-warm-gray focus:border-terracotta outline-none transition-colors"
-                />
-                <p className="text-xs text-black/60 mt-2">
-                  Current: {editingEvent.image}
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm uppercase tracking-widest mb-2">
-                  Description
-                </label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  rows={4}
-                  className="w-full px-4 py-3 bg-cream border border-warm-gray focus:border-terracotta outline-none transition-colors resize-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm uppercase tracking-widest mb-2">
-                  Date *
-                </label>
-                <input
-                  type="date"
-                  value={formData.date}
-                  onChange={(e) =>
-                    setFormData({ ...formData, date: e.target.value })
-                  }
-                  required
-                  className="w-full px-4 py-3 bg-cream border border-warm-gray focus:border-terracotta outline-none transition-colors"
-                />
-              </div>
-
-              <div className="flex gap-4 pt-4">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="flex-1 bg-terracotta text-white py-3 uppercase tracking-widest hover:bg-terracotta/90 transition-colors disabled:opacity-50"
-                >
-                  {loading ? "Updating..." : "Update Event"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowEditModal(false);
-                    setEditingEvent(null);
-                  }}
-                  className="px-8 py-3 bg-warm-gray uppercase tracking-widest hover:bg-warm-gray/80 transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </>
   );
-}
+};
+
+export default CreateEvent;

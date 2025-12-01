@@ -31,6 +31,16 @@
   --font-family-body: var(--font-body);
 }
 
+::-webkit-scrollbar {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  width: 0.2rem;
+  border-radius: 50rem;
+  background: var(--gold);
+}
+
 html {
   scroll-behavior: smooth;
 }

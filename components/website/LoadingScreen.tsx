@@ -26,7 +26,9 @@ export default function LoadingScreen({
         opacity: 0,
         duration: 0.5,
         delay: 1,
-        onComplete,
+        onComplete: () => {
+          setTimeout(onComplete, 50);
+        },
       });
     });
 
@@ -38,7 +40,7 @@ export default function LoadingScreen({
       ref={screenRef}
       className="fixed inset-0 z-100 bg-cream flex items-center justify-center"
     >
-      <div ref={logoRef} className="relative w-32 h-32">
+      <div ref={logoRef} className="relative w-52 h-52">
         <Image
           fill
           alt="DCLM Logo"

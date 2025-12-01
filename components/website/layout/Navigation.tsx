@@ -29,7 +29,7 @@ export default function Navigation() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-300 ease-out ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${
         scrolled
           ? "bg-off-white/95 backdrop-blur-xl py-2"
           : "bg-transparent py-2"
@@ -49,6 +49,12 @@ export default function Navigation() {
 
         <div className="hidden md:flex items-center gap-8">
           <Link
+            href="/"
+            className="text-base uppercase tracking-widest hover:text-burgundy transition-colors duration-300"
+          >
+            Home
+          </Link>
+          <Link
             href="/about"
             className="text-base uppercase tracking-widest hover:text-burgundy transition-colors duration-300"
           >
@@ -59,18 +65,6 @@ export default function Navigation() {
             className="text-base uppercase tracking-widest hover:text-burgundy transition-colors duration-300"
           >
             Events
-          </Link>
-          <Link
-            href="/ministries"
-            className="text-base uppercase tracking-widest hover:text-burgundy transition-colors duration-300"
-          >
-            Ministries
-          </Link>
-          <Link
-            href="/sermons"
-            className="text-base uppercase tracking-widest hover:text-burgundy transition-colors duration-300"
-          >
-            Sermons
           </Link>
           <Link
             href="/contact"
@@ -93,6 +87,13 @@ export default function Navigation() {
         <div className="md:hidden absolute top-full left-0 right-0 bg-off-white border-t border-warm-gray">
           <div className="flex flex-col p-8 space-y-6">
             <Link
+              href="/home"
+              className="text-sm uppercase tracking-widest hover:text-burgundy transition-colors duration-300"
+              onClick={() => setMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
               href="/about"
               className="text-sm uppercase tracking-widest hover:text-burgundy transition-colors duration-300"
               onClick={() => setMenuOpen(false)}
@@ -105,20 +106,6 @@ export default function Navigation() {
               onClick={() => setMenuOpen(false)}
             >
               Events
-            </Link>
-            <Link
-              href="/ministries"
-              className="text-sm uppercase tracking-widest hover:text-burgundy transition-colors duration-300"
-              onClick={() => setMenuOpen(false)}
-            >
-              Ministries
-            </Link>
-            <Link
-              href="/sermons"
-              className="text-sm uppercase tracking-widest hover:text-burgundy transition-colors duration-300"
-              onClick={() => setMenuOpen(false)}
-            >
-              Sermons
             </Link>
             <Link
               href="/contact"

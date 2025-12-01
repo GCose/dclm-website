@@ -25,7 +25,7 @@ const CommunityHighlight = () => {
       spanCols: 4,
       image: "/images/home/highlight-2.jpg",
       title: "YOUTH FELLOWSHIP",
-      description: "Young believers growing together in faith.",
+      description: "Young believers growing together in faith and purpose",
     },
     {
       id: 3,
@@ -33,7 +33,7 @@ const CommunityHighlight = () => {
       spanCols: 3,
       image: "/images/home/highlight-3.jpg",
       title: "OUTREACH PROGRAMS",
-      description: "Reaching all with the love of Christ",
+      description: "Reaching the community with the love of Christ",
     },
     {
       id: 4,
@@ -83,11 +83,11 @@ const CommunityHighlight = () => {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=6000",
+          end: "+=5400",
           pin: true,
           scrub: 1,
           onUpdate: (self) => {
-            if (self.progress >= 0.5) {
+            if (self.progress >= 0.3) {
               setIsDark(true);
             } else {
               setIsDark(false);
@@ -102,10 +102,15 @@ const CommunityHighlight = () => {
       });
 
       highlights.forEach((highlight, index) => {
+        const isLastImage = index === highlights.length - 1;
+
         tl.fromTo(
           `#highlight-${highlight.id}`,
           { yPercent: 100 },
-          { yPercent: -100, duration: 35 },
+          {
+            yPercent: isLastImage ? -20 : -100,
+            duration: isLastImage ? 28 : 35,
+          },
           50 + index * 8
         );
       });
@@ -159,7 +164,7 @@ const CommunityHighlight = () => {
               width: `${widthPercent}%`,
             }}
           >
-            <div className="relative w-full aspect-3/4 mb-2 md:mb-4">
+            <div className="relative w-full aspect-2/3 mb-2 md:mb-4">
               <Image
                 fill
                 src={highlight.image}
@@ -170,14 +175,14 @@ const CommunityHighlight = () => {
 
             <div className="md:text-center">
               <h3
-                className={`text-[clamp(1.4rem,3vw,1.8rem)] font-semibold mb-1 md:mb-2 transition-colors duration-500 ${
+                className={`text-[clamp(1.2rem,3vw,1.8rem)] font-semibold mb-1 md:mb-2 transition-colors duration-500 ${
                   isDark ? "text-white" : "text-black"
                 }`}
               >
                 {highlight.title}
               </h3>
               <p
-                className={`text-[clamp(1.1rem,3vw,1.4rem)] transition-colors duration-500 ${
+                className={`text-[clamp(1rem,3vw,1.4rem)] transition-colors duration-500 ${
                   isDark ? "text-white/70" : "text-black/70"
                 }`}
               >

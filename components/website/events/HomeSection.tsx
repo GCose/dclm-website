@@ -1,7 +1,6 @@
-import axios from "axios";
-import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 interface Event {
   _id: string;
@@ -16,7 +15,7 @@ interface Event {
   createdAt: string;
 }
 
-const ProgramsSection = () => {
+const HomeSection = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -24,7 +23,7 @@ const ProgramsSection = () => {
     const fetchEvents = async () => {
       try {
         const { data } = await axios.get("/api/events");
-        setEvents(data.reverse().slice(0, 3));
+        setEvents(data.reverse());
       } catch (error) {
         console.error("Error fetching events:", error);
       } finally {
@@ -72,44 +71,44 @@ const ProgramsSection = () => {
 
   if (loading) {
     return (
-      <section className="min-h-screen py-32 px-4 bg-off-white">
+      <div className="min-h-screen pt-32 pb-20 px-8 bg-off-white">
         <div className="w-full">
-          <h2 className="text-[clamp(4rem,7vw,7rem)] font-semibold leading-tight text-black mb-20">
-            OUR LATEST PROGRAMS
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-20">
-            {[1, 2, 3].map((i) => (
+          <h1 className="text-[clamp(4rem,8vw,8rem)] font-heading leading-none text-black mb-24">
+            All Events
+          </h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="bg-warm-gray animate-pulse aspect-3/2" />
             ))}
           </div>
         </div>
-      </section>
+      </div>
     );
   }
 
   if (events.length === 0) {
     return (
-      <section className="min-h-screen py-32 px-4 bg-off-white flex items-center justify-center">
+      <div className="min-h-screen pt-32 pb-20 px-8 bg-off-white flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-[clamp(4rem,7vw,7rem)] font-semibold leading-tight text-black mb-8">
-            OUR LATEST PROGRAMS
-          </h2>
+          <h1 className="text-[clamp(4rem,8vw,8rem)] font-heading leading-none text-black mb-8">
+            All Events
+          </h1>
           <p className="text-2xl text-black/40 uppercase tracking-widest">
-            No upcoming programs at the moment
+            No events available at the moment
           </p>
         </div>
-      </section>
+      </div>
     );
   }
 
   return (
-    <section className="min-h-screen py-32 px-4 bg-off-white">
+    <div className="min-h-screen pt-32 pb-20 px-8 bg-off-white">
       <div className="w-full">
-        <h2 className="text-[clamp(4rem,7vw,7rem)] font-semibold leading-tight text-black mb-20">
-          OUR LATEST PROGRAMS
-        </h2>
+        <h1 className="text-[clamp(4rem,8vw,8rem)] font-heading leading-none text-black mb-24">
+          All Events
+        </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
           {events.map((event) => (
             <div key={event._id} className="group">
               <div className="relative w-full aspect-3/2 mb-6 overflow-hidden bg-warm-gray">
@@ -139,7 +138,7 @@ const ProgramsSection = () => {
                   {formatTimeRange(event.timeFrom, event.timeTo)}
                 </p>
                 {event.description && (
-                  <p className="text-lg text-black/60 leading-relaxed line-clamp-3">
+                  <p className="text-lg text-black/60 leading-relaxed">
                     {event.description}
                   </p>
                 )}
@@ -147,17 +146,9 @@ const ProgramsSection = () => {
             </div>
           ))}
         </div>
-
-        <div className="flex justify-center mt-24">
-          <Link href="/events">
-            <button className="px-12 py-5 border-2 border-black text-black text-sm uppercase tracking-[0.3em] cursor-pointer hover:bg-black hover:text-white transition-all duration-300">
-              View All Events
-            </button>
-          </Link>
-        </div>
       </div>
-    </section>
+    </div>
   );
 };
 
-export default ProgramsSection;
+export default HomeSection;
