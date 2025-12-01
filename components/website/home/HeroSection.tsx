@@ -35,12 +35,12 @@ const HeroSection = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const titleWords = ["WELCOME", "TO", "DCLM", "BRIKAMA", "REGION"];
+  const titleWords = ["DCLM", "BRIKAMA", "REGION"];
 
   return (
     <section className="min-h-screen pt-32 pb-50 px-4 bg-cream ">
       <div className="mx-auto">
-        <h1 className="text-[clamp(3rem,7vw,8.5rem)] [word-spacing:20px] text-black font-bold leading-[1.2] tracking-tighter mb-10">
+        <h1 className="text-[clamp(3rem,8vw,11rem)] [word-spacing:20px] text-black font-bold leading-[1.2] tracking-tighter mb-10">
           {titleWords.map((word, index) => (
             <span
               key={index}
