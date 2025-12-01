@@ -7,7 +7,7 @@ const ScrollProvider = ({ children }: { children: ReactNode }) => {
       root
       options={{
         lerp: 0.1,
-        duration: 3.5,
+        duration: 1.5,
         smoothWheel: true,
       }}
     >
