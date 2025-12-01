@@ -1,148 +1,239 @@
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const locations = [
-  {
-    id: "santosu",
-    name: "SANTOSU (HQ)",
-    label: "HeadQuarters Location",
-    image: "/images/location-1.jpg",
-    description:
-      "Our foundation rests on biblical truth—salvation through Christ alone, righteous living, fervent prayer, and the Great Commission.",
-  },
-  {
-    id: "college",
-    name: "COLLEGE",
-    label: "Mbali junction",
-    image: "/images/location-2.jpg",
-    description:
-      "A thriving community dedicated to discipleship and spiritual growth through systematic study of God's Word.",
-  },
-  {
-    id: "medina",
-    name: "MEDINA",
-    label: "Medina Road",
-    image: "/images/location-1.jpg",
-    description:
-      "Our foundation rests on biblical truth—salvation through Christ alone, righteous living, fervent prayer, and the Great Commission.",
-  },
-  {
-    id: "kartong",
-    name: "KARTONG",
-    label: "Kitti 1",
-    image: "/images/location-4.jpg",
-    description:
-      "A gathering place for fervent prayer and fellowship, where faith meets community in transformative ways.",
-  },
-  {
-    id: "jalangba",
-    name: "JALANGBA",
-    label: "Medina Highway",
-    image: "/images/location-3.jpg",
-    description:
-      "Committed to holiness and authentic worship, building believers who walk in righteousness and truth.",
-  },
-  {
-    id: "kasakunda",
-    name: "KASAKUNDA",
-    label: "Mbali junction",
-    image: "/images/location-2.jpg",
-    description:
-      "A thriving community dedicated to discipleship and spiritual growth through systematic study of God's Word.",
-  },
-  {
-    id: "kabeke",
-    name: "KABEKE",
-    label: "Kitti 1",
-    image: "/images/location-4.jpg",
-    description:
-      "A gathering place for fervent prayer and fellowship, where faith meets community in transformative ways.",
-  },
-  {
-    id: "kiti",
-    name: "KITI",
-    label: "Kitti 2",
-    image: "/images/location-3.jpg",
-    description:
-      "Committed to holiness and authentic worship, building believers who walk in righteousness and truth.",
-  },
-];
+gsap.registerPlugin(ScrollTrigger);
 
 const LocationSection = () => {
-  const [activeLocation, setActiveLocation] = useState(locations[0]);
+  const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isDark, setIsDark] = useState(false);
+
+  const locations = [
+    {
+      id: "santosu",
+      name: "SANTOSU",
+      label: "HeadQuarters Location",
+      image: "/images/location-1.jpg",
+      description:
+        "Our foundation rests on biblical truth—salvation through Christ alone, righteous living, fervent prayer, and the Great Commission.",
+    },
+    {
+      id: "college",
+      name: "COLLEGE",
+      label: "Mbali junction",
+      image: "/images/location-2.jpg",
+      description:
+        "A thriving community dedicated to discipleship and spiritual growth through systematic study of God's Word.",
+    },
+    {
+      id: "medina",
+      name: "MEDINA",
+      label: "Medina Road",
+      image: "/images/location-1.jpg",
+      description:
+        "Our foundation rests on biblical truth—salvation through Christ alone, righteous living, fervent prayer, and the Great Commission.",
+    },
+    {
+      id: "kartong",
+      name: "KARTONG",
+      label: "Kartong Village",
+      image: "/images/location-4.jpg",
+      description:
+        "A gathering place for fervent prayer and fellowship, where faith meets community in transformative ways.",
+    },
+    {
+      id: "jalangba",
+      name: "JALANGBA",
+      label: "Medina Highway",
+      image: "/images/location-3.jpg",
+      description:
+        "Committed to holiness and authentic worship, building believers who walk in righteousness and truth.",
+    },
+    {
+      id: "kasakunda",
+      name: "KASAKUNDA",
+      label: "Mbali junction",
+      image: "/images/location-2.jpg",
+      description:
+        "A thriving community dedicated to discipleship and spiritual growth through systematic study of God's Word.",
+    },
+    {
+      id: "kabeke",
+      name: "KABEKE",
+      label: "Kabeke Village",
+      image: "/images/location-4.jpg",
+      description:
+        "A gathering place for fervent prayer and fellowship, where faith meets community in transformative ways.",
+    },
+    {
+      id: "kiti",
+      name: "KITI",
+      label: "Kitti Village",
+      image: "/images/location-3.jpg",
+      description:
+        "Committed to holiness and authentic worship, building believers who walk in righteousness and truth.",
+    },
+  ];
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const container = containerRef.current;
+
+      if (!container) return;
+
+      const cards = container.querySelectorAll(".location-card");
+      if (cards.length === 0) return;
+
+      const cardWidth = (cards[0] as HTMLElement).offsetWidth;
+      const gap = 48;
+      const titleWidth = window.innerWidth * 0.55;
+      const visibleArea = window.innerWidth - titleWidth;
+      const totalCardsWidth =
+        cardWidth * cards.length + gap * (cards.length - 1);
+      const scrollDistance = totalCardsWidth - visibleArea + cardWidth * 0.2;
+
+      gsap.to(container, {
+        x: -scrollDistance,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: () => `+=${scrollDistance * 1.5}`,
+          pin: true,
+          scrub: 1,
+          onUpdate: (self) => {
+            if (self.progress >= 0.15 && self.progress < 0.85) {
+              setIsDark(true);
+            } else {
+              setIsDark(false);
+            }
+          },
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section className="min-h-screen py-32 pb-50 px-4 bg-cream">
-      <div className="mx-auto">
-        <div className="grid grid-cols-12 gap-0">
-          {/*==================== Left side ====================*/}
-          <div className="col-span-12 md:col-span-5 space-y-10 order-3 mt-10 md:mt-0 md:order-1">
-            {/*==================== Editorial image ====================*/}
-            <div className="relative w-full h-screen">
-              <Image
-                fill
-                key={activeLocation.id}
-                src={activeLocation.image}
-                alt={`DCLM Brikama ${activeLocation.name} location`}
-                className="object-cover transition-opacity duration-500"
-              />
-            </div>
-            {/*==================== End of Editorial image ====================*/}
-
-            {/*==================== Text content ====================*/}
-            <div className="max-w-6xl ml-auto">
-              <p className="font-body text-[clamp(1.5rem,4vw,1.8rem)] leading-[1.1] text-black">
-                {activeLocation.description}
-              </p>
-            </div>
-            {/*==================== End of Text content ====================*/}
+    <section
+      ref={sectionRef}
+      className={`relative overflow-hidden transition-colors duration-500 ${
+        isDark ? "bg-black" : "bg-cream"
+      }`}
+    >
+      <div className="hidden md:block h-screen py-20 px-8">
+        <div className="flex items-center h-full gap-12">
+          <div className="shrink-0 w-[55vw] flex flex-col items-start justify-center pr-12">
+            <h2
+              className={`text-[clamp(3rem,6vw,7rem)] font-semibold leading-[1.1] tracking-tight transition-colors duration-500 whitespace-nowrap ${
+                isDark ? "text-white" : "text-black"
+              }`}
+            >
+              OUR LOCATIONS
+            </h2>
+            <p
+              className={`text-lg mt-4 transition-colors duration-500 ${
+                isDark ? "text-white/70" : "text-black/70"
+              }`}
+            >
+              Spread across 8 locations in the region
+            </p>
           </div>
-          {/*==================== End of Left side ====================*/}
 
-          {/*==================== Middle column with vertical stacked text ====================*/}
-          <div className="col-span-12 md:col-span-2 flex order-1 md:order-2 items-start justify-start md:justify-center mb-10 md:mb-0">
-            <div className="flex md:flex-col items-center">
-              {"LOCATIONS".split("").map((letter, index) => (
-                <span
-                  key={index}
-                  className="text-[clamp(3rem,7vw,8.5rem)] font-bold text-black tracking-tight leading-[1.12]"
-                >
-                  {letter}
-                </span>
-              ))}
-            </div>
-          </div>
-          {/*==================== End of Middle column ====================*/}
+          <div ref={containerRef} className="flex items-center h-full gap-12">
+            {locations.map((location, index) => (
+              <div
+                key={location.id}
+                className="location-card shrink-0 w-[40vw] h-[80vh] flex flex-col pb-8 relative"
+              >
+                <div className="relative w-full h-[50vh] mb-6">
+                  <Image
+                    fill
+                    src={location.image}
+                    alt={location.name}
+                    className="object-cover"
+                  />
+                </div>
 
-          {/*==================== Right side ====================*/}
-          <div className="col-span-12 md:col-span-5 flex md:justify-end order-2 md:order-3 mb-10 md:mb-0">
-            <div className="space-y-1 text-right">
-              {/*==================== Locations stack ====================*/}
-              <div className="space-y-18">
-                {locations.map((location) => (
-                  <button
-                    key={location.id}
-                    onMouseEnter={() => setActiveLocation(location)}
-                    className={`text-right w-full transition-all cursor-pointer duration-300 ${
-                      activeLocation.id === location.id
-                        ? "text-burgundy"
-                        : "text-black/60 hover:text-black"
+                <div className="flex-1 flex flex-col">
+                  <h3
+                    className={`text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.1] tracking-tight mb-2 transition-colors duration-500 ${
+                      isDark ? "text-white" : "text-black"
                     }`}
                   >
-                    <h3 className="text-[clamp(1.5rem,5vw,2.5rem)] font-heading leading-[1.1] tracking-tight">
-                      {location.name}
-                    </h3>
-                    <p className="text-sm uppercase tracking-[0.2em] mt-1 border-b">
-                      {location.label}
-                    </p>
-                  </button>
-                ))}
+                    {location.name}
+                  </h3>
+                  <p
+                    className={`text-sm uppercase tracking-[0.2em] mb-4 transition-colors duration-500 ${
+                      isDark ? "text-white/60" : "text-black/60"
+                    }`}
+                  >
+                    {location.label}
+                  </p>
+                  <p
+                    className={`text-base leading-relaxed transition-colors duration-500 ${
+                      isDark ? "text-white/80" : "text-black/80"
+                    }`}
+                  >
+                    {location.description}
+                  </p>
+                </div>
+
+                <div
+                  className={`absolute bottom-8 right-0 text-6xl font-bold transition-colors duration-500 ${
+                    isDark ? "text-white/30" : "text-black/10"
+                  }`}
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </div>
               </div>
-              {/*==================== End of Locations stack ====================*/}
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="md:hidden py-20 px-6 space-y-16">
+        <div className="text-center mb-12">
+          <h2 className="text-5xl font-semibold leading-[1.1] tracking-tight text-black mb-4">
+            OUR LOCATIONS
+          </h2>
+          <p className="text-base text-black/70">
+            Spread across 8 locations in the region
+          </p>
+        </div>
+
+        {locations.map((location, index) => (
+          <div
+            key={location.id}
+            className="pb-8 border-b-2 border-black/20 relative"
+          >
+            <div className="relative w-full h-[50vh] mb-6">
+              <Image
+                fill
+                src={location.image}
+                alt={location.name}
+                className="object-cover"
+              />
+            </div>
+
+            <h3 className="text-4xl font-semibold leading-[1.1] tracking-tight text-black mb-2">
+              {location.name}
+            </h3>
+            <p className="text-sm uppercase tracking-[0.2em] text-black/60 mb-4">
+              {location.label}
+            </p>
+            <p className="text-base leading-relaxed text-black/80">
+              {location.description}
+            </p>
+
+            <div className="absolute bottom-8 right-0 text-6xl font-bold text-black/10">
+              {String(index + 1).padStart(2, "0")}
             </div>
           </div>
-          {/*==================== End of Right side ====================*/}
-        </div>
+        ))}
       </div>
     </section>
   );
