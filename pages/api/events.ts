@@ -8,8 +8,29 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
         await dbConnect();
 
         if (req.method === 'GET') {
-            const events = await Event.find({});
-            return res.status(200).json(events);
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 15;
+            const skip = (page - 1) * limit;
+
+            const [events, total] = await Promise.all([
+                Event.find({})
+                    .sort({ createdAt: -1 })
+                    .skip(skip)
+                    .limit(limit),
+                Event.countDocuments({})
+            ]);
+
+            const totalPages = Math.ceil(total / limit);
+
+            return res.status(200).json({
+                events,
+                pagination: {
+                    total,
+                    page,
+                    limit,
+                    totalPages
+                }
+            });
         }
 
         if (req.method === 'POST') {
@@ -19,7 +40,8 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
 
         res.setHeader('Allow', ['GET', 'POST']);
         res.status(405).end(`Method ${req.method} Not Allowed`);
-    } catch {
+    } catch (error) {
+        console.error('Events API Error:', error);
         res.status(500).json({ error: "Server error" });
     }
 }

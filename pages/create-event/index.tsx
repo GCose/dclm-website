@@ -8,46 +8,25 @@ import ConfirmationModal from "@/components/dashboard/ConfirmationModal";
 import EventCard from "@/components/dashboard/EventCard";
 import EventForm from "@/components/dashboard/EventForm";
 import Modal from "@/components/dashboard/Modal";
-
-interface Event {
-  _id: string;
-  title: string;
-  venue: string;
-  image: string;
-  description?: string;
-  dateFrom: string;
-  dateTo?: string;
-  timeFrom: string;
-  timeTo?: string;
-  createdAt: string;
-}
-
-interface EventFormData {
-  title: string;
-  venue: string;
-  image: string;
-  description: string;
-  dateFrom: string;
-  dateTo: string;
-  timeFrom: string;
-  timeTo: string;
-}
-
-interface EventSubmitData {
-  title: string;
-  venue: string;
-  image: string;
-  description: string;
-  dateFrom: string;
-  timeFrom: string;
-  dateTo?: string;
-  timeTo?: string;
-}
+import {
+  Event,
+  EventFormData,
+  EventSubmitData,
+  PaginationData,
+  EventsResponse,
+} from "@/types";
 
 const CreateEvent = () => {
   const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
   const [events, setEvents] = useState<Event[]>([]);
+  const [pagination, setPagination] = useState<PaginationData>({
+    total: 0,
+    page: 1,
+    limit: 15,
+    totalPages: 0,
+  });
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -73,20 +52,30 @@ const CreateEvent = () => {
     checkAuth();
   }, []);
 
+  useEffect(() => {
+    if (authenticated) {
+      fetchEvents(pagination.page);
+    }
+  }, [authenticated, pagination.page]);
+
   const checkAuth = async () => {
     try {
-      const { data } = await axios.get("/api/events");
+      await axios.get("/api/auth-status");
       setAuthenticated(true);
-      setEvents(data.reverse());
     } catch {
       setAuthenticated(false);
+    } finally {
+      setAuthLoading(false);
     }
   };
 
-  const fetchEvents = async () => {
+  const fetchEvents = async (page: number = 1) => {
     try {
-      const { data } = await axios.get("/api/events");
-      setEvents(data.reverse());
+      const { data } = await axios.get<EventsResponse>(
+        `/api/events?page=${page}&limit=15`
+      );
+      setEvents(data.events);
+      setPagination(data.pagination);
     } catch (error) {
       console.error("Error fetching events:", error);
       toast.error("Failed to fetch events");
@@ -100,26 +89,29 @@ const CreateEvent = () => {
     const password = (form.elements.namedItem("password") as HTMLInputElement)
       .value;
 
+    const loginToast = toast.loading("Logging in...");
+
     try {
       await axios.post("/api/auth", { email, password });
       setAuthenticated(true);
-      fetchEvents();
-      toast.success("Logged in successfully");
+      toast.success("Logged in successfully", { id: loginToast });
     } catch (error) {
-      toast.error("Invalid credentials");
+      toast.error("Invalid credentials", { id: loginToast });
       console.error("Login error:", error);
     }
   };
 
   const handleLogout = async () => {
+    const logoutToast = toast.loading("Logging out...");
+
     try {
       await axios.post("/api/logout");
       setAuthenticated(false);
-      router.reload();
-      toast.success("Logged out successfully");
+      toast.success("Logged out successfully", { id: logoutToast });
+      router.push("/");
     } catch (error) {
       console.error("Logout error:", error);
-      toast.error("Failed to logout");
+      toast.error("Failed to logout", { id: logoutToast });
     }
   };
 
@@ -201,7 +193,7 @@ const CreateEvent = () => {
       await axios.post("/api/events", submitData);
       resetForm();
       setShowCreateModal(false);
-      fetchEvents();
+      fetchEvents(pagination.page);
       toast.success("Event created successfully", { id: createToast });
     } catch (error) {
       console.error("Error creating event:", error);
@@ -240,7 +232,7 @@ const CreateEvent = () => {
       resetForm();
       setShowEditModal(false);
       setEditingEvent(null);
-      fetchEvents();
+      fetchEvents(pagination.page);
       toast.success("Event updated successfully", { id: updateToast });
     } catch (error) {
       console.error("Error updating event:", error);
@@ -276,7 +268,7 @@ const CreateEvent = () => {
 
     try {
       await axios.delete(`/api/events/${deleteConfirm.eventId}`);
-      fetchEvents();
+      fetchEvents(pagination.page);
       toast.success("Event deleted successfully", { id: deleteToast });
     } catch (error) {
       console.error("Error deleting event:", error);
@@ -285,6 +277,19 @@ const CreateEvent = () => {
       setDeleteConfirm({ isOpen: false, eventId: null });
     }
   };
+
+  const handlePageChange = (newPage: number) => {
+    setPagination({ ...pagination, page: newPage });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-cream flex items-center justify-center">
+        <div className="text-2xl text-black/40">Loading...</div>
+      </div>
+    );
+  }
 
   if (!authenticated) {
     return (
@@ -347,9 +352,14 @@ const CreateEvent = () => {
       <div className="min-h-screen pt-32 pb-20 px-8 bg-cream">
         <div className="w-full">
           <div className="flex justify-between items-center mb-16">
-            <h1 className="text-[clamp(3rem,6vw,5rem)] font-heading leading-tight">
-              Event Archive
-            </h1>
+            <div>
+              <h1 className="text-[clamp(3rem,6vw,5rem)] font-heading leading-tight">
+                Event Archive
+              </h1>
+              <p className="text-lg text-black/60 mt-2">
+                {pagination.total} total events
+              </p>
+            </div>
             <div className="flex gap-4">
               <button
                 onClick={() => setShowCreateModal(true)}
@@ -366,36 +376,84 @@ const CreateEvent = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
-            {events.map((event) => (
-              <div key={event._id}>
-                <EventCard
-                  image={event.image}
-                  title={event.title}
-                  description={event.description}
-                  venue={event.venue}
-                  dateFrom={event.dateFrom}
-                  dateTo={event.dateTo}
-                  timeFrom={event.timeFrom}
-                  timeTo={event.timeTo}
-                />
-                <div className="flex gap-3 mt-6">
+          {events.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-2xl text-black/40">No events yet</p>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
+                {events.map((event) => (
+                  <div key={event._id}>
+                    <EventCard
+                      image={event.image}
+                      title={event.title}
+                      description={event.description}
+                      venue={event.venue}
+                      dateFrom={event.dateFrom}
+                      dateTo={event.dateTo}
+                      timeFrom={event.timeFrom}
+                      timeTo={event.timeTo}
+                    />
+                    <div className="flex gap-3 mt-6">
+                      <button
+                        onClick={() => openEditModal(event)}
+                        className="flex-1 px-6 py-3 border border-black text-black text-xs uppercase tracking-wider cursor-pointer hover:bg-black hover:text-white transition-colors"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClick(event._id)}
+                        className="flex-1 px-6 py-3 bg-black text-white text-xs uppercase tracking-wider cursor-pointer hover:bg-black/80 transition-colors"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pagination */}
+              {pagination.totalPages > 1 && (
+                <div className="flex justify-center items-center gap-4 mt-20">
                   <button
-                    onClick={() => openEditModal(event)}
-                    className="flex-1 px-6 py-3 border border-black text-black text-xs uppercase tracking-wider cursor-pointer hover:bg-black hover:text-white transition-colors"
+                    onClick={() => handlePageChange(pagination.page - 1)}
+                    disabled={pagination.page === 1}
+                    className="px-6 py-3 border border-black text-black text-sm uppercase tracking-wider cursor-pointer hover:bg-black hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-black"
                   >
-                    Edit
+                    Previous
                   </button>
+
+                  <div className="flex gap-2">
+                    {Array.from(
+                      { length: pagination.totalPages },
+                      (_, i) => i + 1
+                    ).map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`w-12 h-12 border border-black text-sm uppercase cursor-pointer transition-colors ${
+                          page === pagination.page
+                            ? "bg-black text-white"
+                            : "text-black hover:bg-black hover:text-white"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+
                   <button
-                    onClick={() => handleDeleteClick(event._id)}
-                    className="flex-1 px-6 py-3 bg-black text-white text-xs uppercase tracking-wider cursor-pointer hover:bg-black/80 transition-colors"
+                    onClick={() => handlePageChange(pagination.page + 1)}
+                    disabled={pagination.page === pagination.totalPages}
+                    className="px-6 py-3 border border-black text-black text-sm uppercase tracking-wider cursor-pointer hover:bg-black hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-black"
                   >
-                    Delete
+                    Next
                   </button>
                 </div>
-              </div>
-            ))}
-          </div>
+              )}
+            </>
+          )}
 
           <Modal
             isOpen={showCreateModal}

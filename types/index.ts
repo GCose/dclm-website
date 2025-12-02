@@ -69,3 +69,39 @@ export interface EventCardProps {
     timeFrom: string;
     timeTo?: string;
 }
+
+export interface Event {
+    _id: string;
+    title: string;
+    venue: string;
+    image: string;
+    description?: string;
+    dateFrom: string;
+    dateTo?: string;
+    timeFrom: string;
+    timeTo?: string;
+    createdAt: string;
+}
+
+export interface EventSubmitData {
+    title: string;
+    venue: string;
+    image: string;
+    description: string;
+    dateFrom: string;
+    timeFrom: string;
+    dateTo?: string;
+    timeTo?: string;
+}
+
+export interface PaginationData {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+}
+
+export interface EventsResponse {
+    events: Event[];
+    pagination: PaginationData;
+}

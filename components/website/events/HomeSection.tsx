@@ -1,19 +1,7 @@
-import EventCard from "@/components/dashboard/EventCard";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
-interface Event {
-  _id: string;
-  title: string;
-  venue: string;
-  image: string;
-  description?: string;
-  dateFrom: string;
-  dateTo?: string;
-  timeFrom: string;
-  timeTo?: string;
-  createdAt: string;
-}
+import { Event, EventsResponse } from "@/types";
+import EventCard from "@/components/dashboard/EventCard";
 
 const HomeSection = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -22,8 +10,8 @@ const HomeSection = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const { data } = await axios.get("/api/events");
-        setEvents(data.reverse());
+        const { data } = await axios.get<EventsResponse>("/api/events");
+        setEvents(data.events);
       } catch (error) {
         console.error("Error fetching events:", error);
       } finally {
@@ -43,10 +31,7 @@ const HomeSection = () => {
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div
-                key={i}
-                className="bg-warm-gray animate-pulse aspect-3/2"
-              />
+              <div key={i} className="bg-warm-gray animate-pulse aspect-3/2" />
             ))}
           </div>
         </div>
@@ -82,12 +67,12 @@ const HomeSection = () => {
               key={event._id}
               image={event.image}
               title={event.title}
-              description={event.description}
               venue={event.venue}
-              dateFrom={event.dateFrom}
               dateTo={event.dateTo}
-              timeFrom={event.timeFrom}
               timeTo={event.timeTo}
+              dateFrom={event.dateFrom}
+              timeFrom={event.timeFrom}
+              description={event.description}
             />
           ))}
         </div>

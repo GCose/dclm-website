@@ -1,20 +1,8 @@
-import EventCard from "@/components/dashboard/EventCard";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
-interface Event {
-  _id: string;
-  title: string;
-  venue: string;
-  image: string;
-  description?: string;
-  dateFrom: string;
-  dateTo?: string;
-  timeFrom: string;
-  timeTo?: string;
-  createdAt: string;
-}
+import { Event, EventsResponse } from "@/types";
+import EventCard from "@/components/dashboard/EventCard";
 
 const ProgramsSection = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -23,8 +11,8 @@ const ProgramsSection = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const { data } = await axios.get("/api/events");
-        setEvents(data.reverse().slice(0, 3));
+        const { data } = await axios.get<EventsResponse>("/api/events?limit=3");
+        setEvents(data.events);
       } catch (error) {
         console.error("Error fetching events:", error);
       } finally {
@@ -80,12 +68,12 @@ const ProgramsSection = () => {
               key={event._id}
               image={event.image}
               title={event.title}
-              description={event.description}
               venue={event.venue}
-              dateFrom={event.dateFrom}
               dateTo={event.dateTo}
-              timeFrom={event.timeFrom}
               timeTo={event.timeTo}
+              dateFrom={event.dateFrom}
+              timeFrom={event.timeFrom}
+              description={event.description}
             />
           ))}
         </div>
