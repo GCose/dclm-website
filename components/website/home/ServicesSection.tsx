@@ -77,7 +77,7 @@ const ServicesSection = () => {
                 <Image
                   fill
                   className="object-cover"
-                  src="/images/services.jpg"
+                  src="/images/home/services.jpg"
                   alt="DCLM Brikama worship service"
                 />
               </div>
