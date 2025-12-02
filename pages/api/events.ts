@@ -1,7 +1,7 @@
+import Event from '@/model/Event';
+import dbConnect from '@/lib/mongodb';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { authMiddleware, AuthRequest } from '@/middleware/auth';
-import dbConnect from '@/lib/mongodb';
-import Event from '@/model/Event';
 
 async function handler(req: AuthRequest, res: NextApiResponse) {
     try {

@@ -279,6 +279,7 @@ const CreateEvent = () => {
   };
 
   const handlePageChange = (newPage: number) => {
+    if (newPage === pagination.page) return;
     setPagination({ ...pagination, page: newPage });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
