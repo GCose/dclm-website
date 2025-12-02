@@ -15,7 +15,7 @@ const EventForm = ({
     <form onSubmit={onSubmit} className="space-y-8">
       <div>
         <label className="block text-lg uppercase tracking-relaxed mb-3 text-black/60">
-          Event Title
+          Event Title <span className="text-terracotta">*</span>
         </label>
         <input
           type="text"
@@ -28,7 +28,7 @@ const EventForm = ({
 
       <div>
         <label className="block text-lg uppercase tracking-relaxed mb-3 text-black/60">
-          Venue
+          Venue <span className="text-terracotta">*</span>
         </label>
         <input
           type="text"
@@ -41,7 +41,7 @@ const EventForm = ({
 
       <div>
         <label className="block text-lg uppercase tracking-relaxed mb-3 text-black/60">
-          Event Image
+          Event Image <span className="text-terracotta">*</span>
         </label>
         <input
           type="file"
@@ -67,12 +67,13 @@ const EventForm = ({
 
       <div>
         <label className="block text-lg uppercase tracking-relaxed mb-3 text-black/60">
-          Description
+          Description <span className="text-terracotta">*</span>
         </label>
         <textarea
+          required
+          rows={4}
           value={formData.description}
           onChange={(e) => onChange("description", e.target.value)}
-          rows={4}
           className="w-full px-2 py-4 bg-transparent border-b-2 border-black/20 focus:border-terracotta outline-none text-xl resize-none transition-colors"
         />
       </div>

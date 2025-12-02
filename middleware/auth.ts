@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 import { parse } from 'cookie';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export interface AuthRequest extends NextApiRequest {
     user?: { email: string };

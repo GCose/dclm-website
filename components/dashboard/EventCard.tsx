@@ -1,6 +1,10 @@
 import Image from "next/image";
 import { EventCardProps } from "@/types";
 
+interface EventCardWithClickProps extends EventCardProps {
+  onClick?: () => void;
+}
+
 const EventCard = ({
   image,
   title,
@@ -10,7 +14,8 @@ const EventCard = ({
   dateTo,
   timeFrom,
   timeTo,
-}: EventCardProps) => {
+  onClick,
+}: EventCardWithClickProps) => {
   const formatDateRange = (dateFrom: string, dateTo?: string) => {
     const from = new Date(dateFrom);
     const fromFormatted = from.toLocaleDateString("en-US", {
@@ -47,7 +52,7 @@ const EventCard = ({
   };
 
   return (
-    <div className="group">
+    <div className="group h-full flex flex-col">
       <div className="relative w-full aspect-3/2 mb-6 overflow-hidden bg-warm-gray">
         <Image
           fill
@@ -61,26 +66,37 @@ const EventCard = ({
         />
       </div>
 
-      <div className="space-y-4">
-        <h3 className="text-4xl font-heading leading-tight text-black">
+      <div className="flex-1 flex flex-col space-y-3">
+        <h3 className="text-[clamp(1.75rem,3vw,2.25rem)] font-heading font-bold leading-tight text-black">
           {title}
         </h3>
+
         {description && (
-          <p className="text-xl text-black/70 leading-relaxed line-clamp-3">
+          <p className="text-base text-black/60 leading-relaxed line-clamp-2">
             {description}
           </p>
         )}
-        <p className="text-lg uppercase tracking-[0.2em] text-black/50">
-          {venue}
-        </p>
-        <div className="space-y-1">
-          <p className="text-lg text-black/60">
+
+        <div className="mt-auto space-y-2 pt-4">
+          <p className="text-sm uppercase tracking-[0.15em] text-black/50">
+            {venue}
+          </p>
+          <p className="text-sm text-black/60">
             {formatDateRange(dateFrom, dateTo)}
           </p>
-          <p className="text-lg text-black/60">
+          <p className="text-sm text-black/60">
             {formatTimeRange(timeFrom, timeTo)}
           </p>
         </div>
+
+        {onClick && (
+          <button
+            onClick={onClick}
+            className="mt-4 text-sm uppercase tracking-widest text-terracotta hover:text-black transition-colors cursor-pointer text-left"
+          >
+            View Details →
+          </button>
+        )}
       </div>
     </div>
   );
