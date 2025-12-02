@@ -3,11 +3,11 @@ import Head from "next/head";
 import { toast, Toaster } from "sonner";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import Navigation from "@/components/website/layout/Navigation";
-import ConfirmationModal from "@/components/dashboard/ConfirmationModal";
+import Modal from "@/components/dashboard/Modal";
 import EventCard from "@/components/dashboard/EventCard";
 import EventForm from "@/components/dashboard/EventForm";
-import Modal from "@/components/dashboard/Modal";
+import Navigation from "@/components/website/layout/Navigation";
+import ConfirmationModal from "@/components/dashboard/ConfirmationModal";
 import {
   Event,
   EventFormData,
