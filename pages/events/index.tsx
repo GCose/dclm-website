@@ -1,13 +1,13 @@
-// import { useState } from "react";
+import { useState } from "react";
+import LoadingScreen from "@/components/website/LoadingScreen";
 import HomeSection from "@/components/website/events/HomeSection";
-// import LoadingScreen from "@/components/website/LoadingScreen";
 
 export default function Events() {
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   return (
     <>
-      {/* {loading && <LoadingScreen onComplete={() => setLoading(false)} />} */}
+      {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
       <HomeSection />
     </>
   );

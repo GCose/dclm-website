@@ -1,6 +1,6 @@
+import EventCard from "@/components/dashboard/EventCard";
 import axios from "axios";
 import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface Event {
@@ -35,47 +35,12 @@ const ProgramsSection = () => {
     fetchEvents();
   }, []);
 
-  const formatDateRange = (dateFrom: string, dateTo?: string) => {
-    const from = new Date(dateFrom);
-    const fromFormatted = from.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-
-    if (!dateTo || dateFrom === dateTo) {
-      return fromFormatted;
-    }
-
-    const to = new Date(dateTo);
-    const toFormatted = to.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-
-    return `${fromFormatted} - ${toFormatted}`;
-  };
-
-  const formatTimeRange = (timeFrom: string, timeTo?: string) => {
-    const formatTime = (time: string) => {
-      const [hours, minutes] = time.split(":");
-      const hour = parseInt(hours);
-      const ampm = hour >= 12 ? "PM" : "AM";
-      const displayHour = hour % 12 || 12;
-      return `${displayHour}:${minutes} ${ampm}`;
-    };
-
-    if (!timeTo) return formatTime(timeFrom);
-    return `${formatTime(timeFrom)} - ${formatTime(timeTo)}`;
-  };
-
   if (loading) {
     return (
-      <section className="min-h-screen py-32 px-4 bg-off-white">
+      <section className="min-h-screen py-32 px-8 bg-off-white">
         <div className="w-full">
-          <h2 className="text-[clamp(4rem,7vw,7rem)] font-semibold leading-tight text-black mb-20">
-            OUR LATEST PROGRAMS
+          <h2 className="text-[clamp(4rem,7vw,7rem)] font-heading leading-tight text-black mb-20">
+            Our Latest Programs
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-20">
             {[1, 2, 3].map((i) => (
@@ -89,10 +54,10 @@ const ProgramsSection = () => {
 
   if (events.length === 0) {
     return (
-      <section className="min-h-screen py-32 px-4 bg-off-white flex items-center justify-center">
+      <section className="min-h-screen py-32 px-8 bg-off-white flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-[clamp(4rem,7vw,7rem)] font-semibold leading-tight text-black mb-8">
-            OUR LATEST PROGRAMS
+          <h2 className="text-[clamp(4rem,7vw,7rem)] font-heading leading-tight text-black mb-8">
+            Our Latest Programs
           </h2>
           <p className="text-2xl text-black/40 uppercase tracking-widest">
             No upcoming programs at the moment
@@ -103,48 +68,25 @@ const ProgramsSection = () => {
   }
 
   return (
-    <section className="min-h-screen py-32 px-4 bg-off-white">
+    <section className="min-h-screen py-32 px-8 bg-off-white">
       <div className="w-full">
-        <h2 className="text-[clamp(4rem,7vw,7rem)] font-semibold leading-tight text-black mb-20">
-          OUR LATEST PROGRAMS
+        <h2 className="text-[clamp(4rem,7vw,7rem)] font-heading leading-tight text-black mb-20">
+          Our Latest Programs
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-20">
           {events.map((event) => (
-            <div key={event._id} className="group">
-              <div className="relative w-full aspect-3/2 mb-6 overflow-hidden bg-warm-gray">
-                <Image
-                  fill
-                  src={event.image}
-                  alt={event.title}
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/images/favicon.png";
-                  }}
-                />
-              </div>
-
-              <div className="space-y-3">
-                <p className="text-sm uppercase tracking-[0.3em] text-black/50">
-                  {event.venue}
-                </p>
-                <h3 className="text-3xl font-heading leading-tight text-black">
-                  {event.title}
-                </h3>
-                <p className="text-xl text-black/70">
-                  {formatDateRange(event.dateFrom, event.dateTo)}
-                </p>
-                <p className="text-xl text-black/70">
-                  {formatTimeRange(event.timeFrom, event.timeTo)}
-                </p>
-                {event.description && (
-                  <p className="text-lg text-black/60 leading-relaxed line-clamp-3">
-                    {event.description}
-                  </p>
-                )}
-              </div>
-            </div>
+            <EventCard
+              key={event._id}
+              image={event.image}
+              title={event.title}
+              description={event.description}
+              venue={event.venue}
+              dateFrom={event.dateFrom}
+              dateTo={event.dateTo}
+              timeFrom={event.timeFrom}
+              timeTo={event.timeTo}
+            />
           ))}
         </div>
 

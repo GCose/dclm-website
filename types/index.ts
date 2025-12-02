@@ -58,3 +58,14 @@ export interface EventFormProps {
     uploading: boolean;
     submitText: string;
 }
+
+export interface EventCardProps {
+    image: string;
+    title: string;
+    description?: string;
+    venue: string;
+    dateFrom: string;
+    dateTo?: string;
+    timeFrom: string;
+    timeTo?: string;
+}

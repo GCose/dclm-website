@@ -1,11 +1,11 @@
 import axios from "axios";
 import Head from "next/head";
-import Image from "next/image";
 import { toast, Toaster } from "sonner";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Navigation from "@/components/website/layout/Navigation";
 import ConfirmationModal from "@/components/dashboard/ConfirmationModal";
+import EventCard from "@/components/dashboard/EventCard";
 import EventForm from "@/components/dashboard/EventForm";
 import Modal from "@/components/dashboard/Modal";
 
@@ -286,41 +286,6 @@ const CreateEvent = () => {
     }
   };
 
-  const formatDateRange = (dateFrom: string, dateTo?: string) => {
-    const from = new Date(dateFrom);
-    const fromFormatted = from.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-
-    if (!dateTo || dateFrom === dateTo) {
-      return fromFormatted;
-    }
-
-    const to = new Date(dateTo);
-    const toFormatted = to.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-
-    return `${fromFormatted} - ${toFormatted}`;
-  };
-
-  const formatTimeRange = (timeFrom: string, timeTo?: string) => {
-    const formatTime = (time: string) => {
-      const [hours, minutes] = time.split(":");
-      const hour = parseInt(hours);
-      const ampm = hour >= 12 ? "PM" : "AM";
-      const displayHour = hour % 12 || 12;
-      return `${displayHour}:${minutes} ${ampm}`;
-    };
-
-    if (!timeTo) return formatTime(timeFrom);
-    return `${formatTime(timeFrom)} - ${formatTime(timeTo)}`;
-  };
-
   if (!authenticated) {
     return (
       <>
@@ -383,7 +348,7 @@ const CreateEvent = () => {
         <div className="w-full">
           <div className="flex justify-between items-center mb-16">
             <h1 className="text-[clamp(3rem,6vw,5rem)] font-heading leading-tight">
-              Events Inventory
+              Event Archive
             </h1>
             <div className="flex gap-4">
               <button
@@ -401,48 +366,32 @@ const CreateEvent = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
             {events.map((event) => (
-              <div key={event._id} className="group">
-                <div className="relative w-full aspect-3/2 mb-6 overflow-hidden bg-warm-gray">
-                  <Image
-                    fill
-                    src={event.image}
-                    alt={event.title}
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "/images/favicon.png";
-                    }}
-                  />
-                </div>
-                <div className="space-y-3">
-                  <p className="text-sm uppercase tracking-[0.3em] text-black/50">
-                    {event.venue}
-                  </p>
-                  <h3 className="text-3xl font-heading leading-tight text-black">
-                    {event.title}
-                  </h3>
-                  <p className="text-xl text-black/70">
-                    {formatDateRange(event.dateFrom, event.dateTo)}
-                  </p>
-                  <p className="text-xl text-black/70">
-                    {formatTimeRange(event.timeFrom, event.timeTo)}
-                  </p>
-                  <div className="flex gap-3 pt-4">
-                    <button
-                      onClick={() => openEditModal(event)}
-                      className="flex-1 px-6 py-3 border border-black text-black text-base uppercase tracking-wider cursor-pointer hover:bg-black hover:text-white transition-colors"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteClick(event._id)}
-                      className="flex-1 px-6 py-3 bg-black text-white text-base uppercase tracking-wider cursor-pointer hover:bg-black/80 transition-colors"
-                    >
-                      Delete
-                    </button>
-                  </div>
+              <div key={event._id}>
+                <EventCard
+                  image={event.image}
+                  title={event.title}
+                  description={event.description}
+                  venue={event.venue}
+                  dateFrom={event.dateFrom}
+                  dateTo={event.dateTo}
+                  timeFrom={event.timeFrom}
+                  timeTo={event.timeTo}
+                />
+                <div className="flex gap-3 mt-6">
+                  <button
+                    onClick={() => openEditModal(event)}
+                    className="flex-1 px-6 py-3 border border-black text-black text-xs uppercase tracking-wider cursor-pointer hover:bg-black hover:text-white transition-colors"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteClick(event._id)}
+                    className="flex-1 px-6 py-3 bg-black text-white text-xs uppercase tracking-wider cursor-pointer hover:bg-black/80 transition-colors"
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
