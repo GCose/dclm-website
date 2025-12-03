@@ -79,7 +79,7 @@ const OverseerSection = () => {
               </p>
             </div>
 
-            <div className="pt-8 border-t border-burgundy mr-0 md:mr-4">
+            <div className="pt-8 border-t border-burgundy/30 mr-0 md:mr-4">
               <p className="text-xl font-semibold text-black mb-1">
                 Pastor Kayode Ayepola
               </p>

@@ -5,7 +5,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-cream px-4 pt-52 pb-15">
+    <footer className="bg-off-white/95 px-4 pt-52 pb-15">
       <div className="w-full">
         <div className="flex  items-end gap-5 mb-12">
           <div className="relative w-62 h-62 md:w-100 md:h-100">
@@ -22,7 +22,7 @@ const Footer = () => {
           </h2>
         </div>
 
-        <div className="w-full h-px bg-black/20 mt-18 mb-8"></div>
+        <div className="w-full h-px bg-burgundy/30 mt-18 mb-8"></div>
 
         <div className="flex items-center justify-between text-sm md:text-base">
           <p className="text-black/60">
