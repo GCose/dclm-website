@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Event, EventsResponse } from "@/types";
 import EventCard from "@/components/dashboard/EventCard";
 
-const HomeSection = () => {
+const HeroSection = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,8 +26,8 @@ const HomeSection = () => {
     return (
       <div className="min-h-screen pt-32 pb-20 px-8 bg-off-white">
         <div className="w-full">
-          <h1 className="text-[clamp(4rem,8vw,8rem)] font-heading leading-none text-black mb-24">
-            All Events
+          <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-none mb-24">
+            All Programs
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
             {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -43,8 +43,8 @@ const HomeSection = () => {
     return (
       <div className="min-h-screen pt-32 pb-20 px-8 bg-off-white flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-[clamp(4rem,8vw,8rem)] font-heading leading-none text-black mb-8">
-            All Events
+          <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-none mb-8">
+            All Programs
           </h1>
           <p className="text-2xl text-black/40 uppercase tracking-widest">
             No events available at the moment
@@ -57,8 +57,8 @@ const HomeSection = () => {
   return (
     <div className="min-h-screen pt-32 pb-20 px-8 bg-off-white">
       <div className="w-full">
-        <h1 className="text-[clamp(4rem,8vw,8rem)] font-heading leading-none text-black mb-24">
-          All Events
+        <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-none mb-24">
+          All Programs
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
@@ -81,4 +81,4 @@ const HomeSection = () => {
   );
 };
 
-export default HomeSection;
+export default HeroSection;

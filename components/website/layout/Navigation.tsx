@@ -80,7 +80,7 @@ export default function Navigation() {
                 : "hover:text-burgundy"
             }`}
           >
-            Events
+            Programs
           </Link>
           <Link
             href="/contact"
@@ -137,7 +137,7 @@ export default function Navigation() {
               }`}
               onClick={() => setMenuOpen(false)}
             >
-              Events
+              Programs
             </Link>
             <Link
               href="/contact"

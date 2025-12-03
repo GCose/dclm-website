@@ -1,5 +1,5 @@
 import LoadingScreen from "@/components/website/LoadingScreen";
-import HomeSection from "@/components/website/events/HomeSection";
+import HeroSection from "@/components/website/events/HeroSection";
 import { useState } from "react";
 
 export default function Events() {
@@ -8,7 +8,7 @@ export default function Events() {
   return (
     <>
       {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
-      <HomeSection />
+      <HeroSection />
     </>
   );
 }
