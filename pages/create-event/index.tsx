@@ -398,13 +398,13 @@ const CreateEvent = () => {
             <div className="flex gap-4">
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="px-8 py-4 bg-terracotta text-white text-sm uppercase tracking-widest cursor-pointer hover:bg-terracotta/90 transition-colors"
+                className="px-8 py-4 bg-navy text-white text-sm uppercase tracking-widest cursor-pointer hover:bg-navy/80 transition-colors"
               >
                 New Event
               </button>
               <button
                 onClick={handleLogout}
-                className="px-8 py-4 bg-navy text-white text-sm uppercase tracking-widest cursor-pointer hover:bg-navy/90 transition-colors"
+                className="px-8 py-4 bg-transparent border-burgundy border text-burgundy text-sm uppercase tracking-widest cursor-pointer hover:bg-burgundy/90 hover:text-white transition-colors"
               >
                 Logout
               </button>
@@ -437,13 +437,13 @@ const CreateEvent = () => {
                     <div className="flex gap-3 mt-6">
                       <button
                         onClick={() => openEditModal(event)}
-                        className="flex-1 px-6 py-3 border border-black text-black text-xs uppercase tracking-wider cursor-pointer hover:bg-black hover:text-white transition-colors"
+                        className="flex-1 px-6 py-3 border border-navy text-navy text-xs uppercase tracking-wider cursor-pointer hover:bg-navy hover:text-white transition-colors"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDeleteClick(event._id)}
-                        className="flex-1 px-6 py-3 bg-black text-white text-xs uppercase tracking-wider cursor-pointer hover:bg-black/80 transition-colors"
+                        className="flex-1 px-6 py-3 bg-navy text-white text-xs uppercase tracking-wider cursor-pointer hover:bg-navy/80 transition-colors"
                       >
                         Delete
                       </button>
@@ -452,13 +452,12 @@ const CreateEvent = () => {
                 ))}
               </div>
 
-              {/* Pagination */}
               {pagination.totalPages > 1 && (
                 <div className="flex justify-center items-center gap-4 mt-20">
                   <button
                     onClick={() => handlePageChange(pagination.page - 1)}
                     disabled={pagination.page === 1}
-                    className="px-6 py-3 border border-black text-black text-sm uppercase tracking-wider cursor-pointer hover:bg-black hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-black"
+                    className="px-6 py-3 border border-navy text-navy text-sm uppercase tracking-wider cursor-pointer hover:bg-navy hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-black"
                   >
                     Previous
                   </button>
@@ -471,9 +470,9 @@ const CreateEvent = () => {
                       <button
                         key={page}
                         onClick={() => handlePageChange(page)}
-                        className={`w-12 h-12 border border-black text-sm uppercase cursor-pointer transition-colors ${
+                        className={`w-12 h-12 border border-navy text-sm uppercase cursor-pointer transition-colors ${
                           page === pagination.page
-                            ? "bg-black text-white"
+                            ? "bg-navy text-white"
                             : "text-black hover:bg-black hover:text-white"
                         }`}
                       >
@@ -485,7 +484,7 @@ const CreateEvent = () => {
                   <button
                     onClick={() => handlePageChange(pagination.page + 1)}
                     disabled={pagination.page === pagination.totalPages}
-                    className="px-6 py-3 border border-black text-black text-sm uppercase tracking-wider cursor-pointer hover:bg-black hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-black"
+                    className="px-6 py-3 border border-navy text-navy text-sm uppercase tracking-wider cursor-pointer hover:bg-navy hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-black"
                   >
                     Next
                   </button>

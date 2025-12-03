@@ -14,12 +14,12 @@ const ConfirmationModal = ({
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
       <div className="bg-off-white w-full max-w-md p-8">
-        <h3 className="text-2xl font-heading font-bold mb-4">{title}</h3>
+        <h3 className="text-2xl font-bold uppercase mb-4">{title}</h3>
         <p className="text-lg text-black/70 mb-8">{message}</p>
         <div className="flex gap-4">
           <button
             onClick={onConfirm}
-            className="flex-1 px-6 py-3 uppercase bg-burgundy text-white text-sm tracking-widest cursor-pointer hover:bg-black/80 transition-colors"
+            className="flex-1 px-6 py-3 uppercase bg-navy text-white text-sm tracking-widest cursor-pointer hover:bg-burgundy/80 transition-colors"
           >
             {confirmText}
           </button>
