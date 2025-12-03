@@ -81,7 +81,7 @@ const EventCard = ({
         )}
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <div className="bg-off-white ">
+          <div className="bg-transparent ">
             <p className="text-xs uppercase tracking-[0.2em] text-black/40 mb-2">
               VENUE
             </p>
@@ -90,7 +90,7 @@ const EventCard = ({
             </p>
           </div>
 
-          <div className="bg-off-white ">
+          <div className="bg-transparent ">
             <p className="text-xs uppercase tracking-[0.2em] text-black/40 mb-2">
               DATE
             </p>
@@ -99,7 +99,7 @@ const EventCard = ({
             </p>
           </div>
 
-          <div className="bg-off-white ">
+          <div className="bg-transparent ">
             <p className="text-xs uppercase tracking-[0.2em] text-black/40 mb-2">
               TIME
             </p>

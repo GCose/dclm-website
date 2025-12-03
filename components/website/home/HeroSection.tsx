@@ -38,9 +38,9 @@ const HeroSection = () => {
   const titleWords = ["DCLM", "BRIKAMA", "REGION"];
 
   return (
-    <section className="min-h-screen pt-32 pb-50 px-4 bg-cream ">
+    <section className="min-h-screen pt-22 pb-50 px-4 bg-cream ">
       <div className="mx-auto">
-        <h1 className="text-[clamp(3rem,8.1vw,11rem)] [word-spacing:20px] text-black font-semibold leading-[1.2] tracking-tighter mb-10">
+        <h1 className="text-[clamp(3rem,8.1vw,11rem)] [word-spacing:20px] text-black font-semibold leading-[1.2] tracking-tighter">
           {titleWords.map((word, index) => (
             <span
               key={index}
@@ -56,7 +56,7 @@ const HeroSection = () => {
           ))}
         </h1>
 
-        <div ref={imageRef} className="relative w-full h-screen mb-10">
+        <div ref={imageRef} className="relative w-full h-screen mb-5">
           <Image
             fill
             priority

@@ -24,7 +24,7 @@ const OverseerSection = () => {
       });
 
       gsap.from(contentRef.current, {
-        x: 100,
+        y: 100,
         opacity: 0,
         duration: 1,
         ease: "power3.out",
@@ -39,20 +39,20 @@ const OverseerSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="min-h-screen py-32 px-8 bg-cream">
+    <section ref={sectionRef} className="min-h-screen py-32 bg-cream">
       <div className="w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          <div ref={imageRef} className="relative w-full aspect-[3/4]">
+          <div ref={imageRef} className="relative w-full aspect-3/4">
             <Image
               fill
-              src="/images/home/overseer.jpg"
+              src="/images/home/RO.jpg"
               alt="Regional Overseer"
               className="object-cover"
             />
           </div>
 
           <div ref={contentRef} className="space-y-8">
-            <h2 className="text-[clamp(3rem,6vw,6rem)] font-bold leading-tight text-black">
+            <h2 className="text-[clamp(3rem,6vw,3rem)] font-bold leading-tight text-black">
               A WORD FROM OUR REGIONAL OVERSEER
             </h2>
 
@@ -80,7 +80,7 @@ const OverseerSection = () => {
 
             <div className="pt-8 border-t border-black/20">
               <p className="text-xl font-semibold text-black mb-1">
-                Pastor John Doe
+                Pastor Kayode Ayepola
               </p>
               <p className="text-base uppercase tracking-widest text-black/60">
                 Regional Overseer, Brikama Region
