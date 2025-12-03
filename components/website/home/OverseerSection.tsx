@@ -41,7 +41,7 @@ const OverseerSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen py-32 px-4 md:px-0 bg-cream"
+      className="min-h-screen py-32 px-4 md:px-0 bg-white"
     >
       <div className="w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
@@ -59,29 +59,27 @@ const OverseerSection = () => {
               A WORD FROM OUR REGIONAL OVERSEER
             </h2>
 
-            <div className="space-y-6 text-[clamp(1.2rem,2.5vw,1.5rem)] leading-relaxed text-black/80">
+            <div className="space-y-6 text-[clamp(1.2rem,2.5vw,1.5rem)] leading-tight text-black/80 md:mr-4">
               <p>
-                {'"'}As we gather in worship and fellowship, let us remember
-                that our strength lies in our unity and commitment to Christ.
-                The Brikama Region continues to flourish as we stand firm on the
-                word of God and pursue holiness in all our ways.{'"'}
+                As we gather in worship and fellowship, let us remember that our
+                strength lies in our unity and commitment to Christ. The Brikama
+                Region continues to flourish as we stand firm on the word of God
+                and pursue holiness in all our ways.
               </p>
 
               <p>
-                {'"'}I am proud of the dedication shown by our brothers and
-                sisters across all our locations. Together, we are building a
-                community that reflects the love and grace of our Lord Jesus
-                Christ.{'"'}
+                I am proud of the dedication shown by our brothers and sisters
+                across all our locations. Together, we are building a community
+                that reflects the love and grace of our Lord Jesus Christ.
               </p>
 
               <p>
-                {'"'}May the Lord continue to guide us as we serve Him with all
-                our hearts, spreading His gospel throughout Brikama and beyond.
-                {'"'}
+                May the Lord continue to guide us as we serve Him with all our
+                hearts, spreading His gospel throughout Brikama and beyond.
               </p>
             </div>
 
-            <div className="pt-8 border-t border-black/20">
+            <div className="pt-8 border-t border-black/20 md:mr-4">
               <p className="text-xl font-semibold text-black mb-1">
                 Pastor Kayode Ayepola
               </p>
