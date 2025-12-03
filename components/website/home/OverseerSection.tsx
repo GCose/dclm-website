@@ -44,7 +44,7 @@ const OverseerSection = () => {
       className="min-h-screen py-32 px-4 md:px-0 bg-white"
     >
       <div className="w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-center">
           <div ref={imageRef} className="relative w-full aspect-3/4">
             <Image
               fill
@@ -54,8 +54,8 @@ const OverseerSection = () => {
             />
           </div>
 
-          <div ref={contentRef} className="space-y-8">
-            <h2 className="text-[clamp(3rem,6vw,3rem)] font-bold leading-tight">
+          <div ref={contentRef} className="space-y-8 md:space-y-30">
+            <h2 className="text-[clamp(3rem,6vw,4rem)] font-bold leading-tight">
               A WORD FROM OUR REGIONAL OVERSEER
             </h2>
 
@@ -79,7 +79,7 @@ const OverseerSection = () => {
               </p>
             </div>
 
-            <div className="pt-8 border-t border-black/20 md:mr-4">
+            <div className="pt-8 border-t border-burgundy mr-0 md:mr-4">
               <p className="text-xl font-semibold text-black mb-1">
                 Pastor Kayode Ayepola
               </p>

@@ -41,6 +41,11 @@
   background: var(--gold);
 }
 
+::selection {
+  color: white;
+  background: var(--navy);
+}
+
 html {
   scroll-behavior: smooth;
 }

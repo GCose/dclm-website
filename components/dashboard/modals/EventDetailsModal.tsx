@@ -76,25 +76,25 @@ const EventDetailsModal = ({
 
           <div className="space-y-6">
             <div>
-              <h3 className="text-sm uppercase tracking-[0.15em] text-black/50 mb-2">
+              <p className="text-sm uppercase tracking-[0.15em] text-burgundy mb-2">
                 VENUE
-              </h3>
+              </p>
               <p className="text-xl text-black">{event.venue}</p>
             </div>
 
             <div>
-              <h3 className="text-sm uppercase tracking-[0.15em] text-black/50 mb-2">
+              <p className="text-sm uppercase tracking-[0.15em] text-burgundy mb-2">
                 DATE
-              </h3>
+              </p>
               <p className="text-xl text-black">
                 {formatDateRange(event.dateFrom, event.dateTo)}
               </p>
             </div>
 
             <div>
-              <h3 className="text-sm uppercase tracking-[0.15em] text-black/50 mb-2">
+              <p className="text-sm uppercase tracking-[0.15em] text-burgundy mb-2">
                 TIME
-              </h3>
+              </p>
               <p className="text-xl text-black">
                 {formatTimeRange(event.timeFrom, event.timeTo)}
               </p>
@@ -102,9 +102,9 @@ const EventDetailsModal = ({
 
             {event.description && (
               <div>
-                <h3 className="text-sm uppercase tracking-[0.15em] text-black/50 mb-2">
+                <p className="text-sm uppercase tracking-[0.15em] text-burgundy mb-2">
                   ABOUT THIS EVENT
-                </h3>
+                </p>
                 <p className="text-lg text-black/70 leading-relaxed whitespace-pre-wrap">
                   {event.description}
                 </p>
