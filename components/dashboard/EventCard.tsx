@@ -70,7 +70,7 @@ const EventCard = ({
       </div>
 
       <div className="flex-1 flex flex-col space-y-4">
-        <h3 className="text-[clamp(1.75rem,3vw,2.25rem)] font-heading font-bold leading-tight text-black">
+        <h3 className="text-[clamp(1.75rem,3vw,2.25rem)] uppercase font-heading font-bold leading-tight text-black">
           {title}
         </h3>
 
