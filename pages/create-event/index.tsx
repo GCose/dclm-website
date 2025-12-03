@@ -302,40 +302,37 @@ const CreateEvent = () => {
           <title>DCLM Brikama | Admin Log In</title>
         </Head>
         <Toaster position="top-right" richColors />
-        <div className="min-h-screen bg-cream flex items-center justify-center px-4">
+        <div className="min-h-screen flex items-center justify-center px-4">
           <div className="w-full max-w-lg">
-            <h1 className="text-[clamp(2.5rem,5vw,4rem)] uppercase font-bold text-center mb-8">
+            <h1 className="text-[clamp(2.5rem,5vw,4rem)] uppercase font-bold text-center mb-12">
               Admin Login
             </h1>
-            <form
-              onSubmit={handleLogin}
-              className="space-y-6 bg-off-white p-8 rounded-lg"
-            >
+            <form onSubmit={handleLogin} className="space-y-8 bg-white p-10">
               <div>
-                <label className="block text-sm uppercase tracking-widest mb-2">
+                <label className="block text-lg uppercase tracking-relaxed  text-black/60">
                   Email
                 </label>
                 <input
                   type="email"
                   name="email"
                   required
-                  className="w-full px-4 py-3 bg-cream border border-warm-gray focus:border-terracotta outline-none transition-colors"
+                  className="w-full px-2 py-4 bg-transparent border-b-2 border-black/20 focus:border-terracotta outline-none text-xl transition-colors"
                 />
               </div>
               <div>
-                <label className="block text-sm uppercase tracking-widest mb-2">
+                <label className="block text-lg uppercase tracking-relaxed  text-black/60">
                   Password
                 </label>
                 <input
                   type="password"
                   name="password"
                   required
-                  className="w-full px-4 py-3 bg-cream border border-warm-gray focus:border-terracotta outline-none transition-colors"
+                  className="w-full px-2 py-4 bg-transparent border-b-2 border-black/20 focus:border-terracotta outline-none text-xl transition-colors"
                 />
               </div>
               <button
                 type="submit"
-                className="w-full bg-terracotta text-white py-3 uppercase cursor-pointer tracking-widest hover:bg-terracotta/90 transition-colors"
+                className="w-full bg-navy text-white py-4 text-sm uppercase cursor-pointer tracking-widest hover:bg-navy/90 transition-colors mt-8"
               >
                 Login
               </button>
@@ -345,7 +342,7 @@ const CreateEvent = () => {
       </>
     );
   }
-
+  
   return (
     <>
       <Head>

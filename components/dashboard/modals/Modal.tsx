@@ -22,15 +22,15 @@ const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
       onClick={onClose}
     >
       <div
-        className="bg-off-white w-full max-w-3xl my-8"
+        className="bg-off-white w-full max-w-3xl max-h-[85vh] overflow-y-auto my-8"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="p-12">
+        <div className="py-12 px-6">
           <div className="flex justify-between items-start mb-12">
             <h2 className="text-5xl font-heading font-bold">{title}</h2>
             <button
               onClick={onClose}
-              className="text-black/40 hover:text-black text-3xl cursor-pointer"
+              className="text-black/40 hover:text-black text-6xl cursor-pointer"
             >
               ×
             </button>

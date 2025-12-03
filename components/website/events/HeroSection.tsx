@@ -2,10 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Event, EventsResponse } from "@/types";
 import EventCard from "@/components/dashboard/EventCard";
+import EventDetailsModal from "@/components/dashboard/modals/EventDetailsModal";
 
 const HeroSection = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -55,29 +58,44 @@ const HeroSection = () => {
   }
 
   return (
-    <div className="min-h-screen pt-32 pb-20 px-8 bg-off-white">
-      <div className="w-full">
-        <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-none mb-24">
-          All Programs
-        </h1>
+    <>
+      <div className="min-h-screen pt-32 pb-20 px-8 bg-off-white">
+        <div className="w-full">
+          <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-none mb-24">
+            All Programs
+          </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
-          {events.map((event) => (
-            <EventCard
-              key={event._id}
-              image={event.image}
-              title={event.title}
-              venue={event.venue}
-              dateTo={event.dateTo}
-              timeTo={event.timeTo}
-              dateFrom={event.dateFrom}
-              timeFrom={event.timeFrom}
-              description={event.description}
-            />
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
+            {events.map((event) => (
+              <EventCard
+                key={event._id}
+                image={event.image}
+                title={event.title}
+                venue={event.venue}
+                dateTo={event.dateTo}
+                timeTo={event.timeTo}
+                dateFrom={event.dateFrom}
+                timeFrom={event.timeFrom}
+                description={event.description}
+                onClick={() => {
+                  setSelectedEvent(event);
+                  setShowDetailsModal(true);
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+
+      <EventDetailsModal
+        isOpen={showDetailsModal}
+        onClose={() => {
+          setShowDetailsModal(false);
+          setSelectedEvent(null);
+        }}
+        event={selectedEvent}
+      />
+    </>
   );
 };
 

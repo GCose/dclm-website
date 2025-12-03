@@ -19,7 +19,7 @@ const ConfirmationModal = ({
         <div className="flex gap-4">
           <button
             onClick={onConfirm}
-            className="flex-1 px-6 py-3 bg-burgundy text-white text-sm uppercase tracking-widest cursor-pointer hover:bg-black/80 transition-colors"
+            className="flex-1 px-6 py-3 uppercase bg-burgundy text-white text-sm tracking-widest cursor-pointer hover:bg-black/80 transition-colors"
           >
             {confirmText}
           </button>
