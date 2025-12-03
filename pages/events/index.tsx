@@ -1,6 +1,6 @@
-import { useState } from "react";
 import LoadingScreen from "@/components/website/LoadingScreen";
 import HomeSection from "@/components/website/events/HomeSection";
+import { useState } from "react";
 
 export default function Events() {
   const [loading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ export default function Events() {
   return (
     <>
       {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
-      {!loading && <HomeSection />}
+      <HomeSection />
     </>
   );
 }

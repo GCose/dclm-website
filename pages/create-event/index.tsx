@@ -299,7 +299,7 @@ const CreateEvent = () => {
     return (
       <>
         <Head>
-          <title>Admin Login | DCLM Brikama</title>
+          <title>DCLM Brikama | Admin Log In</title>
         </Head>
         <Toaster position="top-right" richColors />
         <div className="min-h-screen bg-cream flex items-center justify-center px-4">
@@ -349,7 +349,7 @@ const CreateEvent = () => {
   return (
     <>
       <Head>
-        <title>Manage Events | DCLM Brikama</title>
+        <title>DCLM Brikama | Manage Events</title>
       </Head>
       <Toaster position="top-right" richColors />
       <Navigation />

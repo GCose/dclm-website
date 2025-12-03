@@ -80,7 +80,7 @@ const EventCard = ({
           </p>
         )}
 
-        <div className="grid grid-cols-3 bg-black/20">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <div className="bg-off-white ">
             <p className="text-xs uppercase tracking-[0.2em] text-black/40 mb-2">
               VENUE

@@ -30,7 +30,7 @@ const ProgramsSection = () => {
     return (
       <section className="min-h-screen py-32 px-8 bg-off-white">
         <div className="w-full">
-          <h2 className="text-[clamp(4rem,7vw,7rem)] font-bold leading-tight text-black mb-20">
+          <h2 className="text-[clamp(2.7rem,7vw,7rem)] font-bold leading-tight text-black mb-20">
             OUR LATEST PROGRAMS
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-20">
@@ -47,7 +47,7 @@ const ProgramsSection = () => {
     return (
       <section className="min-h-screen py-32 px-8 bg-off-white flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-[clamp(4rem,7vw,7rem)] font-bold leading-tight text-black mb-8">
+          <h2 className="text-[clamp(2.7rem,7vw,7rem)] font-bold leading-tight text-black mb-8">
             OUR LATEST PROGRAMS
           </h2>
           <p className="text-2xl text-black/40 uppercase tracking-widest">
@@ -59,9 +59,9 @@ const ProgramsSection = () => {
   }
 
   return (
-    <section className="min-h-screen py-32 px-8 bg-off-white">
+    <section className="min-h-screen py-32 px-4 bg-off-white">
       <div className="w-full">
-        <h2 className="text-[clamp(4rem,7vw,7rem)] font-bold leading-tight text-black mb-20">
+        <h2 className="text-[clamp(2.7rem,7vw,7rem)] font-bold leading-tight text-black mb-10 md:mb-20">
           OUR LATEST PROGRAMS
         </h2>
 

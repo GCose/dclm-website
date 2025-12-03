@@ -106,7 +106,7 @@ const CommunityHighlight = () => {
 
         tl.fromTo(
           `#highlight-${highlight.id}`,
-          { yPercent: 100 },
+          { yPercent: 105 },
           {
             yPercent: isLastImage ? -20 : -100,
             duration: isLastImage ? 28 : 35,
