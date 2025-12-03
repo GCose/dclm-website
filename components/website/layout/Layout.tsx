@@ -16,7 +16,7 @@ const Layout = ({ children, title, description }: LayoutProps) => {
         <title>{siteTitle}</title>
         <meta name="description" content={siteDescription} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/images/favicon.png" />
+        <link rel="icon" href="/images/logo.png" />
       </Head>
       <Navigation />
       <main>{children}</main>

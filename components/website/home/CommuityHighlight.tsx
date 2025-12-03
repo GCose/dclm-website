@@ -123,14 +123,16 @@ const CommunityHighlight = () => {
     <section
       ref={sectionRef}
       className={`relative h-screen w-full overflow-hidden transition-colors duration-500 ${
-        isDark ? "bg-black" : "bg-cream"
+        isDark ? "bg-navy" : "bg-cream"
       }`}
     >
       <div className="absolute inset-0 grid grid-cols-12 pointer-events-none z-10">
         {Array.from({ length: 12 }).map((_, i) => (
           <div
             key={i}
-            className={`border-r ${isDark ? "" : "border-burgundy/40"}`}
+            className={`border-r ${
+              isDark ? "border-white/40" : "border-burgundy/40"
+            }`}
           />
         ))}
       </div>

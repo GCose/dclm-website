@@ -12,7 +12,7 @@ const Footer = () => {
             <Image
               fill
               alt="DCLM Logo"
-              src="/images/favicon.png"
+              src="/images/logo.png"
               className="object-contain"
             />
           </div>

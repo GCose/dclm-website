@@ -54,7 +54,7 @@ const EventDetailsModal = ({
       >
         <div className="p-8 md:py-12">
           <div className="flex justify-between items-start mb-8">
-            <h2 className="text-4xl md:text-5xl font-heading font-bold pr-8">
+            <h2 className="text-4xl md:text-5xl uppercase font-heading font-bold pr-8">
               {event.title}
             </h2>
             <button

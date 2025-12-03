@@ -69,20 +69,20 @@ const EventCard = ({
         />
       </div>
 
-      <div className="flex-1 flex flex-col space-y-4">
-        <h3 className="text-[clamp(1.75rem,3vw,2.25rem)] uppercase font-heading font-bold leading-tight text-black">
+      <div className="flex-1 flex flex-col space-y-2">
+        <h3 className="text-[clamp(1.75rem,3vw,2.25rem)] uppercase font-heading font-bold leading-tight ">
           {title}
         </h3>
 
         {description && (
-          <p className="text-[clamp(1rem,2vw,1.125rem)] text-black/60 leading-relaxed line-clamp-2 mb-6">
+          <p className="text-[clamp(1rem,2vw,1.125rem)] text-black/60 leading-tight line-clamp-2 mb-6">
             {description}
           </p>
         )}
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
           <div className="bg-transparent ">
-            <p className="text-xs uppercase tracking-[0.2em] text-black/40 mb-2">
+            <p className="text-sm uppercase tracking-[0.2em] text-burgundy mb-2">
               VENUE
             </p>
             <p className="text-[clamp(0.9rem,2vw,1rem)] text-black/70 leading-tight">
@@ -91,7 +91,7 @@ const EventCard = ({
           </div>
 
           <div className="bg-transparent ">
-            <p className="text-xs uppercase tracking-[0.2em] text-black/40 mb-2">
+            <p className="text-sm uppercase tracking-[0.2em] text-burgundy mb-2">
               DATE
             </p>
             <p className="text-[clamp(0.9rem,2vw,1rem)] text-black/70 leading-tight">
@@ -100,7 +100,7 @@ const EventCard = ({
           </div>
 
           <div className="bg-transparent ">
-            <p className="text-xs uppercase tracking-[0.2em] text-black/40 mb-2">
+            <p className="text-sm uppercase tracking-[0.2em] text-burgundy mb-2">
               TIME
             </p>
             <p className="text-[clamp(0.9rem,2vw,1rem)] text-black/70 leading-tight">

@@ -1,7 +1,7 @@
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -121,7 +121,7 @@ const LocationSection = () => {
     <section
       ref={sectionRef}
       className={`relative overflow-hidden md:transition-colors md:duration-500 bg-cream ${
-        isDark ? "md:bg-black" : ""
+        isDark ? "md:bg-navy" : ""
       }`}
     >
       <div className="hidden md:block h-screen py-20 px-8">

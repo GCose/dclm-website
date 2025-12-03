@@ -45,7 +45,7 @@ export default function Navigation() {
             <Image
               fill
               alt="DCLM Brikama Logo"
-              src="/images/favicon.png"
+              src="/images/logo.png"
               className="object-contain hover:opacity-80 transition-opacity duration-300"
             />
           </div>
@@ -54,7 +54,7 @@ export default function Navigation() {
         <div className="hidden md:flex items-center gap-8">
           <Link
             href="/"
-            className={`text-base uppercase tracking-widest transition-colors duration-300 ${
+            className={`text-base font-bold uppercase tracking-widest transition-colors duration-300 ${
               isActive("/")
                 ? "text-burgundy font-semibold"
                 : "hover:text-burgundy"
@@ -64,7 +64,7 @@ export default function Navigation() {
           </Link>
           <Link
             href="/about"
-            className={`text-base uppercase tracking-widest transition-colors duration-300 ${
+            className={`text-base font-bold uppercase tracking-widest transition-colors duration-300 ${
               isActive("/about")
                 ? "text-burgundy font-semibold"
                 : "hover:text-burgundy"
@@ -74,7 +74,7 @@ export default function Navigation() {
           </Link>
           <Link
             href="/events"
-            className={`text-base uppercase tracking-widest transition-colors duration-300 ${
+            className={`text-base font-bold uppercase tracking-widest transition-colors duration-300 ${
               isActive("/events")
                 ? "text-burgundy font-semibold"
                 : "hover:text-burgundy"
@@ -84,7 +84,7 @@ export default function Navigation() {
           </Link>
           <Link
             href="/contact"
-            className={`text-base uppercase tracking-widest transition-colors duration-300 ${
+            className={`text-base font-bold uppercase tracking-widest transition-colors duration-300 ${
               isActive("/contact")
                 ? "text-burgundy font-semibold"
                 : "hover:text-burgundy"
