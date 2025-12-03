@@ -3,11 +3,11 @@ import Head from "next/head";
 import { toast, Toaster } from "sonner";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import Modal from "@/components/dashboard/Modal";
+import Modal from "@/components/dashboard/modals/Modal";
 import EventCard from "@/components/dashboard/EventCard";
 import EventForm from "@/components/dashboard/EventForm";
 import Navigation from "@/components/website/layout/Navigation";
-import ConfirmationModal from "@/components/dashboard/ConfirmationModal";
+import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 import {
   Event,
   EventFormData,
@@ -352,10 +352,10 @@ const CreateEvent = () => {
       <Navigation />
       <div className="min-h-screen pt-32 pb-20 px-8 bg-cream">
         <div className="w-full">
-          <div className="flex justify-between items-center mb-16">
+          <div className="flex flex-col md:flex-row gap-4 md:justify-between items-center mb-16">
             <div>
-              <h1 className="text-[clamp(3rem,6vw,5rem)] font-heading leading-tight">
-                Event Archive
+              <h1 className="text-[clamp(3rem,6vw,5rem)] text-black font-bold leading-tight">
+                MANAGE EVENTS
               </h1>
               <p className="text-lg text-black/60 mt-2">
                 {pagination.total} total events

@@ -105,3 +105,9 @@ export interface EventsResponse {
     events: Event[];
     pagination: PaginationData;
 }
+
+export interface EventDetailsModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    event: Event | null;
+}

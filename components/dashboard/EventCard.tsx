@@ -66,26 +66,26 @@ const EventCard = ({
         />
       </div>
 
-      <div className="flex-1 flex flex-col space-y-3">
-        <h3 className="text-[clamp(1.75rem,3vw,2.25rem)] font-heading font-bold leading-tight text-black">
+      <div className="flex-1 flex flex-col">
+        <h3 className="text-[clamp(1.75rem,3vw,2.25rem)] font-heading font-bold leading-tight text-black mb-1">
           {title}
         </h3>
 
         {description && (
-          <p className="text-base text-black/60 leading-relaxed line-clamp-2">
+          <p className="text-[clamp(1.2rem,3vw,1.4rem)] text-black/60 leading-tight line-clamp-2 mb-4">
             {description}
           </p>
         )}
 
-        <div className="mt-auto space-y-2 pt-4">
-          <p className="text-sm uppercase tracking-[0.15em] text-black/50">
-            {venue}
+        <div className="space-y-2 mt-4">
+          <p className="text-[clamp(1rem,3vw,1.1rem)] uppercase tracking-[0.15em] text-black/50">
+            Location: {venue}
           </p>
-          <p className="text-sm text-black/60">
-            {formatDateRange(dateFrom, dateTo)}
+          <p className="text-[clamp(1rem,3vw,1.1rem)] uppercase tracking-[0.15em] text-black/60">
+            Date: {formatDateRange(dateFrom, dateTo)}
           </p>
-          <p className="text-sm text-black/60">
-            {formatTimeRange(timeFrom, timeTo)}
+          <p className="text-[clamp(1rem,3vw,1.1rem)] uppercase tracking-[0.15em] text-black/60">
+            Time: {formatTimeRange(timeFrom, timeTo)}
           </p>
         </div>
 
