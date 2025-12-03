@@ -55,7 +55,7 @@ const OverseerSection = () => {
           </div>
 
           <div ref={contentRef} className="space-y-8">
-            <h2 className="text-[clamp(3rem,6vw,3rem)] font-bold leading-tight text-black">
+            <h2 className="text-[clamp(3rem,6vw,3rem)] font-bold leading-tight">
               A WORD FROM OUR REGIONAL OVERSEER
             </h2>
 

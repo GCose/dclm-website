@@ -112,7 +112,7 @@ const CreateEvent = () => {
       await axios.post("/api/logout");
       setAuthenticated(false);
       toast.success("Logged out successfully", { id: logoutToast });
-      router.push("/");
+      router.push("/create-event");
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Failed to logout", { id: logoutToast });
@@ -303,8 +303,8 @@ const CreateEvent = () => {
         </Head>
         <Toaster position="top-right" richColors />
         <div className="min-h-screen bg-cream flex items-center justify-center px-4">
-          <div className="w-full max-w-md">
-            <h1 className="text-[clamp(2.5rem,5vw,4rem)] font-heading text-center mb-8">
+          <div className="w-full max-w-lg">
+            <h1 className="text-[clamp(2.5rem,5vw,4rem)] uppercase font-bold text-center mb-8">
               Admin Login
             </h1>
             <form
@@ -357,7 +357,7 @@ const CreateEvent = () => {
         <div className="w-full">
           <div className="flex justify-between items-center mb-16">
             <div>
-              <h1 className="text-[clamp(3rem,6vw,5rem)] font-heading leading-tight">
+              <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-tight">
                 Event Archive
               </h1>
               <p className="text-lg text-black/60 mt-2">

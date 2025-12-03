@@ -129,7 +129,7 @@ const LocationSection = () => {
           <div className="shrink-0 w-[55vw] flex flex-col items-start justify-center pr-12">
             <h2
               className={`text-[clamp(3rem,6.5vw,9rem)] font-semibold leading-[1.1] tracking-tight transition-colors duration-500 whitespace-nowrap ${
-                isDark ? "text-white" : "text-black"
+                isDark ? "text-white" : ""
               }`}
             >
               OUR LOCATIONS
@@ -161,7 +161,7 @@ const LocationSection = () => {
                 <div className="flex-1 flex flex-col">
                   <h3
                     className={`text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.1] tracking-tight mb-2 transition-colors duration-500 ${
-                      isDark ? "text-white" : "text-black"
+                      isDark ? "text-white" : ""
                     }`}
                   >
                     {location.name}
@@ -184,7 +184,7 @@ const LocationSection = () => {
 
                 <div
                   className={`absolute bottom-0 right-0 text-6xl font-bold transition-colors duration-500 ${
-                    isDark ? "text-white/20" : "text-black/10"
+                    isDark ? "text-burgundy/50" : "text-burgundy"
                   }`}
                 >
                   {String(index + 1).padStart(2, "0")}

@@ -36,7 +36,7 @@ const ServicesSection = () => {
         <div className="grid grid-cols-12 gap-0">
           <div className="col-span-12 md:col-span-5">
             <div className="mb-20 md:mb-85">
-              <h2 className="text-[clamp(3rem,5vw,8.5rem)] font-semibold leading-[1.1] tracking-tight text-black mb-4">
+              <h2 className="text-[clamp(3rem,5vw,8.5rem)] font-semibold leading-[1.1] tracking-tight mb-4">
                 OUR SERVICES
               </h2>
             </div>
@@ -53,10 +53,10 @@ const ServicesSection = () => {
             <div className="space-y-20 md:space-y-85">
               {services.map((service) => (
                 <div key={service.id} className="pb-8 border-b">
-                  <h3 className="text-[clamp(1.5rem,5vw,2.5rem)] font-heading leading-[1.1] tracking-tight text-black mb-2">
+                  <h3 className="text-[clamp(1.5rem,5vw,2.5rem)] font-bold leading-[1.1] tracking-tight mb-2">
                     {service.day}
                   </h3>
-                  <p className="font-body text-[clamp(1.25rem,2vw,1.75rem)] text-black/80 mb-2">
+                  <p className="font-body text-[clamp(1.25rem,2vw,1.75rem)] text-burgundy/80 mb-2">
                     {service.time}
                   </p>
                   {service.description && (

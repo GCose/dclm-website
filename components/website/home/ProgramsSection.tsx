@@ -92,7 +92,7 @@ const ProgramsSection = () => {
   return (
     <section ref={sectionRef} className="min-h-screen py-32 px-4 bg-off-white">
       <div className="w-full">
-        <h2 className="text-[clamp(2.7rem,7vw,7rem)] font-bold leading-tight text-black mb-10 md:mb-20">
+        <h2 className="text-[clamp(2.7rem,7vw,7rem)] font-bold leading-tight mb-10 md:mb-20">
           OUR LATEST PROGRAMS
         </h2>
 
@@ -120,7 +120,7 @@ const ProgramsSection = () => {
         <div className="flex justify-center mt-24">
           <Link href="/events">
             <button className="px-12 py-5 border-2 border-black text-black text-sm uppercase tracking-[0.3em] cursor-pointer hover:bg-black hover:text-white transition-all duration-300">
-              View All Events
+              View All Programs
             </button>
           </Link>
         </div>

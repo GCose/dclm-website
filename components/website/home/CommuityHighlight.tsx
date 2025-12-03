@@ -130,9 +130,7 @@ const CommunityHighlight = () => {
         {Array.from({ length: 12 }).map((_, i) => (
           <div
             key={i}
-            className={`border-r ${
-              isDark ? "border-white/40" : "border-black/40"
-            }`}
+            className={`border-r ${isDark ? "" : "border-burgundy/40"}`}
           />
         ))}
       </div>
@@ -143,7 +141,7 @@ const CommunityHighlight = () => {
       >
         <h2
           className={`text-[clamp(2rem,6vw,7rem)] md:text-[clamp(3rem,7vw,7rem)] font-semibold leading-[1.1] tracking-tight transition-colors duration-500 ${
-            isDark ? "text-white" : "text-black"
+            isDark ? "text-white" : ""
           }`}
         >
           THE BRIKAMA COMMUNITY

@@ -40,7 +40,7 @@ const HeroSection = () => {
   return (
     <section className="min-h-screen pt-22 pb-50 px-4 bg-cream ">
       <div className="mx-auto">
-        <h1 className="text-[clamp(3rem,8.1vw,11rem)] [word-spacing:20px] text-black font-semibold leading-[1.2] tracking-tighter mb-5">
+        <h1 className="text-[clamp(3rem,8.1vw,11rem)] [word-spacing:20px] font-semibold leading-[1.2] tracking-tighter mb-5">
           {titleWords.map((word, index) => (
             <span
               key={index}
