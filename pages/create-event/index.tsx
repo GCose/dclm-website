@@ -41,6 +41,7 @@ const CreateEvent = () => {
     isOpen: boolean;
     eventId: string | null;
   }>({ isOpen: false, eventId: null });
+  const [logoutConfirm, setLogoutConfirm] = useState(false);
 
   const [formData, setFormData] = useState<EventFormData>({
     title: "",
@@ -106,7 +107,11 @@ const CreateEvent = () => {
     }
   };
 
-  const handleLogout = async () => {
+  const handleLogoutClick = () => {
+    setLogoutConfirm(true);
+  };
+
+  const confirmLogout = async () => {
     const logoutToast = toast.loading("Logging out...");
 
     try {
@@ -117,6 +122,8 @@ const CreateEvent = () => {
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Failed to logout", { id: logoutToast });
+    } finally {
+      setLogoutConfirm(false);
     }
   };
 
@@ -403,7 +410,7 @@ const CreateEvent = () => {
                 New Event
               </button>
               <button
-                onClick={handleLogout}
+                onClick={handleLogoutClick}
                 className="px-8 py-4 bg-transparent border-burgundy border text-burgundy text-sm uppercase tracking-widest cursor-pointer hover:bg-burgundy/90 hover:text-white transition-colors"
               >
                 Logout
@@ -548,6 +555,16 @@ const CreateEvent = () => {
             title="Delete Event"
             message="Are you sure you want to delete this event? This action cannot be undone."
             confirmText="Delete"
+            cancelText="Cancel"
+          />
+
+          <ConfirmationModal
+            isOpen={logoutConfirm}
+            onClose={() => setLogoutConfirm(false)}
+            onConfirm={confirmLogout}
+            title="Logout"
+            message="Are you sure you want to logout?"
+            confirmText="Logout"
             cancelText="Cancel"
           />
 
