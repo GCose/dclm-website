@@ -25,7 +25,7 @@ const ConfirmationModal = ({
           </button>
           <button
             onClick={onClose}
-            className="flex-1 px-6 py-3 border border-black text-black text-sm uppercase tracking-widest cursor-pointer hover:bg-black hover:text-white transition-colors"
+            className="flex-1 px-6 py-3 border border-navy text-navy text-sm uppercase tracking-widest cursor-pointer hover:bg-navy hover:text-white transition-colors"
           >
             {cancelText}
           </button>

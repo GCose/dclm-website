@@ -30,7 +30,7 @@ const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
             <h2 className="text-5xl font-heading font-bold">{title}</h2>
             <button
               onClick={onClose}
-              className="text-black/40 hover:text-black text-6xl cursor-pointer"
+              className="text-navy/40 hover:text-navy text-6xl cursor-pointer"
             >
               ×
             </button>
