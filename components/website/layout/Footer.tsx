@@ -5,10 +5,10 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-off-white/95 px-4 pt-52 pb-15">
+    <footer className="bg-off-white/95 px-4 pt-30 md:pt-52 pb-15">
       <div className="w-full">
-        <div className="flex  items-end gap-5 mb-12">
-          <div className="relative w-62 h-62 md:w-100 md:h-100">
+        <div className="flex flex-col gap-10 md:gap-5 md:flex-row items-center mb-12">
+          <div className="relative w-62 h-62 md:w-70 md:h-70 lg:w-100 lg:h-100">
             <Image
               fill
               alt="DCLM Logo"

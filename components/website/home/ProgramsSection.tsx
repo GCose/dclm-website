@@ -96,7 +96,7 @@ const ProgramsSection = () => {
           OUR LATEST PROGRAMS
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
           {events.map((event) => (
             <div key={event._id} className="event-card">
               <EventCard

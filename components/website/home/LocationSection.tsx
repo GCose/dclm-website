@@ -135,7 +135,7 @@ const LocationSection = () => {
               OUR LOCATIONS
             </h2>
             <p
-              className={`text-[clamp(1.1rem,6vw,1.8rem)] mt-4 transition-colors duration-500 ${
+              className={`text-[clamp(1.2rem,6vw,1.8rem)] mt-4 transition-colors duration-500 ${
                 isDark ? "text-white/70" : "text-black/70"
               }`}
             >
@@ -174,7 +174,7 @@ const LocationSection = () => {
                     {location.label}
                   </p>
                   <p
-                    className={`text-[clamp(1.3rem,6.5vw,1.5rem)] leading-tight transition-colors duration-500 ${
+                    className={`text-[clamp(1.5rem,4vw,1.5rem)] leading-relaxed transition-colors duration-500 ${
                       isDark ? "text-white/80" : "text-black/80"
                     }`}
                   >
