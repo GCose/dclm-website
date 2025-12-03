@@ -1,9 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { hash, compare } from "bcryptjs"
-import admin from '@/model/Admin';
 import jwt from "jsonwebtoken"
-import dbConnect from '@/lib/mongodb';
+import { compare } from "bcryptjs"
+import admin from '@/model/Admin';
 import { serialize } from 'cookie';
+import dbConnect from '@/lib/mongodb';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (!email || !password) {
             return res.status(400).json({
-                error: "Fill up the inputs please."
+                error: "Email and password are required"
             })
         }
 
@@ -21,15 +21,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const user = await admin.findOne({ email })
 
             if (!user) {
-                const hashedPassword = await hash(password, 10)
-                await admin.create({ email, password: hashedPassword })
-            } else {
-                const isPasswordValid = await compare(password, user.password);
-                if (!isPasswordValid) {
-                    return res.status(400).json({
-                        error: "Invalid Credentials"
-                    })
-                }
+                return res.status(401).json({
+                    error: "Invalid credentials"
+                })
+            }
+
+            const isPasswordValid = await compare(password, user.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({
+                    error: "Invalid credentials"
+                })
             }
 
             const accessToken = jwt.sign(
@@ -41,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const tokenCookie = serialize('dclm_admin_token', accessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                maxAge: 60 * 60 * 24 * 30, // 30 days
+                maxAge: 60 * 60 * 24 * 30,
                 sameSite: 'strict',
                 path: '/',
             });

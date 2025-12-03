@@ -7,6 +7,7 @@ import {
 } from "@/types";
 import axios from "axios";
 import Head from "next/head";
+import Image from "next/image";
 import { toast, Toaster } from "sonner";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
@@ -96,7 +97,7 @@ const CreateEvent = () => {
     const loginToast = toast.loading("Logging in...");
 
     try {
-      await axios.post("/api/auth", { email, password });
+      await axios.post("/api/auth/signin", { email, password });
       setAuthenticated(true);
       toast.success("Logged in successfully", { id: loginToast });
     } catch (error) {
@@ -302,8 +303,41 @@ const CreateEvent = () => {
           <title>DCLM Brikama | Admin Log In</title>
         </Head>
         <Toaster position="top-right" richColors />
-        <div className="min-h-screen flex items-center justify-center px-4">
-          <div className="w-full max-w-lg">
+        <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
+          <div className="absolute -left-32 top-1/4 opacity-10">
+            <div className="relative w-64 h-64 rotate-90">
+              <Image
+                fill
+                src="/images/logo.png"
+                alt=""
+                className="object-contain"
+              />
+            </div>
+          </div>
+
+          <div className="absolute -right-32 top-1/3 opacity-10">
+            <div className="relative w-64 h-64 -rotate-90">
+              <Image
+                fill
+                src="/images/logo.png"
+                alt=""
+                className="object-contain"
+              />
+            </div>
+          </div>
+
+          <div className="absolute -bottom-30 left-1/2 -translate-x-1/2 opacity-10">
+            <div className="relative w-64 h-64">
+              <Image
+                fill
+                src="/images/logo.png"
+                alt=""
+                className="object-contain"
+              />
+            </div>
+          </div>
+
+          <div className="w-full max-w-lg relative z-10">
             <h1 className="text-[clamp(2.5rem,5vw,4rem)] uppercase font-bold text-center mb-12">
               Admin Login
             </h1>
@@ -342,7 +376,7 @@ const CreateEvent = () => {
       </>
     );
   }
-  
+
   return (
     <>
       <Head>
@@ -352,7 +386,7 @@ const CreateEvent = () => {
       <Navigation />
       <div className="min-h-screen pt-32 pb-20 px-8 bg-cream">
         <div className="w-full">
-          <div className="flex justify-between items-center mb-16">
+          <div className="flex flex-col gap-10 md:gap-0 md:flex-row justify-between items-center mb-16">
             <div>
               <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-tight">
                 Event Archive

@@ -11,6 +11,8 @@ const AdminSchema = new Schema<IAdmin>({
         type: String,
         required: true
     },
+}, {
+    timestamps: true
 });
 
 export default models.Admin || model<IAdmin>('Admin', AdminSchema);
