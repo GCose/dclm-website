@@ -142,7 +142,7 @@ const CommunityHighlight = () => {
         className="absolute top-0 left-0 right-0 flex justify-center pt-20 z-20"
       >
         <h2
-          className={`text-[clamp(2rem,6vw,7rem)] md:text-[clamp(3rem,6vw,7rem)] font-semibold leading-[1.1] tracking-tight transition-colors duration-500 ${
+          className={`text-[clamp(2rem,6vw,7rem)] md:text-[clamp(3rem,7vw,7rem)] font-semibold leading-[1.1] tracking-tight transition-colors duration-500 ${
             isDark ? "text-white" : "text-black"
           }`}
         >

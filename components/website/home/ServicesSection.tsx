@@ -18,7 +18,7 @@ const ServicesSection = () => {
     },
     {
       id: "thursday",
-      day: "THURSDAY REVIVAL HOUR",
+      day: "THURSDAY REVIVAL SERVICE",
       time: "6:00 PM GMT",
       description: "A time of teaching, healing and deliverance.",
     },
@@ -34,10 +34,10 @@ const ServicesSection = () => {
     <section className="min-h-screen py-32 px-4 bg-cream">
       <div className="mx-auto">
         <div className="grid grid-cols-12 gap-0">
-          <div className="col-span-12 md:col-span-6">
+          <div className="col-span-12 md:col-span-5">
             <div className="mb-20 md:mb-85">
               <h2 className="text-[clamp(3rem,5vw,8.5rem)] font-semibold leading-[1.1] tracking-tight text-black mb-4">
-                OUR MEETING DAYS
+                OUR SERVICES
               </h2>
             </div>
 
@@ -69,9 +69,9 @@ const ServicesSection = () => {
             </div>
           </div>
 
-          <div className="hidden md:block md:col-span-2"></div>
+          <div className="hidden md:block md:col-span-1"></div>
 
-          <div className="hidden md:block md:col-span-4">
+          <div className="hidden md:block md:col-span-6">
             <div className="sticky top-0 h-screen">
               <div className="relative w-full h-screen">
                 <Image
