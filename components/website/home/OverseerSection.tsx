@@ -39,7 +39,10 @@ const OverseerSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="min-h-screen py-32 bg-cream">
+    <section
+      ref={sectionRef}
+      className="min-h-screen py-32 px-4 md:px-0 bg-cream"
+    >
       <div className="w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <div ref={imageRef} className="relative w-full aspect-3/4">
