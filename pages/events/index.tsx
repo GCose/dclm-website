@@ -8,7 +8,7 @@ export default function Events() {
   return (
     <>
       {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
-      <HomeSection />
+      {!loading && <HomeSection />}
     </>
   );
 }

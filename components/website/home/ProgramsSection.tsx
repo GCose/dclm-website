@@ -3,10 +3,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Event, EventsResponse } from "@/types";
 import EventCard from "@/components/dashboard/EventCard";
+import EventDetailsModal from "@/components/dashboard/modals/EventDetailsModal";
 
 const ProgramsSection = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -74,6 +77,10 @@ const ProgramsSection = () => {
               dateFrom={event.dateFrom}
               timeFrom={event.timeFrom}
               description={event.description}
+              onClick={() => {
+                setSelectedEvent(event);
+                setShowDetailsModal(true);
+              }}
             />
           ))}
         </div>
@@ -86,6 +93,15 @@ const ProgramsSection = () => {
           </Link>
         </div>
       </div>
+
+      <EventDetailsModal
+        isOpen={showDetailsModal}
+        onClose={() => {
+          setShowDetailsModal(false);
+          setSelectedEvent(null);
+        }}
+        event={selectedEvent}
+      />
     </section>
   );
 };

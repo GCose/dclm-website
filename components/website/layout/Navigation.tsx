@@ -87,7 +87,7 @@ export default function Navigation() {
         <div className="md:hidden absolute top-full left-0 right-0 bg-off-white border-t border-warm-gray">
           <div className="flex flex-col p-8 space-y-6">
             <Link
-              href="/home"
+              href="/"
               className="text-sm uppercase tracking-widest hover:text-burgundy transition-colors duration-300"
               onClick={() => setMenuOpen(false)}
             >

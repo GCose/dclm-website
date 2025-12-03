@@ -52,7 +52,10 @@ const EventCard = ({
   };
 
   return (
-    <div className="group h-full flex flex-col">
+    <div
+      className={`group flex flex-col ${onClick ? "cursor-pointer" : ""}`}
+      onClick={onClick}
+    >
       <div className="relative w-full aspect-3/2 mb-6 overflow-hidden bg-warm-gray">
         <Image
           fill
@@ -66,37 +69,45 @@ const EventCard = ({
         />
       </div>
 
-      <div className="flex-1 flex flex-col">
-        <h3 className="text-[clamp(1.75rem,3vw,2.25rem)] font-heading font-bold leading-tight text-black mb-1">
+      <div className="flex-1 flex flex-col space-y-4">
+        <h3 className="text-[clamp(1.75rem,3vw,2.25rem)] font-heading font-bold leading-tight text-black">
           {title}
         </h3>
 
         {description && (
-          <p className="text-[clamp(1.2rem,3vw,1.4rem)] text-black/60 leading-tight line-clamp-2 mb-4">
+          <p className="text-[clamp(1rem,2vw,1.125rem)] text-black/60 leading-relaxed line-clamp-2 mb-6">
             {description}
           </p>
         )}
 
-        <div className="space-y-2 mt-4">
-          <p className="text-[clamp(1rem,3vw,1.1rem)] uppercase tracking-[0.15em] text-black/50">
-            Location: {venue}
-          </p>
-          <p className="text-[clamp(1rem,3vw,1.1rem)] uppercase tracking-[0.15em] text-black/60">
-            Date: {formatDateRange(dateFrom, dateTo)}
-          </p>
-          <p className="text-[clamp(1rem,3vw,1.1rem)] uppercase tracking-[0.15em] text-black/60">
-            Time: {formatTimeRange(timeFrom, timeTo)}
-          </p>
-        </div>
+        <div className="grid grid-cols-3 bg-black/20">
+          <div className="bg-off-white ">
+            <p className="text-xs uppercase tracking-[0.2em] text-black/40 mb-2">
+              VENUE
+            </p>
+            <p className="text-[clamp(0.9rem,2vw,1rem)] text-black/70 leading-tight">
+              {venue}
+            </p>
+          </div>
 
-        {onClick && (
-          <button
-            onClick={onClick}
-            className="mt-4 text-sm uppercase tracking-widest text-terracotta hover:text-black transition-colors cursor-pointer text-left"
-          >
-            View Details →
-          </button>
-        )}
+          <div className="bg-off-white ">
+            <p className="text-xs uppercase tracking-[0.2em] text-black/40 mb-2">
+              DATE
+            </p>
+            <p className="text-[clamp(0.9rem,2vw,1rem)] text-black/70 leading-tight">
+              {formatDateRange(dateFrom, dateTo)}
+            </p>
+          </div>
+
+          <div className="bg-off-white ">
+            <p className="text-xs uppercase tracking-[0.2em] text-black/40 mb-2">
+              TIME
+            </p>
+            <p className="text-[clamp(0.9rem,2vw,1rem)] text-black/70 leading-tight">
+              {formatTimeRange(timeFrom, timeTo)}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

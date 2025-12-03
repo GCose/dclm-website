@@ -18,14 +18,14 @@ const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black/60 flex items-center justify-center p-2 z-50"
+      className="fixed inset-0 bg-black/60 flex items-center justify-center p-2 z-50 overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className="bg-off-white w-full max-w-3xl max-h-[85vh] flex flex-col"
+        className="bg-off-white w-full max-w-3xl my-8"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="p-12 overflow-y-auto flex-1">
+        <div className="p-12">
           <div className="flex justify-between items-start mb-12">
             <h2 className="text-5xl font-heading font-bold">{title}</h2>
             <button

@@ -1,3 +1,10 @@
+import {
+  Event,
+  EventFormData,
+  EventSubmitData,
+  PaginationData,
+  EventsResponse,
+} from "@/types";
 import axios from "axios";
 import Head from "next/head";
 import { toast, Toaster } from "sonner";
@@ -8,19 +15,14 @@ import EventCard from "@/components/dashboard/EventCard";
 import EventForm from "@/components/dashboard/EventForm";
 import Navigation from "@/components/website/layout/Navigation";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
-import {
-  Event,
-  EventFormData,
-  EventSubmitData,
-  PaginationData,
-  EventsResponse,
-} from "@/types";
+import EventDetailsModal from "@/components/dashboard/modals/EventDetailsModal";
 
 const CreateEvent = () => {
   const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
   const [events, setEvents] = useState<Event[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState<PaginationData>({
     total: 0,
     page: 1,
@@ -31,6 +33,8 @@ const CreateEvent = () => {
   const [uploading, setUploading] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<{
     isOpen: boolean;
@@ -54,9 +58,9 @@ const CreateEvent = () => {
 
   useEffect(() => {
     if (authenticated) {
-      fetchEvents(pagination.page);
+      fetchEvents(currentPage);
     }
-  }, [authenticated, pagination.page]);
+  }, [authenticated, currentPage]);
 
   const checkAuth = async () => {
     try {
@@ -279,8 +283,7 @@ const CreateEvent = () => {
   };
 
   const handlePageChange = (newPage: number) => {
-    if (newPage === pagination.page) return;
-    setPagination({ ...pagination, page: newPage });
+    setCurrentPage(newPage);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -352,10 +355,10 @@ const CreateEvent = () => {
       <Navigation />
       <div className="min-h-screen pt-32 pb-20 px-8 bg-cream">
         <div className="w-full">
-          <div className="flex flex-col md:flex-row gap-4 md:justify-between items-center mb-16">
+          <div className="flex justify-between items-center mb-16">
             <div>
-              <h1 className="text-[clamp(3rem,6vw,5rem)] text-black font-bold leading-tight">
-                MANAGE EVENTS
+              <h1 className="text-[clamp(3rem,6vw,5rem)] font-heading leading-tight">
+                Event Archive
               </h1>
               <p className="text-lg text-black/60 mt-2">
                 {pagination.total} total events
@@ -395,6 +398,10 @@ const CreateEvent = () => {
                       dateTo={event.dateTo}
                       timeFrom={event.timeFrom}
                       timeTo={event.timeTo}
+                      onClick={() => {
+                        setSelectedEvent(event);
+                        setShowDetailsModal(true);
+                      }}
                     />
                     <div className="flex gap-3 mt-6">
                       <button
@@ -512,6 +519,15 @@ const CreateEvent = () => {
             message="Are you sure you want to delete this event? This action cannot be undone."
             confirmText="Delete"
             cancelText="Cancel"
+          />
+
+          <EventDetailsModal
+            isOpen={showDetailsModal}
+            onClose={() => {
+              setShowDetailsModal(false);
+              setSelectedEvent(null);
+            }}
+            event={selectedEvent}
           />
         </div>
       </div>

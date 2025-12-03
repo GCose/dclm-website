@@ -52,7 +52,7 @@ const EventDetailsModal = ({
         className="bg-off-white w-full max-w-4xl max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="p-8 md:p-12">
+        <div className="p-8 md:py-12">
           <div className="flex justify-between items-start mb-8">
             <h2 className="text-4xl md:text-5xl font-heading font-bold pr-8">
               {event.title}
