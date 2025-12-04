@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import CTASection from "@/components/website/home/CTASection";
+import CTASection from "@/components/website/CTASection";
 import LoadingScreen from "@/components/website/LoadingScreen";
 import HeroSection from "@/components/website/home/HeroSection";
 import LocationSection from "@/components/website/home/LocationSection";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CTASection from "@/components/website/home/CTASection";
+import CTASection from "@/components/website/CTASection";
 import LoadingScreen from "@/components/website/LoadingScreen";
 import HeroSection from "@/components/website/programs/HeroSection";
 
