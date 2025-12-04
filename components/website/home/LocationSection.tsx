@@ -99,7 +99,6 @@ const LocationSection = () => {
 
       let entranceComplete = false;
 
-      // Entrance animations (time-based, play once when section enters)
       const entranceTl = gsap.timeline({
         paused: true,
         onComplete: () => {
@@ -132,10 +131,9 @@ const LocationSection = () => {
         "-=1.2"
       );
 
-      // Horizontal scroll (only scrolls after entrance completes)
       ScrollTrigger.create({
         trigger: sectionRef.current,
-        start: "top top",
+        start: "top 0",
         end: () => `+=${scrollDistance * 1.5}`,
         pin: true,
         onEnter: () => {
