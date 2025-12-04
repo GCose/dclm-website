@@ -245,10 +245,10 @@ const LocationSection = () => {
 
       <div className="md:hidden py-20 px-6 space-y-16 bg-cream">
         <div className="text-left mb-12">
-          <h2 className="text-5xl font-semibold leading-[1.1] tracking-tight text-black mb-4">
+          <h2 className="text-5xl font-semibold leading-[1.1] tracking-tight text-navy mb-4">
             OUR LOCATIONS
           </h2>
-          <p className="text-base text-black/70">
+          <p className="text-lg text-navy/70">
             Spread across 8 locations in the region
           </p>
         </div>
@@ -256,7 +256,7 @@ const LocationSection = () => {
         {locations.map((location, index) => (
           <div
             key={location.id}
-            className="pb-8 border-b-2 border-black/20 relative"
+            className="pb-8 border-b-2 border-navy/20 relative"
           >
             <div className="relative w-full h-[50vh] mb-6">
               <Image
@@ -267,17 +267,17 @@ const LocationSection = () => {
               />
             </div>
 
-            <h3 className="text-4xl font-semibold leading-[1.1] tracking-tight text-black mb-2">
+            <h3 className="text-4xl font-semibold leading-[1.1] tracking-tight text-navy mb-2">
               {location.name}
             </h3>
-            <p className="text-sm uppercase tracking-[0.2em] text-black/60 mb-4">
+            <p className="text-sm uppercase tracking-[0.2em] text-navy/60 mb-4">
               {location.label}
             </p>
-            <p className="text-base leading-relaxed text-black/80">
+            <p className="text-lg leading-relaxed text-navy/80 mb-6">
               {location.description}
             </p>
 
-            <div className="absolute bottom-0 right-0 text-6xl font-bold text-black/10">
+            <div className="absolute bottom-0 right-0 text-6xl font-bold text-burgundy/80">
               {String(index + 1).padStart(2, "0")}
             </div>
           </div>

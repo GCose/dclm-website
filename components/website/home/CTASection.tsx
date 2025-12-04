@@ -97,7 +97,7 @@ const CTASection = () => {
 
         gsap.to(logoWrapper, {
           opacity: 0,
-          scale: 0.5,
+          scale: 0.8,
           duration: 1.2,
           ease: "power2.out",
           onComplete: () => {
