@@ -1,6 +1,7 @@
+import { useState } from "react";
+import CTASection from "@/components/website/home/CTASection";
 import LoadingScreen from "@/components/website/LoadingScreen";
 import HeroSection from "@/components/website/programs/HeroSection";
-import { useState } from "react";
 
 export default function Events() {
   const [loading, setLoading] = useState(true);
@@ -9,6 +10,7 @@ export default function Events() {
     <>
       {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
       <HeroSection />
+      <CTASection />
     </>
   );
 }

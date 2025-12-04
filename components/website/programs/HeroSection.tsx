@@ -43,7 +43,7 @@ const HeroSection = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-32 pb-20 px-8 bg-off-white">
+      <div className="min-h-screen pt-32 pb-20 px-8 bg-white">
         <div className="w-full">
           <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-none mb-24">
             All Programs
@@ -60,7 +60,7 @@ const HeroSection = () => {
 
   if (events.length === 0) {
     return (
-      <div className="min-h-screen pt-32 pb-20 px-8 bg-off-white flex items-center justify-center">
+      <div className="min-h-screen pt-32 pb-20 px-8 bg-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-none mb-8">
             All Programs
@@ -75,7 +75,7 @@ const HeroSection = () => {
 
   return (
     <>
-      <div className="min-h-screen pt-32 pb-20 px-8 bg-off-white">
+      <div className="min-h-screen pt-32 pb-20 px-8 bg-white">
         <div className="w-full">
           <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-none mb-24">
             All Programs

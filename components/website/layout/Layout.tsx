@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Footer from "./Footer";
 import Navigation from "./Navigation";
 import { LayoutProps } from "@/types";
 
@@ -20,6 +21,7 @@ const Layout = ({ children, title, description }: LayoutProps) => {
       </Head>
       <Navigation />
       <main>{children}</main>
+      <Footer />
     </>
   );
 };

@@ -129,7 +129,7 @@ const CTASection = () => {
         {Array.from({ length: 12 }).map((_, i) => (
           <div
             key={i}
-            className="cta-gridline border-r border-white/10 origin-top opacity-0"
+            className="cta-gridline border-r border-white/40 origin-top opacity-0"
           />
         ))}
       </div>
