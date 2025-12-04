@@ -118,7 +118,7 @@ const ProgramsSection = () => {
         </div>
 
         <div className="flex justify-center mt-24">
-          <Link href="/'programs'">
+          <Link href="/programs">
             <button className="px-12 py-5 border-2 border-navy text-sm uppercase tracking-[0.3em] cursor-pointer hover:bg-navy hover:text-white transition-all duration-300">
               View All Programs
             </button>

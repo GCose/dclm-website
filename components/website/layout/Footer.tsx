@@ -31,7 +31,7 @@ const Footer = () => {
           </p>
 
           <Link
-            href="https://deeperlifeonline.org"
+            href="https://dclm.org/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-black/60 hover:text-black uppercase tracking-widest transition-colors duration-300"
