@@ -131,7 +131,7 @@ const CommunityHighlight = () => {
           <div
             key={i}
             className={`border-r ${
-              isDark ? "border-white/40" : "border-burgundy/30"
+              isDark ? "border-white/40" : "border-black/20"
             }`}
           />
         ))}

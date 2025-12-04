@@ -8,6 +8,8 @@ gsap.registerPlugin(ScrollTrigger);
 const LocationSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
   const [isDark, setIsDark] = useState(false);
 
   const locations = [
@@ -86,6 +88,7 @@ const LocationSection = () => {
       const cards = container.querySelectorAll(".location-card");
       if (cards.length === 0) return;
 
+      // Calculate horizontal scroll distance
       const cardWidth = (cards[0] as HTMLElement).offsetWidth;
       const gap = 48;
       const titleWidth = window.innerWidth * 0.55;
@@ -94,22 +97,65 @@ const LocationSection = () => {
         cardWidth * cards.length + gap * (cards.length - 1);
       const scrollDistance = totalCardsWidth - visibleArea + cardWidth * 0.2;
 
-      gsap.to(container, {
-        x: -scrollDistance,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: () => `+=${scrollDistance * 1.5}`,
-          pin: true,
-          scrub: 1,
-          onUpdate: (self) => {
+      let entranceComplete = false;
+
+      // Entrance animations (time-based, play once when section enters)
+      const entranceTl = gsap.timeline({
+        paused: true,
+        onComplete: () => {
+          entranceComplete = true;
+        },
+      });
+
+      entranceTl.fromTo(
+        titleRef.current,
+        { y: -100, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }
+      );
+
+      entranceTl.fromTo(
+        textRef.current,
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.8, ease: "power2.out" },
+        "-=0.8"
+      );
+
+      entranceTl.fromTo(
+        cards,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: 1,
+          stagger: 0.1,
+          ease: "power2.out",
+        },
+        "-=1.2"
+      );
+
+      // Horizontal scroll (only scrolls after entrance completes)
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top top",
+        end: () => `+=${scrollDistance * 1.5}`,
+        pin: true,
+        onEnter: () => {
+          if (!entranceComplete) {
+            entranceTl.play();
+          }
+        },
+        onUpdate: (self) => {
+          if (entranceComplete) {
+            gsap.to(container, {
+              x: -scrollDistance * self.progress,
+              duration: 0,
+            });
+
             if (self.progress >= 0.15 && self.progress < 0.85) {
               setIsDark(true);
             } else {
               setIsDark(false);
             }
-          },
+          }
         },
       });
     }, sectionRef);
@@ -128,14 +174,16 @@ const LocationSection = () => {
         <div className="flex items-center h-full gap-12">
           <div className="shrink-0 w-[55vw] flex flex-col items-start justify-center pr-12">
             <h2
-              className={`text-[clamp(3rem,6.5vw,9rem)] font-semibold leading-[1.1] tracking-tight transition-colors duration-500 whitespace-nowrap ${
+              ref={titleRef}
+              className={`text-[clamp(3rem,6.5vw,9rem)] font-semibold leading-[1.1] tracking-tight transition-colors duration-500 whitespace-nowrap opacity-0 ${
                 isDark ? "text-white" : ""
               }`}
             >
               OUR LOCATIONS
             </h2>
             <p
-              className={`text-[clamp(1.2rem,6vw,1.8rem)] mt-4 transition-colors duration-500 ${
+              ref={textRef}
+              className={`text-[clamp(1.2rem,6vw,1.8rem)] mt-4 transition-colors duration-500 opacity-0 ${
                 isDark ? "text-white/70" : "text-black/70"
               }`}
             >
@@ -147,7 +195,7 @@ const LocationSection = () => {
             {locations.map((location, index) => (
               <div
                 key={location.id}
-                className="location-card shrink-0 w-[40vw] h-[80vh] flex flex-col pb-8 relative"
+                className="location-card shrink-0 w-[40vw] h-[80vh] flex flex-col pb-8 relative opacity-0"
               >
                 <div className="relative w-full h-[50vh] mb-6">
                   <Image

@@ -2,8 +2,8 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { Event, EventsResponse } from "@/types";
-import EventCard from "@/components/dashboard/EventCard";
-import EventDetailsModal from "@/components/dashboard/modals/EventDetailsModal";
+import EventCard from "@/components/dashboard/ProgramCard";
+import EventDetailsModal from "@/components/dashboard/modals/ProgramDetailsModal";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
@@ -118,7 +118,7 @@ const ProgramsSection = () => {
         </div>
 
         <div className="flex justify-center mt-24">
-          <Link href="/events">
+          <Link href="/'programs'">
             <button className="px-12 py-5 border-2 border-navy text-sm uppercase tracking-[0.3em] cursor-pointer hover:bg-navy hover:text-white transition-all duration-300">
               View All Programs
             </button>

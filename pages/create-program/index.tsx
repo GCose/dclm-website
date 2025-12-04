@@ -12,11 +12,11 @@ import { toast, Toaster } from "sonner";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Modal from "@/components/dashboard/modals/Modal";
-import EventCard from "@/components/dashboard/EventCard";
-import EventForm from "@/components/dashboard/EventForm";
+import EventCard from "@/components/dashboard/ProgramCard";
+import EventForm from "@/components/dashboard/ProgramForm";
 import Navigation from "@/components/website/layout/Navigation";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
-import EventDetailsModal from "@/components/dashboard/modals/EventDetailsModal";
+import EventDetailsModal from "@/components/dashboard/modals/ProgramDetailsModal";
 
 const CreateEvent = () => {
   const router = useRouter();
@@ -387,7 +387,7 @@ const CreateEvent = () => {
   return (
     <>
       <Head>
-        <title>DCLM Brikama | Manage Events</title>
+        <title>DCLM Brikama | Manage Programs</title>
       </Head>
       <Toaster position="top-right" richColors />
       <Navigation />
@@ -396,10 +396,10 @@ const CreateEvent = () => {
           <div className="flex flex-col gap-10 md:gap-0 md:flex-row justify-between items-center mb-16">
             <div>
               <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-tight">
-                Event Archive
+                Manage Programs
               </h1>
               <p className="text-lg text-black/60 mt-2">
-                {pagination.total} total events
+                {pagination.total} total programs
               </p>
             </div>
             <div className="flex gap-4">
@@ -407,7 +407,7 @@ const CreateEvent = () => {
                 onClick={() => setShowCreateModal(true)}
                 className="px-8 py-4 bg-navy text-white text-sm uppercase tracking-widest cursor-pointer hover:bg-navy/80 transition-colors"
               >
-                New Event
+                New Program
               </button>
               <button
                 onClick={handleLogoutClick}
@@ -506,7 +506,7 @@ const CreateEvent = () => {
               setShowCreateModal(false);
               resetForm();
             }}
-            title="CREATE EVENT"
+            title="CREATE PROGRAM"
           >
             <EventForm
               formData={formData}
@@ -519,7 +519,7 @@ const CreateEvent = () => {
               }}
               loading={loading}
               uploading={uploading}
-              submitText="Create Event"
+              submitText="Create PROGRAM"
             />
           </Modal>
 
@@ -530,7 +530,7 @@ const CreateEvent = () => {
               setEditingEvent(null);
               resetForm();
             }}
-            title="EDIT EVENT"
+            title="EDIT PROGRAM"
           >
             <EventForm
               formData={formData}
@@ -544,7 +544,7 @@ const CreateEvent = () => {
               }}
               loading={loading}
               uploading={uploading}
-              submitText="Update Event"
+              submitText="Update Program"
             />
           </Modal>
 
@@ -552,8 +552,8 @@ const CreateEvent = () => {
             isOpen={deleteConfirm.isOpen}
             onClose={() => setDeleteConfirm({ isOpen: false, eventId: null })}
             onConfirm={confirmDelete}
-            title="Delete Event"
-            message="Are you sure you want to delete this event? This action cannot be undone."
+            title="Delete Program"
+            message="Are you sure you want to delete this program? This action cannot be undone."
             confirmText="Delete"
             cancelText="Cancel"
           />

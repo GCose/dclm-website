@@ -83,7 +83,7 @@ export default function LoadingScreen({
         {Array.from({ length: 12 }).map((_, i) => (
           <div
             key={i}
-            className="gridline border-r border-black/10 origin-top opacity-0"
+            className="gridline border-r border-black/20 origin-top opacity-0"
           />
         ))}
       </div>

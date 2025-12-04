@@ -1,6 +1,16 @@
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
+import { useEffect, useRef } from "react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const ServicesSection = () => {
+  const sectionRef = useRef(null);
+  const titleRef = useRef(null);
+  const imageRef = useRef(null);
+  const servicesRef = useRef<(HTMLDivElement | null)[]>([]);
+
   const services = [
     {
       id: "sunday",
@@ -30,18 +40,60 @@ const ServicesSection = () => {
     },
   ];
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const entranceTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 5%",
+        },
+      });
+
+      // Title from top down
+      entranceTl.fromTo(
+        titleRef.current,
+        { y: -100, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }
+      );
+
+      entranceTl.fromTo(
+        imageRef.current,
+        { scale: 0.6, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 2, ease: "power3.out" },
+        "-=0.6"
+      );
+
+      entranceTl.fromTo(
+        servicesRef.current,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: 1,
+          stagger: 0.15,
+          ease: "power2.out",
+        },
+        "-=1.2"
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="min-h-screen py-32 px-4 bg-cream">
+    <section ref={sectionRef} className="min-h-screen py-32 px-4 bg-cream">
       <div className="mx-auto">
         <div className="grid grid-cols-12 gap-0">
           <div className="col-span-12 md:col-span-5">
             <div className="mb-20 md:mb-85">
-              <h2 className="text-[clamp(3rem,5vw,8.5rem)] font-semibold leading-[1.1] tracking-tight mb-4">
+              <h2
+                ref={titleRef}
+                className="text-[clamp(3rem,5vw,8.5rem)] font-semibold leading-[1.1] tracking-tight mb-4 opacity-0"
+              >
                 OUR SERVICES
               </h2>
             </div>
 
-            <div className="md:hidden relative w-full h-[60vh] mb-12">
+            <div className="md:hidden relative w-full h-[60vh] mb-12 opacity-0">
               <Image
                 fill
                 className="object-cover"
@@ -51,8 +103,14 @@ const ServicesSection = () => {
             </div>
 
             <div className="space-y-20 md:space-y-85">
-              {services.map((service) => (
-                <div key={service.id} className="pb-8 border-b">
+              {services.map((service, index) => (
+                <div
+                  key={service.id}
+                  ref={(el) => {
+                    servicesRef.current[index] = el;
+                  }}
+                  className="pb-8 border-b opacity-0"
+                >
                   <h3 className="text-[clamp(1.5rem,5vw,2.5rem)] font-bold leading-[1.1] tracking-tight mb-2">
                     {service.day}
                   </h3>
@@ -73,7 +131,10 @@ const ServicesSection = () => {
 
           <div className="hidden md:block md:col-span-6">
             <div className="sticky top-0 h-screen">
-              <div className="relative w-full h-screen">
+              <div
+                ref={imageRef}
+                className="relative w-full h-screen opacity-0"
+              >
                 <Image
                   fill
                   className="object-cover"

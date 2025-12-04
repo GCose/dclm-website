@@ -103,7 +103,7 @@ const EventDetailsModal = ({
             {event.description && (
               <div>
                 <p className="text-sm uppercase tracking-[0.15em] text-burgundy mb-2">
-                  ABOUT THIS EVENT
+                  ABOUT THIS PROGRAM
                 </p>
                 <p className="text-lg text-black/70 leading-relaxed whitespace-pre-wrap">
                   {event.description}

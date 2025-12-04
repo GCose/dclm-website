@@ -48,7 +48,7 @@ export interface EventFormData {
     timeTo: string;
 }
 
-export interface EventFormProps {
+export interface ProgramFormProps {
     formData: EventFormData;
     onSubmit: (e: FormEvent) => void;
     onChange: (field: keyof EventFormData, value: string) => void;

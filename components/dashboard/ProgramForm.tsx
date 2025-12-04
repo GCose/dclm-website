@@ -1,4 +1,4 @@
-import { EventFormProps } from "@/types";
+import { ProgramFormProps } from "@/types";
 import Image from "next/image";
 
 const EventForm = ({
@@ -10,12 +10,12 @@ const EventForm = ({
   loading,
   uploading,
   submitText,
-}: EventFormProps) => {
+}: ProgramFormProps) => {
   return (
     <form onSubmit={onSubmit} className="space-y-8">
       <div>
         <label className="block text-lg uppercase tracking-relaxed mb-3 text-black/60">
-          Event Title <span className="text-terracotta">*</span>
+          Program Title <span className="text-terracotta">*</span>
         </label>
         <input
           type="text"
@@ -41,7 +41,7 @@ const EventForm = ({
 
       <div>
         <label className="block text-lg uppercase tracking-relaxed mb-3 text-black/60">
-          Event Image <span className="text-terracotta">*</span>
+          Program Image <span className="text-terracotta">*</span>
         </label>
         <input
           type="file"

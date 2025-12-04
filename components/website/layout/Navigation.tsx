@@ -73,9 +73,9 @@ export default function Navigation() {
             About
           </Link>
           <Link
-            href="/events"
+            href="/programs"
             className={`text-base font-bold uppercase tracking-widest transition-colors duration-300 ${
-              isActive("/events")
+              isActive("/programs")
                 ? "text-burgundy font-semibold"
                 : "hover:text-burgundy"
             }`}
@@ -129,7 +129,7 @@ export default function Navigation() {
               About
             </Link>
             <Link
-              href="/events"
+              href="/programs"
               className={`text-sm uppercase tracking-widest transition-colors duration-300 ${
                 isActive("/events")
                   ? "text-burgundy font-semibold"

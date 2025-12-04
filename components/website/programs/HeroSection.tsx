@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Event, EventsResponse } from "@/types";
-import EventCard from "@/components/dashboard/EventCard";
-import EventDetailsModal from "@/components/dashboard/modals/EventDetailsModal";
+import EventCard from "@/components/dashboard/ProgramCard";
+import EventDetailsModal from "@/components/dashboard/modals/ProgramDetailsModal";
 
 const HeroSection = () => {
   const [events, setEvents] = useState<Event[]>([]);
