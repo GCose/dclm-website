@@ -37,35 +37,36 @@ const ProgramsSection = () => {
   useEffect(() => {
     if (!loading && events.length > 0) {
       const ctx = gsap.context(() => {
-        const entranceTl = gsap.timeline({
+        const tl = gsap.timeline({
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 80%",
+            start: "top 70%",
           },
         });
 
-        entranceTl.fromTo(
+        tl.fromTo(
           titleRef.current,
           { y: -80, opacity: 0 },
           { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }
         );
 
-        entranceTl.fromTo(
+        tl.fromTo(
           cardsRef.current,
-          { opacity: 0 },
+          { x: -100, opacity: 0 },
           {
+            x: 0,
             opacity: 1,
             duration: 0.8,
             stagger: 0.2,
-            ease: "power2.out",
+            ease: "power3.out",
           },
-          "-=0.8"
+          "-=0.6"
         );
 
-        entranceTl.fromTo(
+        tl.fromTo(
           buttonRef.current,
-          { scale: 0.9, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.4)" },
+          { scale: 0.8, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)" },
           "-=0.4"
         );
       }, sectionRef);

@@ -82,17 +82,9 @@ const CommunityHighlight = () => {
       const entranceTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 80%",
-          end: "top 20%",
-          scrub: 1,
+          start: "top 70%",
         },
       });
-
-      entranceTl.fromTo(
-        titleRef.current,
-        { y: -100, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
-      );
 
       entranceTl.fromTo(
         ".community-gridline",
@@ -100,11 +92,17 @@ const CommunityHighlight = () => {
         {
           scaleY: 1,
           opacity: 1,
-          duration: 2,
-          stagger: 0.15,
+          duration: 0.6,
+          stagger: 0.05,
           ease: "power2.inOut",
         },
-        0.8
+      );
+
+      entranceTl.fromTo(
+        titleRef.current,
+        { y: -80, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" },
+        "-=0.3"
       );
 
       const tl = gsap.timeline({
