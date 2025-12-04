@@ -16,19 +16,14 @@ const CTASection = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const section = sectionRef.current;
-      if (!section) return;
-
-      let entranceComplete = false;
-
-      const entranceTl = gsap.timeline({
-        paused: true,
-        onComplete: () => {
-          entranceComplete = true;
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 70%",
         },
       });
 
-      entranceTl.fromTo(
+      tl.fromTo(
         ".cta-gridline",
         { scaleY: 0, opacity: 0 },
         {
@@ -40,46 +35,26 @@ const CTASection = () => {
         }
       );
 
-      entranceTl.fromTo(
+      tl.fromTo(
         titleRef.current,
         { y: -80, opacity: 0 },
         { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" },
         "-=0.3"
       );
 
-      entranceTl.fromTo(
+      tl.fromTo(
         subtextRef.current,
         { y: 50, opacity: 0 },
         { y: 0, opacity: 1, duration: 1.5, ease: "power2.out" },
         "-=0.6"
       );
 
-      entranceTl.fromTo(
+      tl.fromTo(
         buttonRef.current,
         { scale: 0.8, opacity: 0 },
         { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)" },
         "-=0.8"
       );
-
-      ScrollTrigger.create({
-        trigger: section,
-        start: "top top",
-        pin: true,
-        anticipatePin: 1,
-        onEnter: () => {
-          if (!entranceComplete) {
-            entranceTl.play();
-          }
-        },
-        onLeaveBack: () => {
-          entranceComplete = false;
-        },
-        onUpdate: (self) => {
-          if (entranceComplete && self.direction === 1) {
-            self.disable();
-          }
-        },
-      });
     }, sectionRef);
 
     return () => ctx.revert();

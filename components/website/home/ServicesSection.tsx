@@ -131,10 +131,7 @@ const ServicesSection = () => {
 
           <div className="hidden md:block md:col-span-6">
             <div className="sticky top-0 h-screen">
-              <div
-                ref={imageRef}
-                className="relative w-full h-screen opacity-0"
-              >
+              <div ref={imageRef} className="relative w-full h-screen">
                 <Image
                   fill
                   className="object-cover"

@@ -9,7 +9,12 @@ export default function Events() {
 
   return (
     <>
-      {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
+      {loading && (
+        <LoadingScreen
+          title="Explore all programs we've had"
+          onComplete={() => setLoading(false)}
+        />
+      )}
       <HeroSection />
       <CTASection />
       <Footer />
