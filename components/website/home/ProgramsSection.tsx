@@ -1,11 +1,11 @@
 import axios from "axios";
 import Link from "next/link";
-import { useEffect, useState, useRef } from "react";
+import { gsap } from "gsap";
 import { Event, EventsResponse } from "@/types";
+import { useEffect, useState, useRef } from "react";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import EventCard from "@/components/dashboard/ProgramCard";
 import EventDetailsModal from "@/components/dashboard/modals/ProgramDetailsModal";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,6 +15,9 @@ const ProgramsSection = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const sectionRef = useRef(null);
+  const titleRef = useRef(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const buttonRef = useRef(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -34,17 +37,37 @@ const ProgramsSection = () => {
   useEffect(() => {
     if (!loading && events.length > 0) {
       const ctx = gsap.context(() => {
-        gsap.from(".event-card", {
-          y: 100,
-          opacity: 0,
-          duration: 0.8,
-          stagger: 0.2,
-          ease: "power3.out",
+        const entranceTl = gsap.timeline({
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 80%",
+            start: "top 5%",
           },
         });
+
+        entranceTl.fromTo(
+          titleRef.current,
+          { y: -80, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }
+        );
+
+        entranceTl.fromTo(
+          cardsRef.current,
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power2.out",
+          },
+          "-=0.8"
+        );
+
+        entranceTl.fromTo(
+          buttonRef.current,
+          { scale: 0.9, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.4)" },
+          "-=0.4"
+        );
       }, sectionRef);
 
       return () => ctx.revert();
@@ -92,13 +115,22 @@ const ProgramsSection = () => {
   return (
     <section ref={sectionRef} className="min-h-screen py-32 px-4 bg-off-white">
       <div className="w-full">
-        <h2 className="text-[clamp(2.7rem,7vw,7rem)] font-bold leading-tight mb-10 md:mb-20">
+        <h2
+          ref={titleRef}
+          className="text-[clamp(2.7rem,7vw,7rem)] font-bold leading-tight mb-10 md:mb-20 opacity-0"
+        >
           OUR LATEST PROGRAMS
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
-          {events.map((event) => (
-            <div key={event._id} className="event-card">
+          {events.map((event, index) => (
+            <div
+              key={event._id}
+              ref={(el) => {
+                cardsRef.current[index] = el;
+              }}
+              className="opacity-0"
+            >
               <EventCard
                 image={event.image}
                 title={event.title}
@@ -119,7 +151,10 @@ const ProgramsSection = () => {
 
         <div className="flex justify-center mt-24">
           <Link href="/programs">
-            <button className="px-12 py-5 border-2 border-navy text-sm uppercase tracking-[0.3em] cursor-pointer hover:bg-navy hover:text-white transition-all duration-300">
+            <button
+              ref={buttonRef}
+              className="px-12 py-5 border-2 border-navy text-sm uppercase tracking-[0.3em] cursor-pointer hover:bg-navy hover:text-white transition-all duration-300 opacity-0"
+            >
               View All Programs
             </button>
           </Link>
