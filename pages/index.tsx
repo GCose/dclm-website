@@ -31,7 +31,7 @@ export default function Home() {
     <>
       {loading && (
         <LoadingScreen
-          title="YOU ARE WELCOME YOUR SPIRITUAL HOME"
+          title="WELCOME YOUR SPIRITUAL HOME"
           onComplete={() => setLoading(false)}
         />
       )}

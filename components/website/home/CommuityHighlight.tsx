@@ -5,85 +5,85 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const highlights = [
+  {
+    id: 1,
+    startCol: 2,
+    spanCols: 3,
+    image: "/images/home/highlight-1.jpg",
+    title: "SUNDAY WORSHIP",
+    description: "Powerful worship services filled with the presence of God",
+  },
+  {
+    id: 2,
+    startCol: 8,
+    spanCols: 4,
+    image: "/images/home/highlight-2.jpg",
+    title: "YOUTH FELLOWSHIP",
+    description: "Young believers growing together in faith and purpose",
+  },
+  {
+    id: 3,
+    startCol: 1,
+    spanCols: 3,
+    image: "/images/home/highlight-3.jpg",
+    title: "OUTREACH PROGRAMS",
+    description: "Reaching the community with the love of Christ",
+  },
+  {
+    id: 4,
+    startCol: 9,
+    spanCols: 3,
+    image: "/images/home/highlight-4.jpg",
+    title: "PRAYER MEETINGS",
+    description: "United in fervent prayer and intercession",
+  },
+  {
+    id: 5,
+    startCol: 2,
+    spanCols: 4,
+    image: "/images/home/highlight-5.jpg",
+    title: "COMMUNITY SERVICE",
+    description: "Serving the people of Brikama with compassion",
+  },
+  {
+    id: 6,
+    startCol: 7,
+    spanCols: 4,
+    image: "/images/home/highlight-6.jpg",
+    title: "BIBLE STUDY",
+    description: "Deepening our understanding of God's Word together",
+  },
+  {
+    id: 7,
+    startCol: 3,
+    spanCols: 3,
+    image: "/images/home/highlight-7.jpg",
+    title: "CHILDREN'S MINISTRY",
+    description: "Nurturing young hearts in faith and knowledge",
+  },
+  {
+    id: 8,
+    startCol: 8,
+    spanCols: 4,
+    image: "/images/home/highlight-8.jpg",
+    title: "EVANGELISM",
+    description: "Spreading the Gospel throughout Brikama and beyond",
+  },
+];
+
 const CommunityHighlight = () => {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const [isDark, setIsDark] = useState(false);
-
-  const highlights = [
-    {
-      id: 1,
-      startCol: 2,
-      spanCols: 3,
-      image: "/images/home/highlight-1.jpg",
-      title: "SUNDAY WORSHIP",
-      description: "Powerful worship services filled with the presence of God",
-    },
-    {
-      id: 2,
-      startCol: 8,
-      spanCols: 4,
-      image: "/images/home/highlight-2.jpg",
-      title: "YOUTH FELLOWSHIP",
-      description: "Young believers growing together in faith and purpose",
-    },
-    {
-      id: 3,
-      startCol: 1,
-      spanCols: 3,
-      image: "/images/home/highlight-3.jpg",
-      title: "OUTREACH PROGRAMS",
-      description: "Reaching the community with the love of Christ",
-    },
-    {
-      id: 4,
-      startCol: 9,
-      spanCols: 3,
-      image: "/images/home/highlight-4.jpg",
-      title: "PRAYER MEETINGS",
-      description: "United in fervent prayer and intercession",
-    },
-    {
-      id: 5,
-      startCol: 2,
-      spanCols: 4,
-      image: "/images/home/highlight-5.jpg",
-      title: "COMMUNITY SERVICE",
-      description: "Serving the people of Brikama with compassion",
-    },
-    {
-      id: 6,
-      startCol: 7,
-      spanCols: 4,
-      image: "/images/home/highlight-6.jpg",
-      title: "BIBLE STUDY",
-      description: "Deepening our understanding of God's Word together",
-    },
-    {
-      id: 7,
-      startCol: 3,
-      spanCols: 3,
-      image: "/images/home/highlight-7.jpg",
-      title: "CHILDREN'S MINISTRY",
-      description: "Nurturing young hearts in faith and knowledge",
-    },
-    {
-      id: 8,
-      startCol: 8,
-      spanCols: 4,
-      image: "/images/home/highlight-8.jpg",
-      title: "EVANGELISM",
-      description: "Spreading the Gospel throughout Brikama and beyond",
-    },
-  ];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       const entranceTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top bottom",
-          end: "top center",
+          start: "top 80%",
+          end: "top 20%",
           scrub: 1,
         },
       });
@@ -100,10 +100,11 @@ const CommunityHighlight = () => {
         {
           scaleY: 1,
           opacity: 1,
-          duration: 1,
-          ease: "power2.out",
+          duration: 2,
+          stagger: 0.15,
+          ease: "power2.inOut",
         },
-        0.5
+        0.8
       );
 
       const tl = gsap.timeline({
