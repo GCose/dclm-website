@@ -59,7 +59,7 @@ const ServicesSection = () => {
       entranceTl.fromTo(
         imageRef.current,
         { scale: 0.6, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 2, ease: "power3.out" },
+        { scale: 1, opacity: 1, duration: 1.8, ease: "power3.out" },
         "-=0.6"
       );
 

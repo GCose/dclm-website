@@ -9,6 +9,7 @@ import ServicesSection from "@/components/website/home/ServicesSection";
 import ProgramsSection from "@/components/website/home/ProgramsSection";
 import OverseerSection from "@/components/website/home/OverseerSection";
 import CommunityHighlight from "@/components/website/home/CommuityHighlight";
+import CTASection from "@/components/website/home/CTASection";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -35,6 +36,7 @@ export default function Home() {
       <CommunityHighlight />
       <ProgramsSection />
       <OverseerSection />
+      <CTASection />
       <Footer />
     </>
   );
