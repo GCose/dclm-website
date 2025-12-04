@@ -79,6 +79,33 @@ const CommunityHighlight = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      const entranceTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "top center",
+          scrub: 1,
+        },
+      });
+
+      entranceTl.fromTo(
+        titleRef.current,
+        { y: -100, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
+      );
+
+      entranceTl.fromTo(
+        ".community-gridline",
+        { scaleY: 0, opacity: 0 },
+        {
+          scaleY: 1,
+          opacity: 1,
+          duration: 1,
+          ease: "power2.out",
+        },
+        0.5
+      );
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -130,7 +157,7 @@ const CommunityHighlight = () => {
         {Array.from({ length: 12 }).map((_, i) => (
           <div
             key={i}
-            className={`border-r ${
+            className={`community-gridline border-r origin-top opacity-0 ${
               isDark ? "border-white/40" : "border-black/20"
             }`}
           />
@@ -139,7 +166,7 @@ const CommunityHighlight = () => {
 
       <div
         ref={titleRef}
-        className="absolute top-0 left-0 right-0 flex justify-center pt-20 z-20"
+        className="absolute top-0 left-0 right-0 flex justify-center pt-20 z-20 opacity-0"
       >
         <h2
           className={`text-[clamp(2rem,6vw,7rem)] md:text-[clamp(3rem,7vw,7rem)] font-semibold leading-[1.1] tracking-tight transition-colors duration-500 ${

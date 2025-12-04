@@ -20,6 +20,7 @@ import EventDetailsModal from "@/components/dashboard/modals/ProgramDetailsModal
 
 const CreateEvent = () => {
   const router = useRouter();
+  const [fetchingEvents, setFetchingEvents] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
   const [events, setEvents] = useState<Event[]>([]);
@@ -76,6 +77,7 @@ const CreateEvent = () => {
   };
 
   const fetchEvents = async (page: number = 1) => {
+    setFetchingEvents(true);
     try {
       const { data } = await axios.get<EventsResponse>(
         `/api/events?page=${page}&limit=15`
@@ -85,6 +87,8 @@ const CreateEvent = () => {
     } catch (error) {
       console.error("Error fetching events:", error);
       toast.error("Failed to fetch events");
+    } finally {
+      setFetchingEvents(false);
     }
   };
 
@@ -118,7 +122,7 @@ const CreateEvent = () => {
       await axios.post("/api/logout");
       setAuthenticated(false);
       toast.success("Logged out successfully", { id: logoutToast });
-      router.push("/create-event");
+      router.push("/create-program");
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Failed to logout", { id: logoutToast });
@@ -455,7 +459,27 @@ const CreateEvent = () => {
             </div>
           </div>
 
-          {events.length === 0 ? (
+          {fetchingEvents ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
+                <div key={i} className="flex flex-col">
+                  <div className="w-full aspect-3/2 bg-warm-gray animate-pulse mb-6"></div>
+                  <div className="h-10 w-full bg-warm-gray animate-pulse mb-4"></div>
+                  <div className="h-20 w-full bg-warm-gray animate-pulse mb-6"></div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="h-16 bg-warm-gray animate-pulse"></div>
+                    <div className="h-16 bg-warm-gray animate-pulse"></div>
+                    <div className="h-16 bg-warm-gray animate-pulse"></div>
+                  </div>
+                  <div className="flex gap-2 mt-6">
+                    <div className="h-10 flex-1 bg-warm-gray animate-pulse"></div>
+                    <div className="h-10 flex-1 bg-warm-gray animate-pulse"></div>
+                    <div className="h-10 flex-1 bg-warm-gray animate-pulse"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : events.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-2xl text-black/40">No events yet</p>
             </div>

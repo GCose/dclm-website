@@ -134,14 +134,14 @@ const EventForm = ({
         <button
           type="submit"
           disabled={loading || uploading}
-          className="flex-1 px-8 py-4 bg-black text-white text-sm uppercase tracking-widest cursor-pointer hover:bg-black/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex-1 px-8 py-4 bg-navy text-white text-sm uppercase tracking-widest cursor-pointer hover:bg-navy/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? `${submitText}...` : submitText}
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="flex-1 px-8 py-4 border border-black text-black text-sm uppercase tracking-widest cursor-pointer hover:bg-black hover:text-white transition-colors"
+          className="flex-1 px-8 py-4 border border-navy text-navy text-sm uppercase tracking-widest cursor-pointer hover:bg-navy hover:text-white transition-colors"
         >
           Cancel
         </button>

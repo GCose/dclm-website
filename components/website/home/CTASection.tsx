@@ -16,10 +16,15 @@ const CTASection = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      const section = sectionRef.current;
+      if (!section) return;
+
+      let entranceComplete = false;
+
       const entranceTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 5%",
+        paused: true,
+        onComplete: () => {
+          entranceComplete = true;
         },
       });
 
@@ -55,6 +60,26 @@ const CTASection = () => {
         { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)" },
         "-=0.8"
       );
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        pin: true,
+        anticipatePin: 1,
+        onEnter: () => {
+          if (!entranceComplete) {
+            entranceTl.play();
+          }
+        },
+        onLeaveBack: () => {
+          entranceComplete = false;
+        },
+        onUpdate: (self) => {
+          if (entranceComplete && self.direction === 1) {
+            self.disable();
+          }
+        },
+      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -69,7 +94,7 @@ const CTASection = () => {
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
-      if (logosRef.current && logoCountRef.current % 3 === 0) {
+      if (logosRef.current && logoCountRef.current % 8 === 0) {
         const logoWrapper = document.createElement("div");
         logoWrapper.className = "absolute pointer-events-none";
         logoWrapper.style.left = `${x}px`;

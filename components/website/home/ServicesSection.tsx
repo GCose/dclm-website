@@ -45,7 +45,7 @@ const ServicesSection = () => {
       const entranceTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 5%",
+          start: "top 80%",
         },
       });
 
