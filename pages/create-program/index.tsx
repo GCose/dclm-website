@@ -17,6 +17,7 @@ import EventForm from "@/components/dashboard/ProgramForm";
 import Navigation from "@/components/website/layout/Navigation";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 import EventDetailsModal from "@/components/dashboard/modals/ProgramDetailsModal";
+import LoadingScreen from "@/components/website/LoadingScreen";
 
 const CreateEvent = () => {
   const router = useRouter();
@@ -301,46 +302,10 @@ const CreateEvent = () => {
 
   if (authLoading) {
     return (
-      <>
-        <Head>
-          <title>DCLM Brikama | Manage Programs</title>
-        </Head>
-        <Navigation />
-        <div className="min-h-screen pt-32 pb-20 px-8 bg-cream">
-          <div className="w-full">
-            <div className="flex flex-col gap-10 md:gap-0 md:flex-row justify-between items-center mb-16">
-              <div>
-                <div className="h-20 w-96 bg-warm-gray animate-pulse"></div>
-                <div className="h-6 w-40 bg-warm-gray animate-pulse mt-2"></div>
-              </div>
-              <div className="flex gap-4">
-                <div className="h-14 w-40 bg-warm-gray animate-pulse"></div>
-                <div className="h-14 w-32 bg-warm-gray animate-pulse"></div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="flex flex-col">
-                  <div className="w-full aspect-3/2 bg-warm-gray animate-pulse mb-6"></div>
-                  <div className="h-10 w-full bg-warm-gray animate-pulse mb-4"></div>
-                  <div className="h-20 w-full bg-warm-gray animate-pulse mb-6"></div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="h-16 bg-warm-gray animate-pulse"></div>
-                    <div className="h-16 bg-warm-gray animate-pulse"></div>
-                    <div className="h-16 bg-warm-gray animate-pulse"></div>
-                  </div>
-                  <div className="flex gap-2 mt-6">
-                    <div className="h-10 flex-1 bg-warm-gray animate-pulse"></div>
-                    <div className="h-10 flex-1 bg-warm-gray animate-pulse"></div>
-                    <div className="h-10 flex-1 bg-warm-gray animate-pulse"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </>
+      <LoadingScreen
+        title="ADMIN PORTAL LOADING"
+        onComplete={() => setAuthLoading(false)}
+      />
     );
   }
 

@@ -4,8 +4,10 @@ import { useEffect, useRef } from "react";
 
 export default function LoadingScreen({
   onComplete,
+  title = "WELCOME TO DCLM THE GAMBIA",
 }: {
   onComplete: () => void;
+  title?: string;
 }) {
   const containerRef = useRef(null);
   const logoRef = useRef(null);
@@ -105,7 +107,7 @@ export default function LoadingScreen({
           ref={textRef}
           className="text-[clamp(1.5rem,4vw,3.5rem)] font-bold uppercase tracking-[0.2em] md:tracking-[0.25em] text-navy opacity-0 text-center px-4"
         >
-          WELCOME TO DCLM THE GAMBIA
+          {title}
         </h1>
       </div>
 

@@ -177,7 +177,7 @@ const LocationSection = () => {
                 isDark ? "text-white" : ""
               }`}
             >
-              OUR LOCATIONS
+              OUR BRANCHES
             </h2>
             <p
               ref={textRef}
