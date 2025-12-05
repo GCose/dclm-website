@@ -5,7 +5,7 @@ import Footer from "@/components/website/layout/Footer";
 import CTASection from "@/components/website/CTASection";
 import LoadingScreen from "@/components/website/LoadingScreen";
 import HeroSection from "@/components/website/home/HeroSection";
-import LocationSection from "@/components/website/home/LocationSection";
+import BranchesSection from "@/components/website/home/BranchesSection";
 import ServicesSection from "@/components/website/home/ServicesSection";
 import ProgramsSection from "@/components/website/home/ProgramsSection";
 import OverseerSection from "@/components/website/home/OverseerSection";
@@ -36,7 +36,7 @@ export default function Home() {
         />
       )}
       <HeroSection />
-      <LocationSection />
+      <BranchesSection />
       <ServicesSection />
       <CommunityHighlight />
       <ProgramsSection />
