@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import EventCard from "@/components/dashboard/ProgramCard";
+import EventCard from "@/components/dashboard/EventCard";
 import { Event, EventsResponse, PaginationData } from "@/types";
-import EventDetailsModal from "@/components/dashboard/modals/ProgramDetailsModal";
+import EventDetailsModal from "@/components/dashboard/modals/EventDetailsModal";
 
 const HeroSection = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -46,7 +46,7 @@ const HeroSection = () => {
       <div className="min-h-screen pt-32 pb-20 px-8 bg-white">
         <div className="w-full">
           <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-none mb-24">
-            All Programs
+            All Events
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
@@ -63,7 +63,7 @@ const HeroSection = () => {
       <div className="min-h-screen pt-32 pb-20 px-8 bg-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-none mb-8">
-            All Programs
+            All Events
           </h1>
           <p className="text-2xl text-black/40 uppercase tracking-widest">
             No events available at the moment
@@ -78,7 +78,7 @@ const HeroSection = () => {
       <div className="min-h-screen pt-32 pb-20 px-8 bg-white">
         <div className="w-full">
           <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-none mb-24">
-            All Programs
+            All Events
           </h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">

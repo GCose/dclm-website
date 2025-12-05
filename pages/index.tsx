@@ -7,7 +7,7 @@ import LoadingScreen from "@/components/website/LoadingScreen";
 import HeroSection from "@/components/website/home/HeroSection";
 import BranchesSection from "@/components/website/home/BranchesSection";
 import ServicesSection from "@/components/website/home/ServicesSection";
-import ProgramsSection from "@/components/website/home/ProgramsSection";
+import EventsSection from "@/components/website/home/EventsSection";
 import OverseerSection from "@/components/website/home/OverseerSection";
 import CommunityHighlight from "@/components/website/home/CommuityHighlight";
 
@@ -39,7 +39,7 @@ export default function Home() {
       <BranchesSection />
       <ServicesSection />
       <CommunityHighlight />
-      <ProgramsSection />
+      <EventsSection />
       <OverseerSection />
       <CTASection />
       <Footer />

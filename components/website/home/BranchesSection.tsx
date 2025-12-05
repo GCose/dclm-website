@@ -212,7 +212,10 @@ const LocationSection = () => {
             </p>
           </div>
 
-          <div ref={containerRef} className="flex items-center h-full gap-12 z-20">
+          <div
+            ref={containerRef}
+            className="flex items-center h-full gap-12 z-20"
+          >
             {locations.map((location, index) => (
               <div
                 key={location.id}

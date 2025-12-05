@@ -12,11 +12,11 @@ import { toast, Toaster } from "sonner";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Modal from "@/components/dashboard/modals/Modal";
-import EventCard from "@/components/dashboard/ProgramCard";
-import EventForm from "@/components/dashboard/ProgramForm";
+import EventCard from "@/components/dashboard/EventCard";
+import EventForm from "@/components/dashboard/EventForm";
 import Navigation from "@/components/website/layout/Navigation";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
-import EventDetailsModal from "@/components/dashboard/modals/ProgramDetailsModal";
+import EventDetailsModal from "@/components/dashboard/modals/EventDetailsModal";
 import LoadingScreen from "@/components/website/LoadingScreen";
 
 const CreateEvent = () => {
@@ -123,7 +123,7 @@ const CreateEvent = () => {
       await axios.post("/api/logout");
       setAuthenticated(false);
       toast.success("Logged out successfully", { id: logoutToast });
-      router.push("/create-program");
+      router.push("/create-EVENT");
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Failed to logout", { id: logoutToast });
@@ -393,7 +393,7 @@ const CreateEvent = () => {
   return (
     <>
       <Head>
-        <title>DCLM Brikama | Manage Programs</title>
+        <title>DCLM Brikama | Manage Events</title>
       </Head>
       <Toaster position="top-right" richColors />
       <Navigation />
@@ -402,10 +402,10 @@ const CreateEvent = () => {
           <div className="flex flex-col gap-10 md:gap-0 md:flex-row justify-between items-center mb-16">
             <div>
               <h1 className="text-[clamp(3rem,6vw,5rem)] uppercase font-bold leading-tight">
-                Manage Programs
+                Manage Events
               </h1>
               <p className="text-lg text-black/60 mt-2">
-                {pagination.total} total programs
+                {pagination.total} total events
               </p>
             </div>
             <div className="flex gap-4">
@@ -413,7 +413,7 @@ const CreateEvent = () => {
                 onClick={() => setShowCreateModal(true)}
                 className="px-8 py-4 bg-navy text-white text-sm uppercase tracking-widest cursor-pointer hover:bg-navy/80 transition-colors"
               >
-                New Program
+                New Event
               </button>
               <button
                 onClick={handleLogoutClick}
@@ -532,7 +532,7 @@ const CreateEvent = () => {
               setShowCreateModal(false);
               resetForm();
             }}
-            title="CREATE PROGRAM"
+            title="CREATE EVENT"
           >
             <EventForm
               formData={formData}
@@ -545,7 +545,7 @@ const CreateEvent = () => {
               }}
               loading={loading}
               uploading={uploading}
-              submitText="Create PROGRAM"
+              submitText="Create EVENT"
             />
           </Modal>
 
@@ -556,7 +556,7 @@ const CreateEvent = () => {
               setEditingEvent(null);
               resetForm();
             }}
-            title="EDIT PROGRAM"
+            title="EDIT EVENT"
           >
             <EventForm
               formData={formData}
@@ -570,7 +570,7 @@ const CreateEvent = () => {
               }}
               loading={loading}
               uploading={uploading}
-              submitText="Update Program"
+              submitText="Update EVENT"
             />
           </Modal>
 
@@ -578,8 +578,8 @@ const CreateEvent = () => {
             isOpen={deleteConfirm.isOpen}
             onClose={() => setDeleteConfirm({ isOpen: false, eventId: null })}
             onConfirm={confirmDelete}
-            title="Delete Program"
-            message="Are you sure you want to delete this program? This action cannot be undone."
+            title="Delete EVENT"
+            message="Are you sure you want to delete this event? This action cannot be undone."
             confirmText="Delete"
             cancelText="Cancel"
           />

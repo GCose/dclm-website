@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CTASection from "@/components/website/CTASection";
 import LoadingScreen from "@/components/website/LoadingScreen";
-import HeroSection from "@/components/website/programs/HeroSection";
+import HeroSection from "@/components/website/events/HeroSection";
 import Footer from "@/components/website/layout/Footer";
 
 export default function Events() {
@@ -11,7 +11,7 @@ export default function Events() {
     <>
       {loading && (
         <LoadingScreen
-          title="Explore all programs we've had"
+          title="Explore all events we've had"
           onComplete={() => setLoading(false)}
         />
       )}

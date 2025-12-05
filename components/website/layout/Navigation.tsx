@@ -73,14 +73,14 @@ export default function Navigation() {
             About
           </Link>
           <Link
-            href="/programs"
+            href="/events"
             className={`text-base font-bold uppercase tracking-widest transition-colors duration-300 ${
-              isActive("/programs")
+              isActive("/events")
                 ? "text-burgundy font-semibold"
                 : "hover:text-burgundy"
             }`}
           >
-            Programs
+            Events
           </Link>
           <Link
             href="/contact"
@@ -129,7 +129,7 @@ export default function Navigation() {
               About
             </Link>
             <Link
-              href="/programs"
+              href="/events"
               className={`text-sm uppercase tracking-widest transition-colors duration-300 ${
                 isActive("/events")
                   ? "text-burgundy font-semibold"
@@ -137,7 +137,7 @@ export default function Navigation() {
               }`}
               onClick={() => setMenuOpen(false)}
             >
-              Programs
+              Events
             </Link>
             <Link
               href="/contact"

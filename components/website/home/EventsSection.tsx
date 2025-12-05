@@ -4,12 +4,12 @@ import { gsap } from "gsap";
 import { Event, EventsResponse } from "@/types";
 import { useEffect, useState, useRef } from "react";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import EventCard from "@/components/dashboard/ProgramCard";
-import EventDetailsModal from "@/components/dashboard/modals/ProgramDetailsModal";
+import EventCard from "@/components/dashboard/EventCard";
+import EventDetailsModal from "@/components/dashboard/modals/EventDetailsModal";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ProgramsSection = () => {
+const EventsSection = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
@@ -83,7 +83,7 @@ const ProgramsSection = () => {
       >
         <div className="w-full">
           <h2 className="text-[clamp(2.7rem,7vw,7rem)] font-bold leading-tight text-black mb-20">
-            OUR LATEST PROGRAMS
+            OUR LATEST EVENTS
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-20">
             {[1, 2, 3].map((i) => (
@@ -103,10 +103,10 @@ const ProgramsSection = () => {
       >
         <div className="text-center">
           <h2 className="text-[clamp(2.7rem,7vw,7rem)] font-bold leading-tight text-black mb-8">
-            OUR LATEST PROGRAMS
+            OUR LATEST EVENTS
           </h2>
           <p className="text-2xl text-black/40 uppercase tracking-widest">
-            No upcoming programs at the moment
+            No upcoming events at the moment
           </p>
         </div>
       </section>
@@ -120,7 +120,7 @@ const ProgramsSection = () => {
           ref={titleRef}
           className="text-[clamp(2.7rem,7vw,7rem)] font-bold leading-tight mb-10 md:mb-20 opacity-0"
         >
-          OUR LATEST PROGRAMS
+          OUR LATEST EVENTS
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
@@ -151,12 +151,12 @@ const ProgramsSection = () => {
         </div>
 
         <div className="flex justify-center mt-24">
-          <Link href="/programs">
+          <Link href="/events">
             <button
               ref={buttonRef}
               className="px-12 py-5 border-2 border-navy text-sm uppercase tracking-[0.3em] cursor-pointer hover:bg-navy hover:text-white transition-all duration-300 opacity-0"
             >
-              View All Programs
+              View All Events
             </button>
           </Link>
         </div>
@@ -174,4 +174,4 @@ const ProgramsSection = () => {
   );
 };
 
-export default ProgramsSection;
+export default EventsSection;
