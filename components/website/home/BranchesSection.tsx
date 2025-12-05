@@ -131,6 +131,19 @@ const LocationSection = () => {
         "-=1.2"
       );
 
+      entranceTl.fromTo(
+        ".branch-gridline",
+        { scaleX: 0, opacity: 0 },
+        {
+          scaleX: 1,
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.05,
+          ease: "power2.inOut",
+        },
+        "-=0.3"
+      );
+
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top 0",
@@ -168,6 +181,16 @@ const LocationSection = () => {
         isDark ? "md:bg-navy" : ""
       }`}
     >
+      <div className="absolute inset-0 grid grid-rows-12 pointer-events-none z-10">
+        {Array.from({ length: 12 }).map((_, i) => (
+          <div
+            key={i}
+            className={`branch-gridline border-b origin-left transition-colors duration-500 ${
+              isDark ? "border-white/20" : "border-black/20"
+            }`}
+          />
+        ))}
+      </div>
       <div className="hidden md:block h-screen py-20 px-8">
         <div className="flex items-center h-full gap-12">
           <div className="shrink-0 w-[55vw] flex flex-col items-start justify-center pr-12">
@@ -189,7 +212,7 @@ const LocationSection = () => {
             </p>
           </div>
 
-          <div ref={containerRef} className="flex items-center h-full gap-12">
+          <div ref={containerRef} className="flex items-center h-full gap-12 z-20">
             {locations.map((location, index) => (
               <div
                 key={location.id}
