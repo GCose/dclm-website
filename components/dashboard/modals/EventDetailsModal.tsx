@@ -45,11 +45,11 @@ const EventDetailsModal = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50"
+      className="fixed inset-0 bg-navy/60 backdrop-blur-sm flex items-center justify-center p-4 z-50"
       onClick={onClose}
     >
       <div
-        className="bg-off-white w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+        className="bg-off-white w-full max-w-5xl max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-8 md:py-12">

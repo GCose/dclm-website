@@ -18,11 +18,11 @@ const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black/60 flex items-center justify-center p-2 z-50 overflow-y-auto"
+      className="fixed inset-0 bg-navy/60 backdrop-blur-sm flex items-center justify-center p-2 z-50 overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className="bg-off-white w-full max-w-3xl max-h-[85vh] overflow-y-auto my-8"
+        className="bg-off-white w-full max-w-5xl max-h-[85vh] overflow-y-auto my-8"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="py-12 px-6">
