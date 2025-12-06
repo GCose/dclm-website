@@ -18,7 +18,7 @@
     "jsonwebtoken": "^9.0.2",
     "lenis": "^1.3.13",
     "mongoose": "^9.0.0",
-    "next": "16.0.0",
+    "next": "^16.0.7",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "sonner": "^2.0.7"

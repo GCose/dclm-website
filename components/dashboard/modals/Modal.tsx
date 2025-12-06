@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useLenis } from "lenis/react";
 import { ModalProps } from "@/types";
+import { useLenis } from "lenis/react";
 
 const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
   const lenis = useLenis();
