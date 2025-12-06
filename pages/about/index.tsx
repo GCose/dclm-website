@@ -4,6 +4,7 @@ import Footer from "@/components/website/layout/Footer";
 import CTASection from "@/components/website/CTASection";
 import LoadingScreen from "@/components/website/LoadingScreen";
 import HeroSection from "@/components/website/about/HeroSection";
+import BibleDoctrine from "@/components/website/about/BibleDoctrine";
 
 export default function About() {
   const [loading, setLoading] = useState(true);
@@ -24,8 +25,8 @@ export default function About() {
         />
       )}
       <HeroSection />
+      <BibleDoctrine />
       {/* <PastorsSection /> */}
-      {/* <BibleDoctrinesSection /> */}
       <CTASection />
       <Footer />
     </>
