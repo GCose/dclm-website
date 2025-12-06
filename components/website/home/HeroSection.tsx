@@ -27,7 +27,7 @@ const HeroSection = () => {
           }
         ).fromTo(
           imageRef.current,
-          { scale: 0.6, opacity: 0 },
+          { scale: 0.7, opacity: 0 },
           {
             scale: 1,
             opacity: 1,
