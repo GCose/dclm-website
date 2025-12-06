@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { useEffect } from "react";
+import { useLenis } from "lenis/react";
 import { EventDetailsModalProps } from "@/types";
 
 const EventDetailsModal = ({
@@ -6,6 +8,23 @@ const EventDetailsModal = ({
   onClose,
   event,
 }: EventDetailsModalProps) => {
+  const lenis = useLenis();
+
+  useEffect(() => {
+    if (isOpen) {
+      lenis?.stop();
+      document.body.style.overflow = "hidden";
+    } else {
+      lenis?.start();
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      lenis?.start();
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen, lenis]);
+
   if (!isOpen || !event) return null;
 
   const formatDateRange = (dateFrom: string, dateTo?: string) => {
@@ -45,11 +64,11 @@ const EventDetailsModal = ({
 
   return (
     <div
-      className="fixed inset-0 bg-navy/60 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+      className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50"
       onClick={onClose}
     >
       <div
-        className="bg-off-white w-full max-w-5xl max-h-[90vh] overflow-y-auto"
+        className="bg-off-white w-full max-w-4xl max-h-[90vh] overflow-y-auto modal-scrollbar"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-8 md:py-12">

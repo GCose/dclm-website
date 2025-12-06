@@ -1,28 +1,31 @@
 import { useEffect } from "react";
+import { useLenis } from "lenis/react";
 import { ModalProps } from "@/types";
 
 const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
+  const lenis = useLenis();
+
   useEffect(() => {
     if (isOpen) {
+      lenis?.stop();
       document.body.style.overflow = "hidden";
     } else {
+      lenis?.start();
       document.body.style.overflow = "unset";
     }
 
     return () => {
+      lenis?.start();
       document.body.style.overflow = "unset";
     };
-  }, [isOpen]);
+  }, [isOpen, lenis]);
 
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed inset-0 bg-navy/60 backdrop-blur-sm flex items-center justify-center p-2 z-50 overflow-y-auto"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-2 z-50 overflow-y-auto">
       <div
-        className="bg-off-white w-full max-w-5xl max-h-[85vh] overflow-y-auto my-8"
+        className="bg-off-white w-full max-w-3xl max-h-[85vh] overflow-y-auto my-8 modal-scrollbar"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="py-12 px-6">

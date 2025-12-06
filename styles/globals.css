@@ -32,11 +32,11 @@
 }
 
 ::-webkit-scrollbar {
+  width: 0.5rem;
   background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  width: 0.2rem;
   border-radius: 50rem;
   background: var(--gold);
 }
