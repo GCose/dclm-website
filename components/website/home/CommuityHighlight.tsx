@@ -123,7 +123,7 @@ const CommunityHighlight = () => {
       });
 
       tl.to(titleRef.current, {
-        y: "40vh",
+        y: "35vh",
         duration: 50,
       });
 

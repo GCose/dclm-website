@@ -78,7 +78,7 @@ const HeroSection = () => {
       <div className="relative z-20 grid grid-cols-12 gap-6 items-center">
         <h1
           ref={titleRef}
-          className="col-start-1 col-span-12 md:col-start-1 md:col-span-11 md:row-start-1 text-[clamp(2.5rem,7vw,6rem)] font-bold md:leading-[0.99] tracking-tight text-navy opacity-0"
+          className="col-start-1 col-span-12 md:col-start-1 md:col-span-11 md:row-start-1 text-[clamp(2.5rem,8vw,7rem)] font-bold md:leading-[0.99] tracking-tight text-navy opacity-0"
         >
           WE{"'"}RE PART OF THE GLOBAL DEEPER LIFE FAMILY
         </h1>
