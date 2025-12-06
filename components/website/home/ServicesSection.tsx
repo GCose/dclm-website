@@ -87,7 +87,7 @@ const ServicesSection = () => {
             <div className="mb-20 md:mb-85">
               <h2
                 ref={titleRef}
-                className="text-[clamp(3rem,5vw,8.5rem)] font-semibold leading-[1.1] tracking-tight mb-4 opacity-0"
+                className="text-[clamp(3rem,6vw,8.5rem)] font-semibold leading-[1.1] tracking-tight mb-4 opacity-0"
               >
                 OUR SERVICES
               </h2>
@@ -111,7 +111,7 @@ const ServicesSection = () => {
                   }}
                   className="pb-8 border-b opacity-0"
                 >
-                  <h3 className="text-[clamp(1.5rem,5vw,2.5rem)] font-bold leading-[1.1] tracking-tight mb-2">
+                  <h3 className="text-[clamp(1.5rem,5vw,2.8rem)] font-bold leading-[1.1] tracking-tight mb-2">
                     {service.day}
                   </h3>
                   <p className="font-body text-[clamp(1.25rem,2vw,1.75rem)] text-burgundy/80 mb-2">

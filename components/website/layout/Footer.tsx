@@ -17,7 +17,7 @@ const Footer = () => {
             />
           </div>
 
-          <h2 className="text-[clamp(2rem,8vw,10rem)] font-semibold leading-none tracking-tight text-right">
+          <h2 className="text-[clamp(2rem,9vw,10rem)] font-semibold leading-none tracking-tight text-right">
             DCLM BRIKAMA REGION
           </h2>
         </div>

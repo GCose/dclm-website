@@ -196,7 +196,7 @@ const LocationSection = () => {
           <div className="shrink-0 w-[55vw] flex flex-col items-start justify-center pr-12">
             <h2
               ref={titleRef}
-              className={`text-[clamp(3rem,6.5vw,9rem)] font-semibold leading-[1.1] tracking-tight transition-colors duration-500 whitespace-nowrap opacity-0 ${
+              className={`text-[clamp(3rem,7vw,9rem)] font-semibold leading-[1.1] tracking-tight transition-colors duration-500 whitespace-nowrap opacity-0 ${
                 isDark ? "text-white" : ""
               }`}
             >
@@ -204,7 +204,7 @@ const LocationSection = () => {
             </h2>
             <p
               ref={textRef}
-              className={`text-[clamp(1.2rem,6vw,1.8rem)] mt-4 transition-colors duration-500 opacity-0 ${
+              className={`text-[clamp(1.2rem,6vw,1.8rem)] transition-colors duration-500 opacity-0 ${
                 isDark ? "text-white/70" : "text-black/70"
               }`}
             >
@@ -294,10 +294,10 @@ const LocationSection = () => {
             <h3 className="text-4xl font-semibold leading-[1.1] tracking-tight text-navy mb-2">
               {location.name}
             </h3>
-            <p className="text-sm uppercase tracking-[0.2em] text-navy/60 mb-4">
+            <p className="text-sm uppercase tracking-[0.2em] text-black/60 mb-4">
               {location.label}
             </p>
-            <p className="text-lg leading-relaxed text-navy/80 mb-6">
+            <p className="text-lg leading-relaxed text-black/80 mb-6">
               {location.description}
             </p>
 

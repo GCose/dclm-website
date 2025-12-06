@@ -82,7 +82,7 @@ const EventsSection = () => {
         className="min-h-screen py-32 px-8 bg-off-white"
       >
         <div className="w-full">
-          <h2 className="text-[clamp(2.7rem,7vw,7rem)] font-bold leading-tight text-black mb-20">
+          <h2 className="text-[clamp(2.7rem,8vw,8rem)] font-bold leading-tight text-black mb-20">
             OUR LATEST EVENTS
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-20">
@@ -102,7 +102,7 @@ const EventsSection = () => {
         className="min-h-screen py-32 px-8 bg-off-white flex items-center justify-center"
       >
         <div className="text-center">
-          <h2 className="text-[clamp(2.7rem,7vw,7rem)] font-bold leading-tight text-black mb-8">
+          <h2 className="text-[clamp(2.7rem,8vw,8rem)] font-bold leading-tight text-black mb-8">
             OUR LATEST EVENTS
           </h2>
           <p className="text-2xl text-black/40 uppercase tracking-widest">
@@ -118,7 +118,7 @@ const EventsSection = () => {
       <div className="w-full">
         <h2
           ref={titleRef}
-          className="text-[clamp(2.7rem,7vw,7rem)] font-bold leading-tight mb-10 md:mb-20 opacity-0"
+          className="text-[clamp(2.7rem,8vw,8rem)] font-bold leading-tight mb-10 md:mb-20 opacity-0"
         >
           OUR LATEST EVENTS
         </h2>

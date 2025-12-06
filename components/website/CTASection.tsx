@@ -142,7 +142,7 @@ const CTASection = () => {
       <div className="w-full max-w-7xl text-center relative z-10">
         <h2
           ref={titleRef}
-          className="text-[clamp(3rem,8vw,7rem)] font-bold leading-[1.1] tracking-tight text-white mb-8 opacity-0"
+          className="text-[clamp(3rem,8vw,8rem)] font-bold leading-[1.1] tracking-tight text-white mb-8 opacity-0"
         >
           FELLOWSHIP WITH US
         </h2>

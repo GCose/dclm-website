@@ -5,7 +5,7 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <link
-          href="https://api.fontshare.com/v2/css?f[]=telma@300,400,500,700,900&display=swap"
+          href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@100,200,300,400,500,700,800,900&display=swap"
           rel="stylesheet"
         />
         <link

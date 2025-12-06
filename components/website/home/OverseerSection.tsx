@@ -1,6 +1,6 @@
+import { gsap } from "gsap";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -55,7 +55,7 @@ const OverseerSection = () => {
           </div>
 
           <div ref={contentRef} className="space-y-8 md:space-y-30">
-            <h2 className="text-[clamp(3rem,6vw,4rem)] font-bold leading-tight">
+            <h2 className="text-[clamp(3rem,6vw,4.2rem)] font-bold leading-tight">
               A WORD FROM OUR REGIONAL OVERSEER
             </h2>
 
