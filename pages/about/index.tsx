@@ -11,7 +11,7 @@ export default function About() {
   return (
     <>
       <Head>
-        <title>About Us | DCLM Brikama Region</title>
+        <title>DCLM Brikama Region | About Us</title>
         <meta
           name="description"
           content="Learn about Deeper Christian Life Ministry Brikama Region - our history, pastors, branches, and biblical doctrines."
