@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useState } from "react";
+import Footer from "@/components/website/layout/Footer";
 import CTASection from "@/components/website/CTASection";
 import LoadingScreen from "@/components/website/LoadingScreen";
 import HeroSection from "@/components/website/about/HeroSection";
@@ -26,6 +27,7 @@ export default function About() {
       {/* <PastorsSection /> */}
       {/* <BibleDoctrinesSection /> */}
       <CTASection />
+      <Footer />
     </>
   );
 }
