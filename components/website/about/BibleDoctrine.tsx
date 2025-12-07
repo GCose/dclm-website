@@ -204,7 +204,7 @@ const BibleDoctrinesSection = () => {
             start: "top top",
             end: `+=${scrollDuration}`,
             pin: true,
-            scrub: 0.5,
+            scrub: 4.0,
             onUpdate: (self) => {
               const progress = self.progress;
               const docIndex = Math.min(
