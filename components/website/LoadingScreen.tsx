@@ -105,7 +105,7 @@ export default function LoadingScreen({
 
         <h1
           ref={textRef}
-          className="text-[clamp(1.5rem,4vw,3.5rem)] font-bold uppercase tracking-[0.2em] md:tracking-[0.25em] text-navy opacity-0 text-center px-4"
+          className="text-[clamp(1.5rem,5vw,3.8rem)] font-bold uppercase tracking-[0.2em] md:tracking-[0.25em] text-navy opacity-0 text-center px-4"
         >
           {title}
         </h1>
