@@ -5,11 +5,12 @@ import Footer from "@/components/website/layout/Footer";
 import CTASection from "@/components/website/CTASection";
 import LoadingScreen from "@/components/website/LoadingScreen";
 import HeroSection from "@/components/website/home/HeroSection";
-import BranchesSection from "@/components/website/home/BranchesSection";
-import ServicesSection from "@/components/website/home/ServicesSection";
 import EventsSection from "@/components/website/home/EventsSection";
+import ServicesSection from "@/components/website/home/ServicesSection";
+import BranchesSection from "@/components/website/home/BranchesSection";
 import OverseerSection from "@/components/website/home/OverseerSection";
 import CommunityHighlight from "@/components/website/home/CommuityHighlight";
+import Layout from "@/components/website/layout/Layout";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -28,7 +29,7 @@ export default function Home() {
   }, [router.events]);
 
   return (
-    <>
+    <Layout>
       {loading && (
         <LoadingScreen
           title="WELCOME TO YOUR SPIRITUAL HOME"
@@ -43,6 +44,6 @@ export default function Home() {
       <OverseerSection />
       <CTASection />
       <Footer />
-    </>
+    </Layout>
   );
 }

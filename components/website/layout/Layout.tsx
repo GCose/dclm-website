@@ -4,8 +4,8 @@ import { LayoutProps } from "@/types";
 
 const Layout = ({ children, title, description }: LayoutProps) => {
   const siteTitle = title
-    ? `${title} | Deeper Christian Life Ministry`
-    : "Deeper Christian Life Ministry | Brikama, The Gambia";
+    ? `DCLM Brikama Region | ${title}`
+    : "DCLM Brikama Region | The Gambia";
   const siteDescription =
     description ||
     "Where faith meets community in the heart of Brikama, The Gambia. Join us for worship, fellowship, and spiritual growth.";
