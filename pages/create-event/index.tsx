@@ -310,7 +310,7 @@ const CreateEvent = () => {
 
   if (!authenticated) {
     return (
-      <Layout title="DCLM Brikama | Admin Log In">
+      <Layout title="Admin Log In">
         <Toaster position="top-right" richColors />
         <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
           <div className="absolute -left-32 top-1/4 opacity-10">
