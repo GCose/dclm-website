@@ -8,7 +8,7 @@ export default function Events() {
   const [loading, setLoading] = useState(true);
 
   return (
-    <>
+    <Layout title="Events | View All Events" description="Surf through all services organkzed by the church.">
       {loading && (
         <LoadingScreen
           title="Explore all events we've had"
@@ -18,6 +18,6 @@ export default function Events() {
       <HeroSection />
       <CTASection />
       <Footer />
-    </>
+    </Layout>
   );
 }
