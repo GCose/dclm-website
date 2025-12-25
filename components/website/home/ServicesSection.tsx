@@ -49,7 +49,6 @@ const ServicesSection = () => {
         },
       });
 
-      // Title from top down
       entranceTl.fromTo(
         titleRef.current,
         { y: -100, opacity: 0 },
@@ -129,7 +128,7 @@ const ServicesSection = () => {
 
           <div className="hidden md:block md:col-span-1"></div>
 
-          <div className="hidden md:block md:col-span-6">
+          <div className="block md:col-span-6">
             <div className="sticky top-0 h-screen">
               <div ref={imageRef} className="relative w-full h-screen">
                 <Image
