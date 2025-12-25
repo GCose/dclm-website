@@ -117,7 +117,7 @@ const ServicesSection = () => {
                     {service.time}
                   </p>
                   {service.description && (
-                    <p className="font-body text-[clamp(1.2rem,4vw,1.5rem)] text-black/60 mt-4">
+                    <p className="font-body text-[clamp(1.2rem,4vw,1.5rem)] font-light text-black/60 mt-4">
                       {service.description}
                     </p>
                   )}

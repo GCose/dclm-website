@@ -59,7 +59,7 @@ const OverseerSection = () => {
               A WORD FROM OUR REGIONAL OVERSEER
             </h2>
 
-            <div className="space-y-6 text-[clamp(1.2rem,2.5vw,1.5rem)] leading-tight text-black/80 md:mr-4">
+            <div className="space-y-6 text-[clamp(1.2rem,2.5vw,1.7rem)] leading-tight font-light text-black md:mr-4">
               <p>
                 As we gather in worship and fellowship, let us remember that our
                 strength lies in our unity and commitment to Christ. The Brikama

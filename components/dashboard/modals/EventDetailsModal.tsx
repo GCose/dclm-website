@@ -124,7 +124,7 @@ const EventDetailsModal = ({
                 <p className="text-sm uppercase tracking-[0.15em] text-burgundy mb-2">
                   ABOUT THIS PROGRAM
                 </p>
-                <p className="text-lg text-black/70 leading-relaxed whitespace-pre-wrap">
+                <p className="text-[clamp(1.1rem,2vw,1.3rem)] text-black font-light leading-relaxed whitespace-pre-wrap">
                   {event.description}
                 </p>
               </div>

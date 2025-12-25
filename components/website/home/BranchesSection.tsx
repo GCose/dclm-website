@@ -204,7 +204,7 @@ const LocationSection = () => {
             </h2>
             <p
               ref={textRef}
-              className={`text-[clamp(1.2rem,6vw,1.8rem)] transition-colors duration-500 opacity-0 ${
+              className={`text-[clamp(1.2rem,6vw,1.8rem)] transition-colors duration-500 font-light opacity-0 ${
                 isDark ? "text-white/70" : "text-black/70"
               }`}
             >
@@ -246,7 +246,7 @@ const LocationSection = () => {
                     {location.label}
                   </p>
                   <p
-                    className={`text-[clamp(1.5rem,4vw,1.5rem)] leading-relaxed transition-colors duration-500 ${
+                    className={`text-[clamp(1.5rem,4vw,1.5rem)] leading-relaxed transition-colors font-light duration-500 ${
                       isDark ? "text-white/80" : "text-black/80"
                     }`}
                   >

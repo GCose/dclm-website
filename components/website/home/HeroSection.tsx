@@ -85,14 +85,14 @@ const HeroSection = () => {
           <Image
             fill
             priority
-            src="/images/home/hero.jpg"
             className="object-cover"
+            src="/images/home/hero.jpeg"
             alt="DCLM Brikama congregation"
           />
         </div>
 
         <div className="max-w-4xl ml-auto">
-          <p className="text-[clamp(1.5rem,4vw,2.1rem)] leading-relaxed text-black">
+          <p className="text-[clamp(1.5rem,4vw,2.1rem)] leading-relaxed text-black font-light">
             <span
               ref={(el) => {
                 textLinesRef.current[0] = el;

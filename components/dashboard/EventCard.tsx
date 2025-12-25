@@ -75,7 +75,7 @@ const EventCard = ({
         </h3>
 
         {description && (
-          <p className="text-[clamp(1rem,2vw,1.125rem)] text-black/60 leading-tight line-clamp-2 mb-6">
+          <p className="text-[clamp(1rem,2vw,1.25rem)] text-black font-light leading-tight line-clamp-2 mb-6">
             {description}
           </p>
         )}

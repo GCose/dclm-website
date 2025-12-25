@@ -1,23 +1,22 @@
 import {
   Event,
   EventFormData,
-  EventSubmitData,
   PaginationData,
   EventsResponse,
+  EventSubmitData,
 } from "@/types";
 import axios from "axios";
-import Head from "next/head";
 import Image from "next/image";
 import { toast, Toaster } from "sonner";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import Layout from "@/components/website/layout/Layout";
 import Modal from "@/components/dashboard/modals/Modal";
 import EventCard from "@/components/dashboard/EventCard";
 import EventForm from "@/components/dashboard/EventForm";
-import Navigation from "@/components/website/layout/Navigation";
+import LoadingScreen from "@/components/website/LoadingScreen";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 import EventDetailsModal from "@/components/dashboard/modals/EventDetailsModal";
-import LoadingScreen from "@/components/website/LoadingScreen";
 
 const CreateEvent = () => {
   const router = useRouter();
@@ -311,10 +310,7 @@ const CreateEvent = () => {
 
   if (!authenticated) {
     return (
-      <>
-        <Head>
-          <title>DCLM Brikama | Admin Log In</title>
-        </Head>
+      <Layout title="DCLM Brikama | Admin Log In">
         <Toaster position="top-right" richColors />
         <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
           <div className="absolute -left-32 top-1/4 opacity-10">
@@ -386,17 +382,13 @@ const CreateEvent = () => {
             </form>
           </div>
         </div>
-      </>
+      </Layout>
     );
   }
 
   return (
-    <>
-      <Head>
-        <title>DCLM Brikama | Manage Events</title>
-      </Head>
+    <Layout title="DCLM Brikama | Manage Events">
       <Toaster position="top-right" richColors />
-      <Navigation />
       <div className="min-h-screen pt-32 pb-20 px-8 bg-cream">
         <div className="w-full">
           <div className="flex flex-col gap-10 md:gap-0 md:flex-row justify-between items-center mb-16">
@@ -604,7 +596,7 @@ const CreateEvent = () => {
           />
         </div>
       </div>
-    </>
+    </Layout>
   );
 };
 
