@@ -9,6 +9,7 @@ const ServicesSection = () => {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const imageRef = useRef(null);
+  const mobileImageRef = useRef(null);
   const servicesRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const services = [
@@ -56,7 +57,7 @@ const ServicesSection = () => {
       );
 
       entranceTl.fromTo(
-        imageRef.current,
+        [imageRef.current, mobileImageRef.current],
         { scale: 0.6, opacity: 0 },
         { scale: 1, opacity: 1, duration: 1.8, ease: "power3.out" },
         "-=0.6"
@@ -92,7 +93,10 @@ const ServicesSection = () => {
               </h2>
             </div>
 
-            <div className="md:hidden relative w-full h-[60vh] mb-12 opacity-0">
+            <div
+              ref={mobileImageRef}
+              className="md:hidden relative w-full h-[60vh] mb-12 opacity-0"
+            >
               <Image
                 fill
                 className="object-cover"
@@ -128,9 +132,12 @@ const ServicesSection = () => {
 
           <div className="hidden md:block md:col-span-1"></div>
 
-          <div className="block md:col-span-6">
+          <div className="hidden md:block md:col-span-6">
             <div className="sticky top-0 h-screen">
-              <div ref={imageRef} className="relative w-full h-screen">
+              <div
+                ref={imageRef}
+                className="relative w-full h-screen opacity-0"
+              >
                 <Image
                   fill
                   className="object-cover"
