@@ -1,11 +1,11 @@
 import { useState } from "react";
 import Footer from "@/components/website/layout/Footer";
+import Layout from "@/components/website/layout/Layout";
 import CTASection from "@/components/website/CTASection";
 import LoadingScreen from "@/components/website/LoadingScreen";
 import HeroSection from "@/components/website/about/HeroSection";
 import BibleDoctrine from "@/components/website/about/BibleDoctrine";
 import PastorsSection from "@/components/website/about/PastorsSection";
-import Layout from "@/components/website/layout/Layout";
 
 export default function About() {
   const [loading, setLoading] = useState(true);

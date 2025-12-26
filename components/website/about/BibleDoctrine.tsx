@@ -351,7 +351,7 @@ const BibleDoctrinesSection = () => {
               <p className="text-lg uppercase tracking-[0.2em] text-terracotta">
                 {doctrines[currentDoctrine].scripture}
               </p>
-              <p className="text-[clamp(1.2rem,2vw,1.6rem)] leading-relaxed text-black/80">
+              <p className="text-[clamp(1.2rem,3vw,1.7rem)] leading-relaxed text-black font-light">
                 {doctrines[currentDoctrine].content}
               </p>
             </div>
