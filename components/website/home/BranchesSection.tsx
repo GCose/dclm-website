@@ -16,7 +16,7 @@ const LocationSection = () => {
     {
       id: "santosu",
       name: "SANTOSU",
-      label: "HeadQuarters Location",
+      label: "HeadQuarters Location @ King Colley Junction",
       image: "/images/home/location-1.jpg",
       description:
         "Our foundation rests on biblical truth—salvation through Christ alone, righteous living, fervent prayer, and the Great Commission.",
@@ -24,7 +24,7 @@ const LocationSection = () => {
     {
       id: "college",
       name: "COLLEGE",
-      label: "Mbali junction",
+      label: "@Mbali junction",
       image: "/images/home/location-2.jpg",
       description:
         "A thriving community dedicated to discipleship and spiritual growth through systematic study of God's Word.",
@@ -32,7 +32,7 @@ const LocationSection = () => {
     {
       id: "medina",
       name: "MEDINA",
-      label: "Medina Road",
+      label: "@Medina Road",
       image: "/images/home/location-1.jpg",
       description:
         "Our foundation rests on biblical truth—salvation through Christ alone, righteous living, fervent prayer, and the Great Commission.",
@@ -40,31 +40,31 @@ const LocationSection = () => {
     {
       id: "kartong",
       name: "KARTONG",
-      label: "Kartong Village",
+      label: "@Kartong Village",
       image: "/images/home/location-4.jpg",
       description:
         "A gathering place for fervent prayer and fellowship, where faith meets community in transformative ways.",
     },
     {
-      id: "jalangba",
-      name: "JALANGBA",
-      label: "Medina Highway",
+      id: "jalambang",
+      name: "JALAMBANG",
+      label: "@Medina Highway",
       image: "/images/home/location-3.jpg",
       description:
         "Committed to holiness and authentic worship, building believers who walk in righteousness and truth.",
     },
     {
-      id: "kasakunda",
-      name: "KASAKUNDA",
-      label: "Mbali junction",
+      id: "casakunda",
+      name: "CASAKUNDA",
+      label: "@Mbali junction",
       image: "/images/home/location-2.jpg",
       description:
         "A thriving community dedicated to discipleship and spiritual growth through systematic study of God's Word.",
     },
     {
-      id: "kabeke",
-      name: "KABEKE",
-      label: "Kabeke Village",
+      id: "kabekel",
+      name: "KABEKEL",
+      label: "@Kabekel Village",
       image: "/images/home/location-4.jpg",
       description:
         "A gathering place for fervent prayer and fellowship, where faith meets community in transformative ways.",
@@ -72,7 +72,7 @@ const LocationSection = () => {
     {
       id: "kiti",
       name: "KITI",
-      label: "Kitti Village",
+      label: "@Kitti Village",
       image: "/images/home/location-3.jpg",
       description:
         "Committed to holiness and authentic worship, building believers who walk in righteousness and truth.",

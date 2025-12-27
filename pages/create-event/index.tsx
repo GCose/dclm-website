@@ -6,7 +6,6 @@ import {
   EventSubmitData,
 } from "@/types";
 import axios from "axios";
-import Image from "next/image";
 import { toast, Toaster } from "sonner";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
@@ -14,6 +13,7 @@ import Layout from "@/components/website/layout/Layout";
 import Modal from "@/components/dashboard/modals/Modal";
 import EventCard from "@/components/dashboard/EventCard";
 import EventForm from "@/components/dashboard/EventForm";
+import AdminLoginScreen from "@/components/AdminLoginScreen";
 import LoadingScreen from "@/components/website/LoadingScreen";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 import EventDetailsModal from "@/components/dashboard/modals/EventDetailsModal";
@@ -312,76 +312,7 @@ const CreateEvent = () => {
     return (
       <Layout title="Admin Log In">
         <Toaster position="top-right" richColors />
-        <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
-          <div className="absolute -left-32 top-1/4 opacity-10">
-            <div className="relative w-64 h-64 rotate-90">
-              <Image
-                fill
-                src="/images/logo.png"
-                alt=""
-                className="object-contain"
-              />
-            </div>
-          </div>
-
-          <div className="absolute -right-32 top-1/3 opacity-10">
-            <div className="relative w-64 h-64 -rotate-90">
-              <Image
-                fill
-                src="/images/logo.png"
-                alt=""
-                className="object-contain"
-              />
-            </div>
-          </div>
-
-          <div className="absolute -bottom-30 left-1/2 -translate-x-1/2 opacity-10">
-            <div className="relative w-64 h-64">
-              <Image
-                fill
-                src="/images/logo.png"
-                alt=""
-                className="object-contain"
-              />
-            </div>
-          </div>
-
-          <div className="w-full max-w-lg relative z-10">
-            <h1 className="text-[clamp(2.5rem,5vw,4rem)] uppercase font-bold text-center mb-12">
-              Admin Login
-            </h1>
-            <form onSubmit={handleLogin} className="space-y-8 bg-white p-10">
-              <div>
-                <label className="block text-lg uppercase tracking-relaxed  text-black/60">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  className="w-full px-2 py-4 bg-transparent border-b-2 border-black/20 focus:border-terracotta outline-none text-xl transition-colors"
-                />
-              </div>
-              <div>
-                <label className="block text-lg uppercase tracking-relaxed  text-black/60">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  required
-                  className="w-full px-2 py-4 bg-transparent border-b-2 border-black/20 focus:border-terracotta outline-none text-xl transition-colors"
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-navy text-white py-4 text-sm uppercase cursor-pointer tracking-widest hover:bg-navy/90 transition-colors mt-8"
-              >
-                Login
-              </button>
-            </form>
-          </div>
-        </div>
+        <AdminLoginScreen onLogin={handleLogin} title="Admin Login" />
       </Layout>
     );
   }
