@@ -46,7 +46,7 @@ const Overview = () => {
   return (
     <DashboardLayout title="Overview">
       <div>
-        <div className="mb-12">
+        <div className="mb-4">
           <h1 className="text-[clamp(1.5rem,5vw,2rem)] font-bold uppercase text-navy dark:text-white mb-2">
             Dashboard Overview
           </h1>
@@ -65,30 +65,6 @@ const Overview = () => {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-warm-gray dark:bg-navy/50 border border-black/10 dark:border-white/10 p-8 rounded-lg">
-            <h2 className="text-2xl font-bold uppercase text-navy dark:text-white mb-4">
-              Quick Actions
-            </h2>
-            <div className="space-y-3">
-              <button className="w-full px-6 py-3 bg-navy dark:bg-white text-white dark:text-navy text-sm uppercase tracking-wider cursor-pointer hover:bg-burgundy dark:hover:bg-burgundy dark:hover:text-white transition-colors rounded">
-                Create New Retreat
-              </button>
-              <button className="w-full px-6 py-3 border border-navy dark:border-white text-navy dark:text-white text-sm uppercase tracking-wider cursor-pointer hover:bg-navy hover:text-white dark:hover:bg-white dark:hover:text-navy transition-colors rounded">
-                View All Retreats
-              </button>
-            </div>
-          </div>
-
-          <div className="bg-warm-gray dark:bg-navy/50 border border-black/10 dark:border-white/10 p-8 rounded-lg">
-            <h2 className="text-2xl font-bold uppercase text-navy dark:text-white mb-4">
-              Recent Activity
-            </h2>
-            <p className="text-black/60 dark:text-white/60">
-              No recent activity to display
-            </p>
-          </div>
-        </div>
       </div>
     </DashboardLayout>
   );

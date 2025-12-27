@@ -4,34 +4,422 @@ import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
 import { useState, useEffect } from "react";
 import { Plus, Edit, Trash2, X } from "lucide-react";
-import { Retreat } from "@/types/interface/dashboard";
+import SessionForm from "@/components/dashboard/forms/SessionForms";
+import RegistrationsTable from "@/components/dashboard/RegistrationTable";
+import EditRetreatForm from "@/components/dashboard/forms/EditRetreatForm";
 import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
+import RegistrationModal from "@/components/dashboard/modals/RegistrationModal";
+import CreateRetreatModal from "@/components/dashboard/modals/CreateRetreatModal";
+import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 
-export default function Retreats() {
+interface Retreat {
+  _id: string;
+  year: number;
+  type: "Easter" | "December";
+  status: "ongoing" | "completed";
+  totalDays: number;
+  dateFrom: string;
+  dateTo: string;
+  venue: string;
+  theme?: string;
+  createdAt: string;
+}
+
+interface Registration {
+  _id: string;
+  retreatId: string;
+  name: string;
+  gender: string;
+  address: string;
+  phone: string;
+  nationality: string;
+  invitedBy: string;
+  age: number;
+  dayRegistered: number;
+  createdAt: string;
+}
+
+interface AttendanceSession {
+  _id: string;
+  retreatId: string;
+  day: number;
+  date: string;
+  sessionName: string;
+  sessionTime: string;
+}
+
+interface AttendanceRecord {
+  _id?: string;
+  sessionId: string;
+  adultsMale: number;
+  adultsFemale: number;
+  youthMale: number;
+  youthFemale: number;
+  childrenMale: number;
+  childrenFemale: number;
+  total: number;
+}
+
+interface SessionTemplate {
+  sessionName: string;
+  sessionTime: string;
+}
+
+const Retreats = () => {
   const [retreats, setRetreats] = useState<Retreat[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedRetreat, setSelectedRetreat] = useState<Retreat | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [activeTab, setActiveTab] = useState<
     "overview" | "registrations" | "attendance"
   >("overview");
 
+  const [retreatForm, setRetreatForm] = useState({
+    year: new Date().getFullYear(),
+    type: "Easter" as "Easter" | "December",
+    status: "ongoing" as "ongoing" | "completed",
+    totalDays: 1,
+    dateFrom: "",
+    dateTo: "",
+    venue: "",
+    theme: "",
+  });
+
+  const [registrations, setRegistrations] = useState<Registration[]>([]);
+  const [showRegModal, setShowRegModal] = useState(false);
+  const [regForm, setRegForm] = useState({
+    name: "",
+    gender: "Male" as "Male" | "Female",
+    address: "",
+    phone: "",
+    nationality: "",
+    invitedBy: "",
+    age: 18,
+    dayRegistered: 1,
+  });
+
+  const [sessions, setSessions] = useState<AttendanceSession[]>([]);
+  const [attendanceRecords, setAttendanceRecords] = useState<
+    AttendanceRecord[]
+  >([]);
+
+  const [deleteRetreatConfirm, setDeleteRetreatConfirm] = useState<{
+    isOpen: boolean;
+    id: string | null;
+  }>({ isOpen: false, id: null });
+
+  const [deleteRegistrationConfirm, setDeleteRegistrationConfirm] = useState<{
+    isOpen: boolean;
+    id: string | null;
+  }>({ isOpen: false, id: null });
+
   useEffect(() => {
+    const fetchRetreats = async () => {
+      setLoading(true);
+      try {
+        const { data } = await axios.get("/api/retreats");
+        const retreatsData = Array.isArray(data) ? data : data.retreats || [];
+        setRetreats(retreatsData);
+      } catch (error: unknown) {
+        console.error("Error fetching retreats:", error);
+        toast.error("Failed to fetch retreats");
+        setRetreats([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchRetreats();
   }, []);
 
-  const fetchRetreats = async () => {
-    setLoading(true);
+  useEffect(() => {
+    if (!selectedRetreat) return;
+
+    const fetchRetreatData = async () => {
+      try {
+        const [regsRes, sessionsRes, recordsRes] = await Promise.all([
+          axios.get(`/api/registrations?retreatId=${selectedRetreat._id}`),
+          axios.get(
+            `/api/attendance-sessions?retreatId=${selectedRetreat._id}`
+          ),
+          axios.get(`/api/attendance-records`),
+        ]);
+
+        const regsData = Array.isArray(regsRes.data)
+          ? regsRes.data
+          : regsRes.data.registrations || [];
+        const sessionsData = Array.isArray(sessionsRes.data)
+          ? sessionsRes.data
+          : sessionsRes.data.sessions || [];
+        const recordsData = Array.isArray(recordsRes.data)
+          ? recordsRes.data
+          : recordsRes.data.records || [];
+
+        setRegistrations(regsData);
+        setSessions(sessionsData);
+        setAttendanceRecords(recordsData);
+      } catch (error: unknown) {
+        console.error("Error fetching retreat data:", error);
+        toast.error("Failed to fetch retreat data");
+      }
+    };
+
+    fetchRetreatData();
+  }, [selectedRetreat]);
+
+  const fetchRegistrations = async () => {
+    if (!selectedRetreat) return;
     try {
+      const { data } = await axios.get(
+        `/api/registrations?retreatId=${selectedRetreat._id}`
+      );
+      const regsData = Array.isArray(data) ? data : data.registrations || [];
+      setRegistrations(regsData);
+    } catch (error: unknown) {
+      console.error("Error fetching registrations:", error);
+      toast.error("Failed to fetch registrations");
+    }
+  };
+
+  const fetchSessions = async () => {
+    if (!selectedRetreat) return;
+    try {
+      const { data } = await axios.get(
+        `/api/attendance-sessions?retreatId=${selectedRetreat._id}`
+      );
+      const sessionsData = Array.isArray(data) ? data : data.sessions || [];
+      setSessions(sessionsData);
+    } catch (error: unknown) {
+      console.error("Error fetching sessions:", error);
+      toast.error("Failed to fetch sessions");
+    }
+  };
+
+  const fetchAttendanceRecords = async () => {
+    if (!selectedRetreat) return;
+    try {
+      const { data } = await axios.get(`/api/attendance-records`);
+      const recordsData = Array.isArray(data) ? data : data.records || [];
+      setAttendanceRecords(recordsData);
+    } catch (error: unknown) {
+      console.error("Error fetching attendance records:", error);
+    }
+  };
+
+  const calculateDayDate = (dayNumber: number) => {
+    if (!selectedRetreat) return new Date().toISOString().split("T")[0];
+    const startDate = new Date(selectedRetreat.dateFrom);
+    const dayDate = new Date(startDate);
+    dayDate.setDate(startDate.getDate() + (dayNumber - 1));
+    return dayDate.toISOString().split("T")[0];
+  };
+
+  const handleGenerateSessions = async (
+    sessionsPerFullDay: number,
+    templates: SessionTemplate[]
+  ) => {
+    if (!selectedRetreat) return;
+
+    try {
+      const sessionsToCreate: Array<{
+        retreatId: string;
+        day: number;
+        date: string;
+        sessionName: string;
+        sessionTime: string;
+      }> = [];
+
+      for (let day = 1; day <= selectedRetreat.totalDays; day++) {
+        const dayDate = calculateDayDate(day);
+
+        if (day === 1) {
+          sessionsToCreate.push({
+            retreatId: selectedRetreat._id,
+            day: 1,
+            date: dayDate,
+            sessionName: "Evening Session",
+            sessionTime: "6:00 PM - 8:00 PM",
+          });
+        } else if (day === selectedRetreat.totalDays) {
+          sessionsToCreate.push({
+            retreatId: selectedRetreat._id,
+            day: selectedRetreat.totalDays,
+            date: dayDate,
+            sessionName: "Morning Session",
+            sessionTime: "6:00 AM - 8:00 AM",
+          });
+        } else {
+          templates.forEach((template) => {
+            sessionsToCreate.push({
+              retreatId: selectedRetreat._id,
+              day,
+              date: dayDate,
+              sessionName: template.sessionName,
+              sessionTime: template.sessionTime,
+            });
+          });
+        }
+      }
+
+      await Promise.all(
+        sessionsToCreate.map((session) =>
+          axios.post("/api/attendance-sessions", session)
+        )
+      );
+
+      toast.success("Sessions generated successfully");
+      await fetchSessions();
+    } catch (error: unknown) {
+      console.error("Error generating sessions:", error);
+      toast.error("Failed to generate sessions");
+    }
+  };
+
+  const handleCreateRetreat = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await axios.post("/api/retreats", retreatForm);
+      toast.success("Retreat created successfully");
+      setShowCreateModal(false);
+      resetRetreatForm();
+
       const { data } = await axios.get("/api/retreats");
       const retreatsData = Array.isArray(data) ? data : data.retreats || [];
       setRetreats(retreatsData);
     } catch (error: unknown) {
-      console.error("Error fetching retreats:", error);
-      toast.error("Failed to fetch retreats");
-      setRetreats([]);
-    } finally {
-      setLoading(false);
+      console.error("Error creating retreat:", error);
+      toast.error("Failed to create retreat");
     }
+  };
+
+  const handleUpdateRetreat = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedRetreat) return;
+    try {
+      await axios.patch(`/api/retreats/${selectedRetreat._id}`, retreatForm);
+      toast.success("Retreat updated successfully");
+
+      const [retreatsRes, retreatRes] = await Promise.all([
+        axios.get("/api/retreats"),
+        axios.get(`/api/retreats/${selectedRetreat._id}`),
+      ]);
+
+      const retreatsData = Array.isArray(retreatsRes.data)
+        ? retreatsRes.data
+        : retreatsRes.data.retreats || [];
+      setRetreats(retreatsData);
+      setSelectedRetreat(retreatRes.data);
+    } catch (error: unknown) {
+      console.error("Error updating retreat:", error);
+      toast.error("Failed to update retreat");
+    }
+  };
+
+  const confirmDeleteRetreat = async () => {
+    if (!deleteRetreatConfirm.id) return;
+
+    try {
+      await axios.delete(`/api/retreats/${deleteRetreatConfirm.id}`);
+      toast.success("Retreat deleted");
+
+      const { data } = await axios.get("/api/retreats");
+      const retreatsData = Array.isArray(data) ? data : data.retreats || [];
+      setRetreats(retreatsData);
+
+      if (selectedRetreat?._id === deleteRetreatConfirm.id) {
+        setSelectedRetreat(null);
+      }
+    } catch (error: unknown) {
+      console.error("Error deleting retreat:", error);
+      toast.error("Failed to delete retreat");
+    } finally {
+      setDeleteRetreatConfirm({ isOpen: false, id: null });
+    }
+  };
+
+  const handleCreateRegistration = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedRetreat) return;
+    try {
+      await axios.post("/api/registrations", {
+        ...regForm,
+        retreatId: selectedRetreat._id,
+      });
+      toast.success("Registration added");
+      setShowRegModal(false);
+      resetRegForm();
+      await fetchRegistrations();
+    } catch (error: unknown) {
+      console.error("Error creating registration:", error);
+      toast.error("Failed to add registration");
+    }
+  };
+
+  const confirmDeleteRegistration = async () => {
+    if (!deleteRegistrationConfirm.id) return;
+
+    try {
+      await axios.delete(`/api/registrations/${deleteRegistrationConfirm.id}`);
+      toast.success("Registration deleted");
+      await fetchRegistrations();
+    } catch (error: unknown) {
+      console.error("Error deleting registration:", error);
+      toast.error("Failed to delete registration");
+    } finally {
+      setDeleteRegistrationConfirm({ isOpen: false, id: null });
+    }
+  };
+
+  const handleSaveAttendance = async (records: AttendanceRecord[]) => {
+    try {
+      await Promise.all(
+        records.map((record) => axios.post("/api/attendance-records", record))
+      );
+      toast.success("Attendance saved successfully");
+      await fetchAttendanceRecords();
+    } catch (error: unknown) {
+      console.error("Error saving attendance:", error);
+      toast.error("Failed to save attendance");
+    }
+  };
+
+  const resetRetreatForm = () => {
+    setRetreatForm({
+      year: new Date().getFullYear(),
+      type: "Easter",
+      status: "ongoing",
+      totalDays: 1,
+      dateFrom: "",
+      dateTo: "",
+      venue: "",
+      theme: "",
+    });
+  };
+
+  const resetRegForm = () => {
+    setRegForm({
+      name: "",
+      gender: "Male",
+      address: "",
+      phone: "",
+      nationality: "",
+      invitedBy: "",
+      age: 18,
+      dayRegistered: 1,
+    });
+  };
+
+  const loadRetreatToForm = (retreat: Retreat) => {
+    setRetreatForm({
+      year: retreat.year,
+      type: retreat.type,
+      status: retreat.status,
+      totalDays: retreat.totalDays,
+      dateFrom: retreat.dateFrom.split("T")[0],
+      dateTo: retreat.dateTo.split("T")[0],
+      venue: retreat.venue,
+      theme: retreat.theme || "",
+    });
   };
 
   const formatDate = (date: string) => {
@@ -45,119 +433,154 @@ export default function Retreats() {
   return (
     <DashboardLayout title="Retreats">
       <Toaster position="top-right" richColors />
-      <div className="max-w-7xl">
+      <div>
         {!selectedRetreat ? (
           <>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
               <div>
-                <h1 className="text-[clamp(2.5rem,5vw,4rem)] font-bold uppercase text-navy dark:text-white mb-2">
+                <h1 className="text-[clamp(1.5rem,5vw,2rem)] font-bold uppercase text-navy dark:text-white mb-2">
                   Retreats
                 </h1>
-                <p className="text-lg text-black/60 dark:text-white/60">
+                <p className="text-sm text-black/60 dark:text-white/60">
                   {retreats.length} total retreats
                 </p>
               </div>
-              <button className="flex items-center gap-2 px-6 py-3 bg-navy dark:bg-white text-white dark:text-navy text-sm uppercase tracking-wider hover:bg-burgundy dark:hover:bg-burgundy dark:hover:text-white transition-colors rounded">
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className="flex items-center gap-2 px-6 py-3 bg-navy dark:bg-white text-white dark:text-navy text-sm uppercase tracking-wider hover:bg-burgundy dark:hover:bg-burgundy dark:hover:text-white transition-colors rounded cursor-pointer"
+              >
                 <Plus size={20} />
                 Create Retreat
               </button>
             </div>
 
             {loading ? (
-              <div className="grid grid-cols-1 gap-4">
-                {[1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="bg-warm-gray dark:bg-navy/50 p-6 rounded-lg h-32 animate-pulse"
-                  />
-                ))}
+              <div className="bg-white dark:bg-navy/50 p-6 rounded-lg border border-black/10 dark:border-white/10">
+                <div className="animate-pulse space-y-4">
+                  <div className="h-10 bg-warm-gray dark:bg-white/10 rounded"></div>
+                  <div className="h-10 bg-warm-gray dark:bg-white/10 rounded"></div>
+                  <div className="h-10 bg-warm-gray dark:bg-white/10 rounded"></div>
+                </div>
               </div>
             ) : retreats.length === 0 ? (
-              <div className="bg-warm-gray dark:bg-navy/50 border border-black/10 dark:border-white/10 p-12 rounded-lg text-center">
+              <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-12 rounded-lg text-center">
                 <p className="text-black/60 dark:text-white/60 text-lg">
                   No retreats yet. Create your first retreat to get started.
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-4">
-                {retreats.map((retreat) => (
-                  <div
-                    key={retreat._id}
-                    className="bg-warm-gray dark:bg-navy/50 border border-black/10 dark:border-white/10 p-6 rounded-lg hover:shadow-lg transition-all duration-300 cursor-pointer"
-                    onClick={() => setSelectedRetreat(retreat)}
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h3 className="text-2xl font-bold uppercase text-navy dark:text-white mb-2">
-                          {retreat.title}
-                        </h3>
-                        <p className="text-black/60 dark:text-white/60 mb-4">
-                          {retreat.description}
-                        </p>
-                        <div className="flex flex-wrap gap-6 text-sm">
-                          <div>
-                            <span className="uppercase tracking-wider text-burgundy font-bold block mb-1">
-                              Location
-                            </span>
-                            <span className="text-black/70 dark:text-white/70">
-                              {retreat.location}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="uppercase tracking-wider text-burgundy font-bold block mb-1">
-                              Dates
-                            </span>
-                            <span className="text-black/70 dark:text-white/70">
-                              {formatDate(retreat.startDate)} -{" "}
-                              {formatDate(retreat.endDate)}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="uppercase tracking-wider text-burgundy font-bold block mb-1">
-                              Duration
-                            </span>
-                            <span className="text-black/70 dark:text-white/70">
-                              {retreat.totalDays} days
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex gap-2 ml-4">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
+              <div className="bg-white dark:bg-navy/50 border border-black/0 dark:border-white/10 rounded-lg overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-black/0 dark:border-white/10 bg-gray-100 dark:bg-navy">
+                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-burgundy font-bold">
+                          Year
+                        </th>
+                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-burgundy font-bold">
+                          Type
+                        </th>
+                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-burgundy font-bold">
+                          Venue
+                        </th>
+                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-burgundy font-bold">
+                          Dates
+                        </th>
+                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-burgundy font-bold">
+                          Duration
+                        </th>
+                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-burgundy font-bold">
+                          Status
+                        </th>
+                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-burgundy font-bold">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {retreats.map((retreat) => (
+                        <tr
+                          key={retreat._id}
+                          className="border-b border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer transition-colors"
+                          onClick={() => {
+                            setSelectedRetreat(retreat);
+                            loadRetreatToForm(retreat);
                           }}
-                          className="p-2 text-navy dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded transition-colors"
                         >
-                          <Edit size={20} />
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                          className="p-2 text-burgundy hover:bg-burgundy/10 rounded transition-colors"
-                        >
-                          <Trash2 size={20} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                          <td className="py-4 px-6 text-black/70 dark:text-white/70 font-medium">
+                            {retreat.year}
+                          </td>
+                          <td className="py-4 px-6 text-black/70 dark:text-white/70">
+                            {retreat.type}
+                          </td>
+                          <td className="py-4 px-6 text-black/70 dark:text-white/70">
+                            {retreat.venue}
+                          </td>
+                          <td className="py-4 px-6 text-black/70 dark:text-white/70">
+                            {formatDate(retreat.dateFrom)} -{" "}
+                            {formatDate(retreat.dateTo)}
+                          </td>
+                          <td className="py-4 px-6 text-black/70 dark:text-white/70">
+                            {retreat.totalDays} days
+                          </td>
+                          <td className="py-4 px-6">
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${
+                                retreat.status === "ongoing"
+                                  ? "bg-terracotta/20 text-terracotta"
+                                  : "bg-navy/20 dark:bg-white/20 text-navy dark:text-white"
+                              }`}
+                            >
+                              {retreat.status}
+                            </span>
+                          </td>
+                          <td className="py-4 px-6">
+                            <div className="flex gap-2">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedRetreat(retreat);
+                                  loadRetreatToForm(retreat);
+                                }}
+                                className="p-2 text-navy dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded transition-colors cursor-pointer"
+                              >
+                                <Edit size={16} />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setDeleteRetreatConfirm({
+                                    isOpen: true,
+                                    id: retreat._id,
+                                  });
+                                }}
+                                className="p-2 text-burgundy hover:bg-burgundy/10 rounded transition-colors cursor-pointer"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </>
         ) : (
           <>
             <div className="flex justify-between items-center mb-8">
-              <h1 className="text-[clamp(2rem,4vw,3rem)] font-bold uppercase text-navy dark:text-white">
-                {selectedRetreat.title}
+              <h1 className="text-[clamp(1.5rem,4vw,2rem)] font-bold uppercase text-navy dark:text-white">
+                {selectedRetreat.year} {selectedRetreat.type} Retreat
               </h1>
               <button
                 onClick={() => {
                   setSelectedRetreat(null);
                   setActiveTab("overview");
+                  resetRetreatForm();
                 }}
-                className="flex items-center gap-2 px-4 py-2 text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white transition-colors cursor-pointer"
               >
                 <X size={20} />
                 Close
@@ -168,7 +591,7 @@ export default function Retreats() {
               <div className="flex gap-6">
                 <button
                   onClick={() => setActiveTab("overview")}
-                  className={`pb-4 text-sm uppercase tracking-wider transition-colors ${
+                  className={`pb-4 text-sm uppercase tracking-wider transition-colors cursor-pointer ${
                     activeTab === "overview"
                       ? "border-b-2 border-navy dark:border-white text-navy dark:text-white font-bold"
                       : "text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white"
@@ -178,7 +601,7 @@ export default function Retreats() {
                 </button>
                 <button
                   onClick={() => setActiveTab("registrations")}
-                  className={`pb-4 text-sm uppercase tracking-wider transition-colors ${
+                  className={`pb-4 text-sm uppercase tracking-wider transition-colors cursor-pointer ${
                     activeTab === "registrations"
                       ? "border-b-2 border-navy dark:border-white text-navy dark:text-white font-bold"
                       : "text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white"
@@ -188,7 +611,7 @@ export default function Retreats() {
                 </button>
                 <button
                   onClick={() => setActiveTab("attendance")}
-                  className={`pb-4 text-sm uppercase tracking-wider transition-colors ${
+                  className={`pb-4 text-sm uppercase tracking-wider transition-colors cursor-pointer ${
                     activeTab === "attendance"
                       ? "border-b-2 border-navy dark:border-white text-navy dark:text-white font-bold"
                       : "text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white"
@@ -201,91 +624,88 @@ export default function Retreats() {
 
             <div>
               {activeTab === "overview" && (
-                <div className="bg-warm-gray dark:bg-navy/50 border border-black/10 dark:border-white/10 p-8 rounded-lg">
-                  <h2 className="text-xl font-bold uppercase text-navy dark:text-white mb-6">
-                    Retreat Details
-                  </h2>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
-                        Title
-                      </label>
-                      <p className="text-black/70 dark:text-white/70">
-                        {selectedRetreat.title}
-                      </p>
-                    </div>
-                    <div>
-                      <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
-                        Description
-                      </label>
-                      <p className="text-black/70 dark:text-white/70">
-                        {selectedRetreat.description}
-                      </p>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
-                          Location
-                        </label>
-                        <p className="text-black/70 dark:text-white/70">
-                          {selectedRetreat.location}
-                        </p>
-                      </div>
-                      <div>
-                        <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
-                          Start Date
-                        </label>
-                        <p className="text-black/70 dark:text-white/70">
-                          {formatDate(selectedRetreat.startDate)}
-                        </p>
-                      </div>
-                      <div>
-                        <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
-                          End Date
-                        </label>
-                        <p className="text-black/70 dark:text-white/70">
-                          {formatDate(selectedRetreat.endDate)}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <EditRetreatForm
+                  onSubmit={handleUpdateRetreat}
+                  form={retreatForm}
+                  setForm={setRetreatForm}
+                />
               )}
 
               {activeTab === "registrations" && (
-                <div className="bg-warm-gray dark:bg-navy/50 border border-black/10 dark:border-white/10 p-8 rounded-lg">
-                  <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold uppercase text-navy dark:text-white">
-                      Registrations
-                    </h2>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-navy dark:bg-white text-white dark:text-navy text-sm uppercase tracking-wider hover:bg-burgundy dark:hover:bg-burgundy dark:hover:text-white transition-colors rounded">
-                      <Plus size={16} />
-                      Add Registration
-                    </button>
-                  </div>
-                  <p className="text-black/60 dark:text-white/60">
-                    No registrations yet
-                  </p>
-                </div>
+                <RegistrationsTable
+                  registrations={registrations}
+                  onAdd={() => setShowRegModal(true)}
+                  onDelete={(id) =>
+                    setDeleteRegistrationConfirm({ isOpen: true, id })
+                  }
+                />
               )}
 
               {activeTab === "attendance" && (
-                <div className="bg-warm-gray dark:bg-navy/50 border border-black/10 dark:border-white/10 p-8 rounded-lg">
-                  <h2 className="text-xl font-bold uppercase text-navy dark:text-white mb-6">
-                    Sessions & Attendance
-                  </h2>
-                  <p className="text-black/60 dark:text-white/60">
-                    No sessions yet
-                  </p>
-                </div>
+                <SessionForm
+                  totalDays={selectedRetreat.totalDays}
+                  retreatDateFrom={selectedRetreat.dateFrom}
+                  retreatId={selectedRetreat._id}
+                  sessions={sessions}
+                  attendanceRecords={attendanceRecords}
+                  onGenerateSessions={handleGenerateSessions}
+                  onSaveAttendance={handleSaveAttendance}
+                />
               )}
             </div>
           </>
         )}
+
+        <CreateRetreatModal
+          show={showCreateModal}
+          onClose={() => {
+            setShowCreateModal(false);
+            resetRetreatForm();
+          }}
+          onSubmit={handleCreateRetreat}
+          form={retreatForm}
+          setForm={setRetreatForm}
+        />
+
+        <RegistrationModal
+          show={showRegModal}
+          onClose={() => {
+            setShowRegModal(false);
+            resetRegForm();
+          }}
+          onSubmit={handleCreateRegistration}
+          form={regForm}
+          setForm={setRegForm}
+          totalDays={selectedRetreat?.totalDays || 1}
+        />
+
+        <ConfirmationModal
+          isOpen={deleteRetreatConfirm.isOpen}
+          onClose={() => setDeleteRetreatConfirm({ isOpen: false, id: null })}
+          onConfirm={confirmDeleteRetreat}
+          title="Delete Retreat"
+          message="Are you sure you want to delete this retreat? This will also delete all registrations and sessions."
+          confirmText="Delete"
+          cancelText="Cancel"
+        />
+
+        <ConfirmationModal
+          isOpen={deleteRegistrationConfirm.isOpen}
+          onClose={() =>
+            setDeleteRegistrationConfirm({ isOpen: false, id: null })
+          }
+          onConfirm={confirmDeleteRegistration}
+          title="Delete Registration"
+          message="Are you sure you want to delete this registration?"
+          confirmText="Delete"
+          cancelText="Cancel"
+        />
       </div>
     </DashboardLayout>
   );
-}
+};
+
+export default Retreats;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return await requireAuth(context);

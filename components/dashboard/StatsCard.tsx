@@ -9,12 +9,12 @@ const StatsCard = ({
 }: StatsCardProps) => {
   if (loading) {
     return (
-      <div className="bg-warm-gray dark:bg-navy/50 p-6 rounded-lg h-40 animate-pulse" />
+      <div className="bg-gray-100 dark:bg-navy/50 p-6 rounded-lg h-40 animate-pulse" />
     );
   }
 
   return (
-    <div className="bg-warm-gray dark:bg-navy/50 border border-black/10 dark:border-white/10 p-6 rounded-lg hover:shadow-lg transition-all duration-300">
+    <div className="bg-gray-100 dark:bg-navy/50 border border-white/0 dark:border-white/10 p-6 rounded-lg hover:shadow-lg hover:shadow-blue-100 transition-all duration-300">
       <div className="flex items-start justify-between mb-4">
         <Icon size={32} className="text-navy dark:text-white" />
         <div className="text-right">

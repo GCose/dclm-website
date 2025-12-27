@@ -72,14 +72,14 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
         <link rel="icon" href="/images/logo.png" />
       </Head>
 
-      <div className="min-h-screen flex bg-white dark:bg-navy transition-colors duration-300">
+      <div className="min-h-screen flex bg-white dark:bg-navy transition-colors duration-300 ">
         <aside
-          className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-warm-gray dark:bg-navy/50 border-r border-black/10 dark:border-white/10 transition-transform duration-300 ${
+          className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-gray-100 dark:bg-navy/50 border-r border-black/0 dark:border-white/10 transition-transform duration-300 ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
           }`}
         >
           <div className="flex flex-col h-full">
-            <div className="p-4 border-b border-black/10 dark:border-white/10">
+            <div className="px-4 py-2 border-b border-black/10 dark:border-white/10">
               <Link href="/" className="flex items-center gap-3">
                 <div className="relative w-12 h-12">
                   <Image
@@ -91,11 +91,8 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
                 </div>
                 <div>
                   <h1 className="text-lg font-bold uppercase text-navy dark:text-white">
-                    DCLM
+                    DCLM Admin
                   </h1>
-                  <p className="text-xs uppercase tracking-wider text-black/60 dark:text-white/60">
-                    Admin
-                  </p>
                 </div>
               </Link>
             </div>
@@ -126,14 +123,14 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
 
         {sidebarOpen && (
           <div
-            className="fixed inset-0 bg-black/50 lg:hidden z-40"
+            className="fixed inset-0 bg-black/10 lg:hidden z-40"
             onClick={() => setSidebarOpen(false)}
           />
         )}
 
         <div className="flex-1 flex flex-col min-h-screen">
           <header className="sticky top-0 z-30 bg-white dark:bg-navy border-b border-black/10 dark:border-white/10 transition-colors duration-300">
-            <div className="flex items-center justify-between px-6 py-4">
+            <div className="flex items-center justify-between px-6 py-2">
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -156,6 +153,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
 
                 <Link
                   href="/"
+                  target="_blank"
                   className="text-sm uppercase tracking-wider text-black/60 dark:text-white/60 hover:text-burgundy dark:hover:text-burgundy transition-colors"
                 >
                   View Website

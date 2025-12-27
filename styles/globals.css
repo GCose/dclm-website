@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 :root {
   /*========== Colors ==========*/
   --gold: #d4a574;
@@ -54,7 +56,6 @@ html {
 body {
   color: var(--navy);
   font-family: var(--font-body);
-  background-color: var(--cream);
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 }
