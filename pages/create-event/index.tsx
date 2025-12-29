@@ -11,12 +11,12 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Layout from "@/components/website/layout/Layout";
 import Modal from "@/components/dashboard/modals/Modal";
-import EventCard from "@/components/dashboard/EventCard";
-import EventForm from "@/components/dashboard/EventForm";
+import EventCard from "@/components/website/components/EventCard";
+import EventForm from "@/components/website/components/EventForm";
 import AdminLoginScreen from "@/components/AdminLoginScreen";
 import LoadingScreen from "@/components/website/LoadingScreen";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
-import EventDetailsModal from "@/components/dashboard/modals/EventDetailsModal";
+import EventDetailsModal from "@/components/website/components/modals/EventDetailsModal";
 
 const CreateEvent = () => {
   const router = useRouter();

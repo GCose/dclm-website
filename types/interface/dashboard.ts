@@ -16,37 +16,6 @@ export interface StatsCardProps {
 
 export interface Retreat {
     _id: string;
-    title: string;
-    description: string;
-    location: string;
-    startDate: string;
-    endDate: string;
-    totalDays: number;
-    createdAt: string;
-}
-
-export interface RetreatForm {
-    year: number;
-    type: "Easter" | "December";
-    status: "ongoing" | "completed";
-    totalDays: number;
-    sessionsPerFullDay: number;
-    dateFrom: string;
-    dateTo: string;
-    venue: string;
-    theme: string;
-}
-
-export interface CreateRetreatModalProps {
-    show: boolean;
-    onClose: () => void;
-    onSubmit: (e: React.FormEvent) => void;
-    form: RetreatForm;
-    setForm: React.Dispatch<React.SetStateAction<RetreatForm>>;
-}
-
-export interface Retreat {
-    _id: string;
     year: number;
     type: "Easter" | "December";
     status: "ongoing" | "completed";
@@ -58,6 +27,25 @@ export interface Retreat {
     createdAt: string;
 }
 
+export interface RetreatForm {
+    year: number;
+    type: "Easter" | "December";
+    status: "ongoing" | "completed";
+    totalDays: number;
+    dateFrom: string;
+    dateTo: string;
+    venue: string;
+    theme: string;
+}
+
+export interface CreateRetreatModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSubmit: (e: React.FormEvent) => void;
+    form: RetreatForm;
+    setForm: React.Dispatch<React.SetStateAction<RetreatForm>>;
+}
+
 export interface Registration {
     _id: string;
     retreatId: string;
@@ -67,37 +55,46 @@ export interface Registration {
     phone: string;
     nationality: string;
     invitedBy: string;
+    category: string;
     age: number;
     dayRegistered: number;
     createdAt: string;
 }
 
-export interface AttendanceSession {
-    _id: string;
-    retreatId: string;
-    day: number;
-    date: string;
-    sessionName: string;
-    sessionTime: string;
+export interface RegistrationForm {
+    name: string;
+    gender: "Male" | "Female";
+    address: string;
+    phone: string;
+    nationality: string;
+    invitedBy: "Invited" | "Member" | "Worker";
+    category: "Adult" | "Campus" | "Youth" | "Children";
+    age: number;
+    dayRegistered: number;
 }
 
-export interface AttendanceRecord {
-    _id?: string;
-    sessionId: string;
-    adultsMale: number;
-    adultsFemale: number;
-    youthMale: number;
-    youthFemale: number;
-    childrenMale: number;
-    childrenFemale: number;
-    total: number;
+export interface RegistrationModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSubmit: (e: React.FormEvent) => void;
+    form: RegistrationForm;
+    setForm: React.Dispatch<React.SetStateAction<RegistrationForm>>;
+    totalDays: number;
 }
 
-export interface SessionTemplate {
-    sessionName: string;
-    sessionTime: string;
+export interface RegistrationFormProps {
+    form: RegistrationForm;
+    setForm: React.Dispatch<React.SetStateAction<RegistrationForm>>;
+    onSubmit: (e: React.FormEvent) => void;
+    totalDays: number;
+    submitText: string;
 }
 
+export interface RegistrationsTableProps {
+    registrations: Registration[];
+    onAdd: () => void;
+    onDelete: (id: string) => void;
+}
 
 export interface AttendanceSession {
     _id: string;
@@ -138,42 +135,15 @@ export interface SessionFormProps {
     onSaveAttendance: (records: AttendanceRecord[]) => void;
 }
 
-export interface RegistrationForm {
-    name: string;
-    gender: "Male" | "Female";
-    address: string;
-    phone: string;
-    nationality: string;
-    invitedBy: string;
-    age: number;
-    dayRegistered: number;
+export interface TableColumn<T = unknown> {
+    key: string;
+    label: string;
+    render?: (value: unknown, row: T) => ReactNode;
 }
 
-export interface RegistrationModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onSubmit: (e: React.FormEvent) => void;
-    form: RegistrationForm;
-    setForm: React.Dispatch<React.SetStateAction<RegistrationForm>>;
-    totalDays: number;
-}
-
-export interface Registration {
-    _id: string;
-    retreatId: string;
-    name: string;
-    gender: string;
-    address: string;
-    phone: string;
-    nationality: string;
-    invitedBy: string;
-    age: number;
-    dayRegistered: number;
-    createdAt: string;
-}
-
-export interface RegistrationsTableProps {
-    registrations: Registration[];
-    onAdd: () => void;
-    onDelete: (id: string) => void;
+export interface TableProps<T = unknown> {
+    columns: TableColumn<T>[];
+    data: T[];
+    onRowClick?: (row: T) => void;
+    emptyMessage?: string;
 }

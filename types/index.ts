@@ -111,3 +111,8 @@ export interface EventDetailsModalProps {
     onClose: () => void;
     event: Event | null;
 }
+
+export interface AdminLoginScreenProps {
+    onLogin: (e: FormEvent<HTMLFormElement>) => void;
+    title?: string;
+}

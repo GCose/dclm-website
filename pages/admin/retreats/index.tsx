@@ -1,16 +1,10 @@
 import axios from "axios";
-import {
-  Retreat,
-  Registration,
-  AttendanceSession,
-  AttendanceRecord,
-  SessionTemplate,
-} from "@/types/interface/dashboard";
 import { toast, Toaster } from "sonner";
 import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
 import { useState, useEffect } from "react";
 import { Plus, Edit, Trash2, X } from "lucide-react";
+import Table from "@/components/dashboard/Table";
 import SessionForm from "@/components/dashboard/forms/SessionForms";
 import RegistrationsTable from "@/components/dashboard/RegistrationTable";
 import EditRetreatForm from "@/components/dashboard/forms/EditRetreatForm";
@@ -18,6 +12,14 @@ import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 import RegistrationModal from "@/components/dashboard/modals/RegistrationModal";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 import CreateRetreatModal from "@/components/dashboard/modals/CreateRetreatModal";
+import RetreatsPageSkeleton from "@/components/dashboard/skeletons/page/RetreatsPageSkeleton";
+import {
+  Retreat,
+  Registration,
+  AttendanceSession,
+  AttendanceRecord,
+  SessionTemplate,
+} from "@/types/interface/dashboard";
 
 const Retreats = () => {
   const [retreats, setRetreats] = useState<Retreat[]>([]);
@@ -26,7 +28,7 @@ const Retreats = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [activeTab, setActiveTab] = useState<
     "overview" | "registrations" | "attendance"
-  >("overview");
+  >("registrations");
 
   const [retreatForm, setRetreatForm] = useState({
     year: new Date().getFullYear(),
@@ -384,6 +386,74 @@ const Retreats = () => {
     });
   };
 
+  const retreatsColumns = [
+    {
+      key: "year",
+      label: "Year",
+      render: (value: unknown) => (
+        <span className="font-medium">{value as number}</span>
+      ),
+    },
+    { key: "type", label: "Type" },
+    { key: "venue", label: "Venue" },
+    {
+      key: "dates",
+      label: "Dates",
+      render: (_: unknown, row: Retreat) =>
+        `${formatDate(row.dateFrom)} - ${formatDate(row.dateTo)}`,
+    },
+    {
+      key: "totalDays",
+      label: "Duration",
+      render: (value: unknown) => `${value as number} days`,
+    },
+    {
+      key: "status",
+      label: "Status",
+      render: (value: unknown) => (
+        <span
+          className={`px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${
+            value === "ongoing"
+              ? "bg-green-500/20 text-green-600 dark:bg-green-500/30 dark:text-green-400"
+              : "bg-gray-200 text-gray-700"
+          }`}
+        >
+          {value as string}
+        </span>
+      ),
+    },
+    {
+      key: "actions",
+      label: "Actions",
+      render: (_: unknown, row: Retreat) => (
+        <div className="flex gap-2">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedRetreat(row);
+              loadRetreatToForm(row);
+            }}
+            className="p-2 text-navy dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded transition-colors cursor-pointer"
+          >
+            <Edit size={16} />
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setDeleteRetreatConfirm({
+                isOpen: true,
+                id: row._id,
+              });
+            }}
+            className="p-2 text-burgundy hover:bg-burgundy/10 rounded transition-colors cursor-pointer"
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <DashboardLayout title="Retreats">
       <Toaster position="top-right" richColors />
@@ -409,117 +479,17 @@ const Retreats = () => {
             </div>
 
             {loading ? (
-              <div className="bg-white dark:bg-navy/50 p-6 rounded-lg border border-black/10 dark:border-white/10">
-                <div className="animate-pulse space-y-4">
-                  <div className="h-10 bg-gray-100 dark:bg-white/10 rounded"></div>
-                  <div className="h-10 bg-gray-100 dark:bg-white/10 rounded"></div>
-                  <div className="h-10 bg-gray-100 dark:bg-white/10 rounded"></div>
-                </div>
-              </div>
-            ) : retreats.length === 0 ? (
-              <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-12 rounded-lg text-center">
-                <p className="text-black/60 dark:text-white/60 text-lg">
-                  No retreats yet. Create your first retreat to get started.
-                </p>
-              </div>
+              <RetreatsPageSkeleton />
             ) : (
-              <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 rounded-lg overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-black/10 dark:border-white/10 bg-gray-100 dark:bg-navy">
-                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
-                          Year
-                        </th>
-                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
-                          Type
-                        </th>
-                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
-                          Venue
-                        </th>
-                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
-                          Dates
-                        </th>
-                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
-                          Duration
-                        </th>
-                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
-                          Status
-                        </th>
-                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {retreats.map((retreat) => (
-                        <tr
-                          key={retreat._id}
-                          className="border-b border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer transition-colors"
-                          onClick={() => {
-                            setSelectedRetreat(retreat);
-                            loadRetreatToForm(retreat);
-                          }}
-                        >
-                          <td className="py-4 px-6 text-black/70 dark:text-white/70 font-medium">
-                            {retreat.year}
-                          </td>
-                          <td className="py-4 px-6 text-black/70 dark:text-white/70">
-                            {retreat.type}
-                          </td>
-                          <td className="py-4 px-6 text-black/70 dark:text-white/70">
-                            {retreat.venue}
-                          </td>
-                          <td className="py-4 px-6 text-black/70 dark:text-white/70">
-                            {formatDate(retreat.dateFrom)} -{" "}
-                            {formatDate(retreat.dateTo)}
-                          </td>
-                          <td className="py-4 px-6 text-black/70 dark:text-white/70">
-                            {retreat.totalDays} days
-                          </td>
-                          <td className="py-4 px-6">
-                            <span
-                              className={`px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${
-                                retreat.status === "ongoing"
-                                  ? "bg-terracotta/20 text-terracotta"
-                                  : "bg-navy/20 dark:bg-white/20 text-navy dark:text-white"
-                              }`}
-                            >
-                              {retreat.status}
-                            </span>
-                          </td>
-                          <td className="py-4 px-6">
-                            <div className="flex gap-2">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setSelectedRetreat(retreat);
-                                  loadRetreatToForm(retreat);
-                                }}
-                                className="p-2 text-navy dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded transition-colors cursor-pointer"
-                              >
-                                <Edit size={16} />
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setDeleteRetreatConfirm({
-                                    isOpen: true,
-                                    id: retreat._id,
-                                  });
-                                }}
-                                className="p-2 text-burgundy hover:bg-burgundy/10 rounded transition-colors cursor-pointer"
-                              >
-                                <Trash2 size={16} />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <Table
+                columns={retreatsColumns}
+                data={retreats}
+                onRowClick={(retreat) => {
+                  setSelectedRetreat(retreat);
+                  loadRetreatToForm(retreat);
+                }}
+                emptyMessage="No retreats yet. Create your first retreat to get started."
+              />
             )}
           </>
         ) : (

@@ -1,17 +1,12 @@
 import Image from "next/image";
-import { FormEvent } from "react";
-
-interface AdminLoginScreenProps {
-  onLogin: (e: FormEvent<HTMLFormElement>) => void;
-  title?: string;
-}
+import { AdminLoginScreenProps } from "@/types";
 
 const AdminLoginScreen = ({
   onLogin,
   title = "Admin Login",
 }: AdminLoginScreenProps) => {
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
+    <div className="relative min-h-screen bg-cream flex items-center justify-center px-4 overflow-hidden">
       <div className="absolute -left-32 top-1/4 opacity-10">
         <div className="relative w-64 h-64 rotate-90">
           <Image

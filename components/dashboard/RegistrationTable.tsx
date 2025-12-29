@@ -1,13 +1,48 @@
+import {
+  Registration,
+  RegistrationsTableProps,
+} from "@/types/interface/dashboard";
 import { Plus, Trash2 } from "lucide-react";
-import { RegistrationsTableProps } from "@/types/interface/dashboard";
+import Table from "@/components/dashboard/Table";
 
 const RegistrationsTable = ({
   registrations,
   onAdd,
   onDelete,
 }: RegistrationsTableProps) => {
+  const columns = [
+    { key: "name", label: "Name" },
+    { key: "gender", label: "Gender" },
+    { key: "age", label: "Age" },
+    { key: "category", label: "Category" },
+    { key: "nationality", label: "Nationality" },
+    { key: "phone", label: "Phone" },
+    { key: "address", label: "Address" },
+    { key: "invitedBy", label: "Type" },
+    {
+      key: "dayRegistered",
+      label: "Day Registered",
+      render: (value: unknown) => `Day ${value as number}`,
+    },
+    {
+      key: "actions",
+      label: "Actions",
+      render: (_: unknown, row: Registration) => (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(row._id);
+          }}
+          className="p-2 text-burgundy hover:bg-burgundy/10 rounded transition-colors cursor-pointer"
+        >
+          <Trash2 size={16} />
+        </button>
+      ),
+    },
+  ];
+
   return (
-    <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-8 rounded-lg">
+    <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-bold uppercase text-navy dark:text-white">
           Registrations
@@ -21,68 +56,11 @@ const RegistrationsTable = ({
         </button>
       </div>
 
-      {registrations.length === 0 ? (
-        <p className="text-black/60 dark:text-white/60">No registrations yet</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-black/10 dark:border-white/10">
-                <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
-                  Name
-                </th>
-                <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
-                  Gender
-                </th>
-                <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
-                  Age
-                </th>
-                <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
-                  Phone
-                </th>
-                <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
-                  Day Registered
-                </th>
-                <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {registrations.map((reg) => (
-                <tr
-                  key={reg._id}
-                  className="border-b border-black/10 dark:border-white/10"
-                >
-                  <td className="py-3 px-4 text-black/70 dark:text-white/70">
-                    {reg.name}
-                  </td>
-                  <td className="py-3 px-4 text-black/70 dark:text-white/70">
-                    {reg.gender}
-                  </td>
-                  <td className="py-3 px-4 text-black/70 dark:text-white/70">
-                    {reg.age}
-                  </td>
-                  <td className="py-3 px-4 text-black/70 dark:text-white/70">
-                    {reg.phone}
-                  </td>
-                  <td className="py-3 px-4 text-black/70 dark:text-white/70">
-                    Day {reg.dayRegistered}
-                  </td>
-                  <td className="py-3 px-4">
-                    <button
-                      onClick={() => onDelete(reg._id)}
-                      className="p-2 text-burgundy hover:bg-burgundy/10 rounded transition-colors cursor-pointer"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <Table
+        columns={columns}
+        data={registrations}
+        emptyMessage="No registrations yet"
+      />
     </div>
   );
 };

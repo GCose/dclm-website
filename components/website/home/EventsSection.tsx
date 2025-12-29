@@ -4,8 +4,8 @@ import { gsap } from "gsap";
 import { Event, EventsResponse } from "@/types";
 import { useEffect, useState, useRef } from "react";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import EventCard from "@/components/dashboard/EventCard";
-import EventDetailsModal from "@/components/dashboard/modals/EventDetailsModal";
+import EventCard from "@/components/website/components/EventCard";
+import EventDetailsModal from "@/components/website/components/modals/EventDetailsModal";
 
 gsap.registerPlugin(ScrollTrigger);
 

@@ -1,40 +1,55 @@
 import mongoose from "mongoose";
 
-const retreatSchema = new mongoose.Schema(
+const registrationSchema = new mongoose.Schema(
     {
-        year: {
-            type: Number,
+        retreatId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Retreat",
             required: true,
         },
-        type: {
-            type: String,
-            enum: ["Easter", "December"],
-            required: true,
+        registrationDate: {
+            type: Date,
+            default: Date.now,
         },
-        status: {
-            type: String,
-            enum: ["ongoing", "completed"],
-            default: "ongoing",
-        },
-        totalDays: {
+        dayRegistered: {
             type: Number,
             required: true,
             min: 1,
         },
-        dateFrom: {
-            type: Date,
-            required: true,
-        },
-        dateTo: {
-            type: Date,
-            required: true,
-        },
-        venue: {
+        name: {
             type: String,
             required: true,
         },
-        theme: {
+        gender: {
             type: String,
+            enum: ["Male", "Female"],
+            required: true,
+        },
+        category: {
+            type: String,
+            enum: ["Adult", "Campus", "Youth", "Children"],
+            required: true,
+        },
+        address: {
+            type: String,
+            required: true,
+        },
+        phone: {
+            type: String,
+            required: true,
+        },
+        nationality: {
+            type: String,
+            required: true,
+        },
+        invitedBy: {
+            type: String,
+            enum: ["Invited", "Member", "Worker"],
+            required: true,
+        },
+        age: {
+            type: Number,
+            required: true,
         },
         createdBy: {
             type: String,
@@ -49,7 +64,7 @@ const retreatSchema = new mongoose.Schema(
     }
 );
 
-retreatSchema.index({ year: 1, type: 1 }, { unique: true });
+registrationSchema.index({ retreatId: 1 });
 
-export default mongoose.models.Retreat ||
-    mongoose.model("Retreat", retreatSchema);
+export default mongoose.models.Registration ||
+    mongoose.model("Registration", registrationSchema);
