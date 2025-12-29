@@ -163,7 +163,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => setDarkMode(!darkMode)}
-                  className="p-2 text-navy dark:text-white hover:bg-black/5 dark:hover:bg-white/10 rounded-lg transition-colors"
+                  className="p-2 text-navy dark:text-white cursor-pointer hover:bg-black/5 dark:hover:bg-white/10 rounded-lg transition-colors"
                 >
                   {darkMode ? <Sun size={20} /> : <Moon size={20} />}
                 </button>
@@ -171,7 +171,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
                 <div className="relative">
                   <button
                     onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    className="flex items-center gap-2 p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-lg transition-colors"
+                    className="flex items-center gap-2 p-2 cursor-pointer hover:bg-black/5 dark:hover:bg-white/10 rounded-lg transition-colors"
                   >
                     <div className="relative w-8 h-8">
                       <Image
@@ -201,7 +201,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
                         <div className="p-2">
                           <button
                             onClick={handleSignOut}
-                            className="w-full flex items-center gap-3 px-4 py-3 text-left text-black/70 dark:text-white/70 hover:bg-black/5 dark:hover:bg-white/10 rounded-lg transition-colors"
+                            className="w-full flex items-center cursor-pointer gap-3 px-4 py-3 text-left text-black/70 dark:text-white/70 hover:bg-black/5 dark:hover:bg-white/10 rounded-lg transition-colors"
                           >
                             <LogOut size={18} />
                             <span className="text-sm uppercase tracking-wider">
