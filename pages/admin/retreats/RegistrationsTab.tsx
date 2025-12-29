@@ -2,7 +2,7 @@ import {
   Registration,
   RegistrationsTableProps,
 } from "@/types/interface/dashboard";
-import Table from "@/components/dashboard/tables/Table";
+import Table from "@/components/dashboard/Table";
 import { Plus, Trash2, Edit, RefreshCw } from "lucide-react";
 
 const RegistrationsTab = ({

@@ -54,7 +54,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
   const isActive = (path: string) => router.pathname === path;
 
   const navLinks = [
-    { path: "/admin", label: "Dashboard", icon: LayoutDashboard },
+    { path: "/admin/overview", label: "Dashboard", icon: LayoutDashboard },
     { path: "/admin/retreats", label: "Retreats", icon: Church },
     { path: "/admin/admins", label: "Admins", icon: Users },
     { path: "/admin/settings", label: "Settings", icon: Settings },

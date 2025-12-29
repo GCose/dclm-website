@@ -13,7 +13,7 @@ import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
 import { useState, useEffect } from "react";
 import { Plus, Edit, Trash2, X } from "lucide-react";
-import Table from "@/components/dashboard/tables/Table";
+import Table from "@/components/dashboard/Table";
 import { useRegistrations } from "@/hooks/use-registrations";
 import SessionForm from "@/components/dashboard/forms/SessionForms";
 import EditRetreatForm from "@/components/dashboard/forms/EditRetreatForm";

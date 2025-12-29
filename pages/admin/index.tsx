@@ -1,11 +1,21 @@
 import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
-import Overview from "@/components/dashboard/Overview";
 
 export default function Admin() {
-  return <Overview />;
+  return null;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  return await requireAuth(context);
+  const authResult = await requireAuth(context);
+
+  if ("redirect" in authResult) {
+    return authResult;
+  }
+
+  return {
+    redirect: {
+      destination: "/admin/overview",
+      permanent: false,
+    },
+  };
 };
