@@ -25,6 +25,11 @@ const registrationSchema = new mongoose.Schema(
             enum: ["Male", "Female"],
             required: true,
         },
+        category: {
+            type: String,
+            enum: ["Adult", "Campus", "Youth", "Children"],
+            required: true,
+        },
         address: {
             type: String,
             required: true,
@@ -39,6 +44,7 @@ const registrationSchema = new mongoose.Schema(
         },
         invitedBy: {
             type: String,
+            enum: ["Invited", "Member", "Worker"],
             required: true,
         },
         age: {
