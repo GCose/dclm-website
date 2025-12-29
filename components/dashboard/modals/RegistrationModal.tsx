@@ -29,7 +29,7 @@ const RegistrationModal = ({
         <form onSubmit={onSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div className="md:col-span-2">
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Full Name *
               </label>
               <input
@@ -42,7 +42,7 @@ const RegistrationModal = ({
             </div>
 
             <div>
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Gender *
               </label>
               <select
@@ -62,7 +62,7 @@ const RegistrationModal = ({
             </div>
 
             <div>
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Age *
               </label>
               <input
@@ -78,7 +78,7 @@ const RegistrationModal = ({
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Address *
               </label>
               <input
@@ -91,7 +91,7 @@ const RegistrationModal = ({
             </div>
 
             <div>
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Phone *
               </label>
               <input
@@ -104,7 +104,7 @@ const RegistrationModal = ({
             </div>
 
             <div>
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Nationality *
               </label>
               <input
@@ -119,7 +119,7 @@ const RegistrationModal = ({
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Invited By / Worker / Member *
               </label>
               <input
@@ -134,7 +134,7 @@ const RegistrationModal = ({
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Day Registered *
               </label>
               <select
