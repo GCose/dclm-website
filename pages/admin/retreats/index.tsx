@@ -1,10 +1,18 @@
 import axios from "axios";
+import {
+  Retreat,
+  Registration,
+  SessionTemplate,
+  AttendanceRecord,
+  RegistrationForm,
+  AttendanceSession,
+} from "@/types/interface/dashboard";
 import { toast, Toaster } from "sonner";
 import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
 import { useState, useEffect } from "react";
-import { Plus, Edit, Trash2, X } from "lucide-react";
 import Table from "@/components/dashboard/Table";
+import { Plus, Edit, Trash2, X } from "lucide-react";
 import SessionForm from "@/components/dashboard/forms/SessionForms";
 import RegistrationsTable from "@/components/dashboard/RegistrationTable";
 import EditRetreatForm from "@/components/dashboard/forms/EditRetreatForm";
@@ -12,14 +20,7 @@ import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 import RegistrationModal from "@/components/dashboard/modals/RegistrationModal";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 import CreateRetreatModal from "@/components/dashboard/modals/CreateRetreatModal";
-import RetreatsPageSkeleton from "@/components/dashboard/skeletons/page/RetreatsPageSkeleton";
-import {
-  Retreat,
-  Registration,
-  AttendanceSession,
-  AttendanceRecord,
-  SessionTemplate,
-} from "@/types/interface/dashboard";
+import LoadingSkeleton from "@/components/dashboard/skeletons/page/RetreatsPageSkeleton";
 
 const Retreats = () => {
   const [retreats, setRetreats] = useState<Retreat[]>([]);
@@ -28,7 +29,7 @@ const Retreats = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [activeTab, setActiveTab] = useState<
     "overview" | "registrations" | "attendance"
-  >("registrations");
+  >("overview");
 
   const [retreatForm, setRetreatForm] = useState({
     year: new Date().getFullYear(),
@@ -43,13 +44,14 @@ const Retreats = () => {
 
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [showRegModal, setShowRegModal] = useState(false);
-  const [regForm, setRegForm] = useState({
+  const [regForm, setRegForm] = useState<RegistrationForm>({
     name: "",
-    gender: "Male" as "Male" | "Female",
+    gender: "Male",
     address: "",
     phone: "",
     nationality: "",
-    invitedBy: "",
+    invitedBy: "Invited",
+    category: "Adult",
     age: 18,
     dayRegistered: 1,
   });
@@ -359,7 +361,8 @@ const Retreats = () => {
       address: "",
       phone: "",
       nationality: "",
-      invitedBy: "",
+      invitedBy: "Invited",
+      category: "Adult",
       age: 18,
       dayRegistered: 1,
     });
@@ -414,8 +417,8 @@ const Retreats = () => {
         <span
           className={`px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${
             value === "ongoing"
-              ? "bg-green-500/20 text-green-600 dark:bg-green-500/30 dark:text-green-400"
-              : "bg-gray-200 text-gray-700"
+              ? "bg-terracotta/20 text-terracotta"
+              : "bg-green-500/20 text-green-600 dark:bg-green-500/30 dark:text-green-400"
           }`}
         >
           {value as string}
@@ -479,7 +482,7 @@ const Retreats = () => {
             </div>
 
             {loading ? (
-              <RetreatsPageSkeleton />
+              <LoadingSkeleton />
             ) : (
               <Table
                 columns={retreatsColumns}
