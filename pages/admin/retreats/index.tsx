@@ -23,7 +23,7 @@ import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 import CreateRetreatModal from "@/components/dashboard/modals/CreateRetreatModal";
 import EditRegistrationModal from "@/components/dashboard/modals/EditRegistrationModal";
 import LoadingSkeleton from "@/components/dashboard/skeletons/page/RetreatsPageSkeleton";
-import RegistrationsTab from "./RegistrationsTab";
+import RegistrationsTab from "../../../components/dashboard/retreat-tabs/RegistrationsTab";
 
 const Retreats = () => {
   const [retreats, setRetreats] = useState<Retreat[]>([]);
