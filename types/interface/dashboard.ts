@@ -73,6 +73,14 @@ export interface RegistrationForm {
     dayRegistered: number;
 }
 
+export interface RegistrationFilters {
+    gender: string;
+    category: string;
+    nationality: string;
+    invitedBy: string;
+    dayRegistered: string;
+}
+
 export interface RegistrationModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -92,8 +100,21 @@ export interface RegistrationFormProps {
 
 export interface RegistrationsTableProps {
     registrations: Registration[];
+    total: number;
+    loading: boolean;
+    filters: RegistrationFilters;
+    pagination: {
+        page: number;
+        totalPages: number;
+        total?: number;
+        onPageChange: (page: number) => void;
+    };
+    onFiltersChange: (filters: RegistrationFilters) => void;
     onAdd: () => void;
+    onEdit: (registration: Registration) => void;
     onDelete: (id: string) => void;
+    onRefresh: () => void;
+    totalDays: number;
 }
 
 export interface AttendanceSession {
@@ -146,4 +167,27 @@ export interface TableProps<T = unknown> {
     data: T[];
     onRowClick?: (row: T) => void;
     emptyMessage?: string;
+    loading?: boolean;
+    pagination?: {
+        page: number;
+        totalPages: number;
+        total?: number;
+        onPageChange: (page: number) => void;
+    };
+}
+
+export interface UseRegistrationsParams {
+    retreatId: string | null;
+    page: number;
+    filters: RegistrationFilters;
+}
+
+export interface RegistrationsResponse {
+    registrations: Registration[];
+    pagination: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    };
 }

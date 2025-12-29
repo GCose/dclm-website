@@ -8,19 +8,40 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
         await dbConnect();
 
         if (req.method === "GET") {
-            const { retreatId } = req.query;
+            const { retreatId, page, limit, gender, category, nationality, invitedBy, dayRegistered } = req.query;
 
-            if (retreatId) {
-                const registrations = await Registration.find({ retreatId }).sort({
-                    registrationDate: -1,
-                });
-                return res.status(200).json({ registrations });
-            }
+            const pageNum = parseInt(page as string) || 1;
+            const limitNum = parseInt(limit as string) || 20;
+            const skip = (pageNum - 1) * limitNum;
 
-            const registrations = await Registration.find({})
-                .populate("retreatId")
-                .sort({ registrationDate: -1 });
-            return res.status(200).json({ registrations });
+            const filter: Record<string, unknown> = {};
+
+            if (retreatId) filter.retreatId = retreatId;
+            if (gender) filter.gender = gender;
+            if (category) filter.category = category;
+            if (nationality) filter.nationality = nationality;
+            if (invitedBy) filter.invitedBy = invitedBy;
+            if (dayRegistered) filter.dayRegistered = parseInt(dayRegistered as string);
+
+            const [registrations, total] = await Promise.all([
+                Registration.find(filter)
+                    .sort({ registrationDate: -1 })
+                    .skip(skip)
+                    .limit(limitNum),
+                Registration.countDocuments(filter)
+            ]);
+
+            const totalPages = Math.ceil(total / limitNum);
+
+            return res.status(200).json({
+                registrations,
+                pagination: {
+                    total,
+                    page: pageNum,
+                    limit: limitNum,
+                    totalPages
+                }
+            });
         }
 
         if (req.method === "POST") {

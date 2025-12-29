@@ -10,9 +10,7 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
         await dbConnect();
 
         if (req.method === "GET") {
-            const registration = await Registration.findById(id).populate(
-                "retreatId"
-            );
+            const registration = await Registration.findById(id).populate("retreatId");
             if (!registration) {
                 return res.status(404).json({ error: "Registration not found" });
             }

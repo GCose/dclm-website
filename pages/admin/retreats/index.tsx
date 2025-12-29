@@ -6,20 +6,23 @@ import {
   AttendanceRecord,
   RegistrationForm,
   AttendanceSession,
+  RegistrationFilters,
 } from "@/types/interface/dashboard";
 import { toast, Toaster } from "sonner";
 import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
 import { useState, useEffect } from "react";
-import Table from "@/components/dashboard/Table";
 import { Plus, Edit, Trash2, X } from "lucide-react";
+import Table from "@/components/dashboard/tables/Table";
+import { useRegistrations } from "@/hooks/use-registrations";
 import SessionForm from "@/components/dashboard/forms/SessionForms";
-import RegistrationsTable from "@/components/dashboard/RegistrationTable";
 import EditRetreatForm from "@/components/dashboard/forms/EditRetreatForm";
 import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 import RegistrationModal from "@/components/dashboard/modals/RegistrationModal";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
+import RegistrationsTable from "@/components/dashboard/tables/RegistrationTable";
 import CreateRetreatModal from "@/components/dashboard/modals/CreateRetreatModal";
+import EditRegistrationModal from "@/components/dashboard/modals/EditRegistrationModal";
 import LoadingSkeleton from "@/components/dashboard/skeletons/page/RetreatsPageSkeleton";
 
 const Retreats = () => {
@@ -42,8 +45,10 @@ const Retreats = () => {
     theme: "",
   });
 
-  const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [showRegModal, setShowRegModal] = useState(false);
+  const [showEditRegModal, setShowEditRegModal] = useState(false);
+  const [editingRegistration, setEditingRegistration] =
+    useState<Registration | null>(null);
   const [regForm, setRegForm] = useState<RegistrationForm>({
     name: "",
     gender: "Male",
@@ -54,6 +59,27 @@ const Retreats = () => {
     category: "Adult",
     age: 18,
     dayRegistered: 1,
+  });
+
+  const [regPage, setRegPage] = useState(1);
+  const [regFilters, setRegFilters] = useState<RegistrationFilters>({
+    gender: "",
+    category: "",
+    nationality: "",
+    invitedBy: "",
+    dayRegistered: "",
+  });
+
+  const {
+    registrations,
+    total: regTotal,
+    totalPages: regTotalPages,
+    isLoading: regLoading,
+    refresh: refreshRegistrations,
+  } = useRegistrations({
+    retreatId: selectedRetreat?._id || null,
+    page: regPage,
+    filters: regFilters,
   });
 
   const [sessions, setSessions] = useState<AttendanceSession[]>([]);
@@ -95,17 +121,13 @@ const Retreats = () => {
 
     const fetchRetreatData = async () => {
       try {
-        const [regsRes, sessionsRes, recordsRes] = await Promise.all([
-          axios.get(`/api/registrations?retreatId=${selectedRetreat._id}`),
+        const [sessionsRes, recordsRes] = await Promise.all([
           axios.get(
             `/api/attendance-sessions?retreatId=${selectedRetreat._id}`
           ),
           axios.get(`/api/attendance-records`),
         ]);
 
-        const regsData = Array.isArray(regsRes.data)
-          ? regsRes.data
-          : regsRes.data.registrations || [];
         const sessionsData = Array.isArray(sessionsRes.data)
           ? sessionsRes.data
           : sessionsRes.data.sessions || [];
@@ -113,7 +135,6 @@ const Retreats = () => {
           ? recordsRes.data
           : recordsRes.data.records || [];
 
-        setRegistrations(regsData);
         setSessions(sessionsData);
         setAttendanceRecords(recordsData);
       } catch (error: unknown) {
@@ -124,20 +145,6 @@ const Retreats = () => {
 
     fetchRetreatData();
   }, [selectedRetreat]);
-
-  const fetchRegistrations = async () => {
-    if (!selectedRetreat) return;
-    try {
-      const { data } = await axios.get(
-        `/api/registrations?retreatId=${selectedRetreat._id}`
-      );
-      const regsData = Array.isArray(data) ? data : data.registrations || [];
-      setRegistrations(regsData);
-    } catch (error: unknown) {
-      console.error("Error fetching registrations:", error);
-      toast.error("Failed to fetch registrations");
-    }
-  };
 
   const fetchSessions = async () => {
     if (!selectedRetreat) return;
@@ -306,10 +313,49 @@ const Retreats = () => {
       toast.success("Registration added");
       setShowRegModal(false);
       resetRegForm();
-      await fetchRegistrations();
+      refreshRegistrations();
     } catch (error: unknown) {
       console.error("Error creating registration:", error);
       toast.error("Failed to add registration");
+    }
+  };
+
+  const handleEditRegistration = (registration: Registration) => {
+    setEditingRegistration(registration);
+    setRegForm({
+      name: registration.name,
+      gender: registration.gender as "Male" | "Female",
+      address: registration.address,
+      phone: registration.phone,
+      nationality: registration.nationality,
+      invitedBy: registration.invitedBy as "Invited" | "Member" | "Worker",
+      category: registration.category as
+        | "Adult"
+        | "Campus"
+        | "Youth"
+        | "Children",
+      age: registration.age,
+      dayRegistered: registration.dayRegistered,
+    });
+    setShowEditRegModal(true);
+  };
+
+  const handleUpdateRegistration = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingRegistration) return;
+    try {
+      await axios.patch(
+        `/api/registrations/${editingRegistration._id}`,
+        regForm
+      );
+      toast.success("Registration updated");
+      setShowEditRegModal(false);
+      setEditingRegistration(null);
+      resetRegForm();
+      refreshRegistrations();
+    } catch (error: unknown) {
+      console.error("Error updating registration:", error);
+      toast.error("Failed to update registration");
     }
   };
 
@@ -319,7 +365,7 @@ const Retreats = () => {
     try {
       await axios.delete(`/api/registrations/${deleteRegistrationConfirm.id}`);
       toast.success("Registration deleted");
-      await fetchRegistrations();
+      refreshRegistrations();
     } catch (error: unknown) {
       console.error("Error deleting registration:", error);
       toast.error("Failed to delete registration");
@@ -387,6 +433,11 @@ const Retreats = () => {
       day: "numeric",
       year: "numeric",
     });
+  };
+
+  const handleFiltersChange = (filters: RegistrationFilters) => {
+    setRegFilters(filters);
+    setRegPage(1);
   };
 
   const retreatsColumns = [
@@ -561,10 +612,23 @@ const Retreats = () => {
               {activeTab === "registrations" && (
                 <RegistrationsTable
                   registrations={registrations}
+                  total={regTotal}
+                  loading={regLoading}
+                  filters={regFilters}
+                  pagination={{
+                    page: regPage,
+                    totalPages: regTotalPages,
+                    total: regTotal,
+                    onPageChange: setRegPage,
+                  }}
+                  onFiltersChange={handleFiltersChange}
                   onAdd={() => setShowRegModal(true)}
+                  onEdit={handleEditRegistration}
                   onDelete={(id) =>
                     setDeleteRegistrationConfirm({ isOpen: true, id })
                   }
+                  onRefresh={refreshRegistrations}
+                  totalDays={selectedRetreat.totalDays}
                 />
               )}
 
@@ -601,6 +665,19 @@ const Retreats = () => {
             resetRegForm();
           }}
           onSubmit={handleCreateRegistration}
+          form={regForm}
+          setForm={setRegForm}
+          totalDays={selectedRetreat?.totalDays || 1}
+        />
+
+        <EditRegistrationModal
+          isOpen={showEditRegModal}
+          onClose={() => {
+            setShowEditRegModal(false);
+            setEditingRegistration(null);
+            resetRegForm();
+          }}
+          onSubmit={handleUpdateRegistration}
           form={regForm}
           setForm={setRegForm}
           totalDays={selectedRetreat?.totalDays || 1}
