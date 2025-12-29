@@ -20,10 +20,10 @@ import EditRetreatForm from "@/components/dashboard/forms/EditRetreatForm";
 import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 import RegistrationModal from "@/components/dashboard/modals/RegistrationModal";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
-import RegistrationsTable from "@/components/dashboard/tables/RegistrationTable";
 import CreateRetreatModal from "@/components/dashboard/modals/CreateRetreatModal";
 import EditRegistrationModal from "@/components/dashboard/modals/EditRegistrationModal";
 import LoadingSkeleton from "@/components/dashboard/skeletons/page/RetreatsPageSkeleton";
+import RegistrationsTab from "./RegistrationsTab";
 
 const Retreats = () => {
   const [retreats, setRetreats] = useState<Retreat[]>([]);
@@ -549,7 +549,7 @@ const Retreats = () => {
         ) : (
           <>
             <div className="flex justify-between items-center mb-8">
-              <h1 className="text-[clamp(1.5rem,4vw,2rem)] font-bold uppercase text-navy dark:text-white">
+              <h1 className="text-[clamp(1.2rem,4vw,2rem)] font-bold uppercase text-navy dark:text-white">
                 {selectedRetreat.year} {selectedRetreat.type} Retreat
               </h1>
               <button
@@ -610,7 +610,7 @@ const Retreats = () => {
               )}
 
               {activeTab === "registrations" && (
-                <RegistrationsTable
+                <RegistrationsTab
                   registrations={registrations}
                   total={regTotal}
                   loading={regLoading}

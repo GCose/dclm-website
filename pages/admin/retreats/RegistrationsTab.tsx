@@ -73,7 +73,7 @@ const RegistrationsTab = ({
 
   return (
     <div>
-      <div className="flex flex-col md:flex-col justify-between items-center mb-6 gap-6 md:gap-0">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-6 md:gap-0">
         <h2 className="text-[clamp(1.1rem,3vw,1.4rem)] font-bold uppercase text-navy dark:text-white">
           Registrations
         </h2>
@@ -98,7 +98,7 @@ const RegistrationsTab = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-10 mb-6">
         <div>
-          <label className="block text-[clamp(0.6rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
+          <label className="block text-[clamp(0.8rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Gender
           </label>
           <select
@@ -115,7 +115,7 @@ const RegistrationsTab = ({
         </div>
 
         <div>
-          <label className="block text-[clamp(0.6rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
+          <label className="block text-[clamp(0.8rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Category
           </label>
           <select
@@ -134,7 +134,7 @@ const RegistrationsTab = ({
         </div>
 
         <div>
-          <label className="block text-[clamp(0.6rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
+          <label className="block text-[clamp(0.8rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Nationality
           </label>
           <select
@@ -154,7 +154,7 @@ const RegistrationsTab = ({
         </div>
 
         <div>
-          <label className="block text-[clamp(0.6rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
+          <label className="block text-[clamp(0.8rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Type
           </label>
           <select
@@ -172,7 +172,7 @@ const RegistrationsTab = ({
         </div>
 
         <div>
-          <label className="block text-[clamp(0.6rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
+          <label className="block text-[clamp(0.8rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Day Registered
           </label>
           <select
