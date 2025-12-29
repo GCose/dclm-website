@@ -2,8 +2,8 @@ import { useState } from "react";
 import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
 import StatsCard from "@/components/dashboard/StatsCard";
-import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 import { Church, Clipboard, Calendar, Users } from "lucide-react";
+import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 
 const OverviewPage = () => {
   const [stats] = useState({

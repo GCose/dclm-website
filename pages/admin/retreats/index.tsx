@@ -1,33 +1,34 @@
-import axios from "axios";
+import { Toaster } from "sonner";
+import { useState } from "react";
 import {
   Retreat,
   Registration,
-  SessionTemplate,
-  AttendanceRecord,
   RegistrationForm,
-  AttendanceSession,
   RegistrationFilters,
 } from "@/types/interface/dashboard";
-import { toast, Toaster } from "sonner";
+import { Plus, X } from "lucide-react";
 import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
-import { useState, useEffect } from "react";
-import { Plus, Edit, Trash2, X } from "lucide-react";
 import Table from "@/components/dashboard/Table";
+import { useDebounce } from "@/hooks/usedebounce";
+import { formatDate } from "@/utils/retreats/helpers";
+import useRetreat from "@/hooks/retreats/use-retreat";
+import useSession from "@/hooks/retreats/use-sessions";
 import { useRegistrations } from "@/hooks/use-registrations";
+import { getRetreatsColumns } from "@/utils/retreats/columns";
 import SessionForm from "@/components/dashboard/forms/SessionForms";
+import { useRetreatsData } from "@/hooks/retreats/use-retreats-data";
 import EditRetreatForm from "@/components/dashboard/forms/EditRetreatForm";
 import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 import RegistrationModal from "@/components/dashboard/modals/RegistrationModal";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 import CreateRetreatModal from "@/components/dashboard/modals/CreateRetreatModal";
+import RegistrationsTab from "@/components/dashboard/retreat-tabs/RegistrationsTab";
+import { useRegistrationHandlers } from "@/hooks/retreats/use-registration-handlers";
 import EditRegistrationModal from "@/components/dashboard/modals/EditRegistrationModal";
 import LoadingSkeleton from "@/components/dashboard/skeletons/page/RetreatsPageSkeleton";
-import RegistrationsTab from "../../../components/dashboard/retreat-tabs/RegistrationsTab";
 
 const Retreats = () => {
-  const [retreats, setRetreats] = useState<Retreat[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedRetreat, setSelectedRetreat] = useState<Retreat | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [activeTab, setActiveTab] = useState<
@@ -63,6 +64,7 @@ const Retreats = () => {
 
   const [regPage, setRegPage] = useState(1);
   const [regFilters, setRegFilters] = useState<RegistrationFilters>({
+    search: "",
     gender: "",
     category: "",
     nationality: "",
@@ -70,22 +72,12 @@ const Retreats = () => {
     dayRegistered: "",
   });
 
-  const {
-    registrations,
-    total: regTotal,
-    totalPages: regTotalPages,
-    isLoading: regLoading,
-    refresh: refreshRegistrations,
-  } = useRegistrations({
-    retreatId: selectedRetreat?._id || null,
-    page: regPage,
-    filters: regFilters,
-  });
+  const debouncedSearch = useDebounce(regFilters.search, 500);
 
-  const [sessions, setSessions] = useState<AttendanceSession[]>([]);
-  const [attendanceRecords, setAttendanceRecords] = useState<
-    AttendanceRecord[]
-  >([]);
+  const debouncedFilters = {
+    ...regFilters,
+    search: debouncedSearch,
+  };
 
   const [deleteRetreatConfirm, setDeleteRetreatConfirm] = useState<{
     isOpen: boolean;
@@ -97,295 +89,52 @@ const Retreats = () => {
     id: string | null;
   }>({ isOpen: false, id: null });
 
-  useEffect(() => {
-    const fetchRetreats = async () => {
-      setLoading(true);
-      try {
-        const { data } = await axios.get("/api/retreats");
-        const retreatsData = Array.isArray(data) ? data : data.retreats || [];
-        setRetreats(retreatsData);
-      } catch (error: unknown) {
-        console.error("Error fetching retreats:", error);
-        toast.error("Failed to fetch retreats");
-        setRetreats([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const {
+    retreats,
+    loading,
+    retreatsPage,
+    setRetreatsPage,
+    retreatsTotalPages,
+    retreatsTotal,
+    sessions,
+    attendanceRecords,
+    fetchRetreats,
+    fetchSessions,
+    fetchAttendanceRecords,
+  } = useRetreatsData(selectedRetreat);
 
-    fetchRetreats();
-  }, []);
+  const {
+    registrations,
+    total: regTotal,
+    totalPages: regTotalPages,
+    isLoading: regLoading,
+    refresh: refreshRegistrations,
+  } = useRegistrations({
+    retreatId: selectedRetreat?._id || null,
+    page: regPage,
+    filters: debouncedFilters,
+  });
 
-  useEffect(() => {
-    if (!selectedRetreat) return;
+  const { handleCreateRetreat, handleUpdateRetreat, confirmDeleteRetreat } =
+    useRetreat(
+      fetchRetreats,
+      retreatsPage,
+      setSelectedRetreat,
+      selectedRetreat
+    );
 
-    const fetchRetreatData = async () => {
-      try {
-        const [sessionsRes, recordsRes] = await Promise.all([
-          axios.get(
-            `/api/attendance-sessions?retreatId=${selectedRetreat._id}`
-          ),
-          axios.get(`/api/attendance-records`),
-        ]);
+  const {
+    handleCreateRegistration,
+    handleEditRegistration,
+    handleUpdateRegistration,
+    confirmDeleteRegistration,
+  } = useRegistrationHandlers(selectedRetreat, refreshRegistrations);
 
-        const sessionsData = Array.isArray(sessionsRes.data)
-          ? sessionsRes.data
-          : sessionsRes.data.sessions || [];
-        const recordsData = Array.isArray(recordsRes.data)
-          ? recordsRes.data
-          : recordsRes.data.records || [];
-
-        setSessions(sessionsData);
-        setAttendanceRecords(recordsData);
-      } catch (error: unknown) {
-        console.error("Error fetching retreat data:", error);
-        toast.error("Failed to fetch retreat data");
-      }
-    };
-
-    fetchRetreatData();
-  }, [selectedRetreat]);
-
-  const fetchSessions = async () => {
-    if (!selectedRetreat) return;
-    try {
-      const { data } = await axios.get(
-        `/api/attendance-sessions?retreatId=${selectedRetreat._id}`
-      );
-      const sessionsData = Array.isArray(data) ? data : data.sessions || [];
-      setSessions(sessionsData);
-    } catch (error: unknown) {
-      console.error("Error fetching sessions:", error);
-      toast.error("Failed to fetch sessions");
-    }
-  };
-
-  const fetchAttendanceRecords = async () => {
-    if (!selectedRetreat) return;
-    try {
-      const { data } = await axios.get(`/api/attendance-records`);
-      const recordsData = Array.isArray(data) ? data : data.records || [];
-      setAttendanceRecords(recordsData);
-    } catch (error: unknown) {
-      console.error("Error fetching attendance records:", error);
-    }
-  };
-
-  const calculateDayDate = (dayNumber: number) => {
-    if (!selectedRetreat) return new Date().toISOString().split("T")[0];
-    const startDate = new Date(selectedRetreat.dateFrom);
-    const dayDate = new Date(startDate);
-    dayDate.setDate(startDate.getDate() + (dayNumber - 1));
-    return dayDate.toISOString().split("T")[0];
-  };
-
-  const handleGenerateSessions = async (
-    sessionsPerFullDay: number,
-    templates: SessionTemplate[]
-  ) => {
-    if (!selectedRetreat) return;
-
-    try {
-      const sessionsToCreate: Array<{
-        retreatId: string;
-        day: number;
-        date: string;
-        sessionName: string;
-        sessionTime: string;
-      }> = [];
-
-      for (let day = 1; day <= selectedRetreat.totalDays; day++) {
-        const dayDate = calculateDayDate(day);
-
-        if (day === 1) {
-          sessionsToCreate.push({
-            retreatId: selectedRetreat._id,
-            day: 1,
-            date: dayDate,
-            sessionName: "Evening Session",
-            sessionTime: "6:00 PM - 8:00 PM",
-          });
-        } else if (day === selectedRetreat.totalDays) {
-          sessionsToCreate.push({
-            retreatId: selectedRetreat._id,
-            day: selectedRetreat.totalDays,
-            date: dayDate,
-            sessionName: "Morning Session",
-            sessionTime: "6:00 AM - 8:00 AM",
-          });
-        } else {
-          templates.forEach((template) => {
-            sessionsToCreate.push({
-              retreatId: selectedRetreat._id,
-              day,
-              date: dayDate,
-              sessionName: template.sessionName,
-              sessionTime: template.sessionTime,
-            });
-          });
-        }
-      }
-
-      await Promise.all(
-        sessionsToCreate.map((session) =>
-          axios.post("/api/attendance-sessions", session)
-        )
-      );
-
-      toast.success("Sessions generated successfully");
-      await fetchSessions();
-    } catch (error: unknown) {
-      console.error("Error generating sessions:", error);
-      toast.error("Failed to generate sessions");
-    }
-  };
-
-  const handleCreateRetreat = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await axios.post("/api/retreats", retreatForm);
-      toast.success("Retreat created successfully");
-      setShowCreateModal(false);
-      resetRetreatForm();
-
-      const { data } = await axios.get("/api/retreats");
-      const retreatsData = Array.isArray(data) ? data : data.retreats || [];
-      setRetreats(retreatsData);
-    } catch (error: unknown) {
-      console.error("Error creating retreat:", error);
-      toast.error("Failed to create retreat");
-    }
-  };
-
-  const handleUpdateRetreat = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedRetreat) return;
-    try {
-      await axios.patch(`/api/retreats/${selectedRetreat._id}`, retreatForm);
-      toast.success("Retreat updated successfully");
-
-      const [retreatsRes, retreatRes] = await Promise.all([
-        axios.get("/api/retreats"),
-        axios.get(`/api/retreats/${selectedRetreat._id}`),
-      ]);
-
-      const retreatsData = Array.isArray(retreatsRes.data)
-        ? retreatsRes.data
-        : retreatsRes.data.retreats || [];
-      setRetreats(retreatsData);
-      setSelectedRetreat(retreatRes.data);
-    } catch (error: unknown) {
-      console.error("Error updating retreat:", error);
-      toast.error("Failed to update retreat");
-    }
-  };
-
-  const confirmDeleteRetreat = async () => {
-    if (!deleteRetreatConfirm.id) return;
-
-    try {
-      await axios.delete(`/api/retreats/${deleteRetreatConfirm.id}`);
-      toast.success("Retreat deleted");
-
-      const { data } = await axios.get("/api/retreats");
-      const retreatsData = Array.isArray(data) ? data : data.retreats || [];
-      setRetreats(retreatsData);
-
-      if (selectedRetreat?._id === deleteRetreatConfirm.id) {
-        setSelectedRetreat(null);
-      }
-    } catch (error: unknown) {
-      console.error("Error deleting retreat:", error);
-      toast.error("Failed to delete retreat");
-    } finally {
-      setDeleteRetreatConfirm({ isOpen: false, id: null });
-    }
-  };
-
-  const handleCreateRegistration = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedRetreat) return;
-    try {
-      await axios.post("/api/registrations", {
-        ...regForm,
-        retreatId: selectedRetreat._id,
-      });
-      toast.success("Registration added");
-      setShowRegModal(false);
-      resetRegForm();
-      refreshRegistrations();
-    } catch (error: unknown) {
-      console.error("Error creating registration:", error);
-      toast.error("Failed to add registration");
-    }
-  };
-
-  const handleEditRegistration = (registration: Registration) => {
-    setEditingRegistration(registration);
-    setRegForm({
-      name: registration.name,
-      gender: registration.gender as "Male" | "Female",
-      address: registration.address,
-      phone: registration.phone,
-      nationality: registration.nationality,
-      invitedBy: registration.invitedBy as "Invited" | "Member" | "Worker",
-      category: registration.category as
-        | "Adult"
-        | "Campus"
-        | "Youth"
-        | "Children",
-      age: registration.age,
-      dayRegistered: registration.dayRegistered,
-    });
-    setShowEditRegModal(true);
-  };
-
-  const handleUpdateRegistration = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!editingRegistration) return;
-    try {
-      await axios.patch(
-        `/api/registrations/${editingRegistration._id}`,
-        regForm
-      );
-      toast.success("Registration updated");
-      setShowEditRegModal(false);
-      setEditingRegistration(null);
-      resetRegForm();
-      refreshRegistrations();
-    } catch (error: unknown) {
-      console.error("Error updating registration:", error);
-      toast.error("Failed to update registration");
-    }
-  };
-
-  const confirmDeleteRegistration = async () => {
-    if (!deleteRegistrationConfirm.id) return;
-
-    try {
-      await axios.delete(`/api/registrations/${deleteRegistrationConfirm.id}`);
-      toast.success("Registration deleted");
-      refreshRegistrations();
-    } catch (error: unknown) {
-      console.error("Error deleting registration:", error);
-      toast.error("Failed to delete registration");
-    } finally {
-      setDeleteRegistrationConfirm({ isOpen: false, id: null });
-    }
-  };
-
-  const handleSaveAttendance = async (records: AttendanceRecord[]) => {
-    try {
-      await Promise.all(
-        records.map((record) => axios.post("/api/attendance-records", record))
-      );
-      toast.success("Attendance saved successfully");
-      await fetchAttendanceRecords();
-    } catch (error: unknown) {
-      console.error("Error saving attendance:", error);
-      toast.error("Failed to save attendance");
-    }
-  };
+  const { handleGenerateSessions, handleSaveAttendance } = useSession(
+    selectedRetreat,
+    fetchSessions,
+    fetchAttendanceRecords
+  );
 
   const resetRetreatForm = () => {
     setRetreatForm({
@@ -427,86 +176,19 @@ const Retreats = () => {
     });
   };
 
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
   const handleFiltersChange = (filters: RegistrationFilters) => {
     setRegFilters(filters);
     setRegPage(1);
   };
 
-  const retreatsColumns = [
-    {
-      key: "year",
-      label: "Year",
-      render: (value: unknown) => (
-        <span className="font-medium">{value as number}</span>
-      ),
+  const retreatsColumns = getRetreatsColumns(
+    formatDate,
+    (retreat) => {
+      setSelectedRetreat(retreat);
+      loadRetreatToForm(retreat);
     },
-    { key: "type", label: "Type" },
-    { key: "venue", label: "Venue" },
-    {
-      key: "dates",
-      label: "Dates",
-      render: (_: unknown, row: Retreat) =>
-        `${formatDate(row.dateFrom)} - ${formatDate(row.dateTo)}`,
-    },
-    {
-      key: "totalDays",
-      label: "Duration",
-      render: (value: unknown) => `${value as number} days`,
-    },
-    {
-      key: "status",
-      label: "Status",
-      render: (value: unknown) => (
-        <span
-          className={`px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${
-            value === "ongoing"
-              ? "bg-terracotta/20 text-terracotta"
-              : "bg-green-500/20 text-green-600 dark:bg-green-500/30 dark:text-green-400"
-          }`}
-        >
-          {value as string}
-        </span>
-      ),
-    },
-    {
-      key: "actions",
-      label: "Actions",
-      render: (_: unknown, row: Retreat) => (
-        <div className="flex gap-2">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedRetreat(row);
-              loadRetreatToForm(row);
-            }}
-            className="p-2 text-navy dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded transition-colors cursor-pointer"
-          >
-            <Edit size={16} />
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setDeleteRetreatConfirm({
-                isOpen: true,
-                id: row._id,
-              });
-            }}
-            className="p-2 text-burgundy hover:bg-burgundy/10 rounded transition-colors cursor-pointer"
-          >
-            <Trash2 size={16} />
-          </button>
-        </div>
-      ),
-    },
-  ];
+    (id) => setDeleteRetreatConfirm({ isOpen: true, id })
+  );
 
   return (
     <DashboardLayout title="Retreats">
@@ -520,7 +202,7 @@ const Retreats = () => {
                   Retreats
                 </h1>
                 <p className="text-sm text-black/60 dark:text-white/60">
-                  {retreats.length} total retreats
+                  {retreatsTotal} total retreats
                 </p>
               </div>
               <button
@@ -542,6 +224,12 @@ const Retreats = () => {
                   setSelectedRetreat(retreat);
                   loadRetreatToForm(retreat);
                 }}
+                pagination={{
+                  page: retreatsPage,
+                  totalPages: retreatsTotalPages,
+                  total: retreatsTotal,
+                  onPageChange: setRetreatsPage,
+                }}
                 emptyMessage="No retreats yet. Create your first retreat to get started."
               />
             )}
@@ -549,7 +237,7 @@ const Retreats = () => {
         ) : (
           <>
             <div className="flex justify-between items-center mb-8">
-              <h1 className="text-[clamp(1.2rem,4vw,2rem)] font-bold uppercase text-navy dark:text-white">
+              <h1 className="text-[clamp(1.5rem,4vw,2rem)] font-bold uppercase text-navy dark:text-white">
                 {selectedRetreat.year} {selectedRetreat.type} Retreat
               </h1>
               <button
@@ -603,7 +291,7 @@ const Retreats = () => {
             <div>
               {activeTab === "overview" && (
                 <EditRetreatForm
-                  onSubmit={handleUpdateRetreat}
+                  onSubmit={(e) => handleUpdateRetreat(e, retreatForm)}
                   form={retreatForm}
                   setForm={setRetreatForm}
                 />
@@ -623,7 +311,14 @@ const Retreats = () => {
                   }}
                   onFiltersChange={handleFiltersChange}
                   onAdd={() => setShowRegModal(true)}
-                  onEdit={handleEditRegistration}
+                  onEdit={(reg) =>
+                    handleEditRegistration(
+                      reg,
+                      setEditingRegistration,
+                      setRegForm,
+                      setShowEditRegModal
+                    )
+                  }
                   onDelete={(id) =>
                     setDeleteRegistrationConfirm({ isOpen: true, id })
                   }
@@ -653,7 +348,14 @@ const Retreats = () => {
             setShowCreateModal(false);
             resetRetreatForm();
           }}
-          onSubmit={handleCreateRetreat}
+          onSubmit={(e) =>
+            handleCreateRetreat(
+              e,
+              retreatForm,
+              resetRetreatForm,
+              setShowCreateModal
+            )
+          }
           form={retreatForm}
           setForm={setRetreatForm}
         />
@@ -664,7 +366,9 @@ const Retreats = () => {
             setShowRegModal(false);
             resetRegForm();
           }}
-          onSubmit={handleCreateRegistration}
+          onSubmit={(e) =>
+            handleCreateRegistration(e, regForm, setShowRegModal, resetRegForm)
+          }
           form={regForm}
           setForm={setRegForm}
           totalDays={selectedRetreat?.totalDays || 1}
@@ -677,7 +381,16 @@ const Retreats = () => {
             setEditingRegistration(null);
             resetRegForm();
           }}
-          onSubmit={handleUpdateRegistration}
+          onSubmit={(e) =>
+            handleUpdateRegistration(
+              e,
+              editingRegistration,
+              regForm,
+              setShowEditRegModal,
+              setEditingRegistration,
+              resetRegForm
+            )
+          }
           form={regForm}
           setForm={setRegForm}
           totalDays={selectedRetreat?.totalDays || 1}
@@ -686,7 +399,9 @@ const Retreats = () => {
         <ConfirmationModal
           isOpen={deleteRetreatConfirm.isOpen}
           onClose={() => setDeleteRetreatConfirm({ isOpen: false, id: null })}
-          onConfirm={confirmDeleteRetreat}
+          onConfirm={() =>
+            confirmDeleteRetreat(deleteRetreatConfirm, setDeleteRetreatConfirm)
+          }
           title="Delete Retreat"
           message="Are you sure you want to delete this retreat? This will also delete all registrations and sessions."
           confirmText="Delete"
@@ -698,7 +413,12 @@ const Retreats = () => {
           onClose={() =>
             setDeleteRegistrationConfirm({ isOpen: false, id: null })
           }
-          onConfirm={confirmDeleteRegistration}
+          onConfirm={() =>
+            confirmDeleteRegistration(
+              deleteRegistrationConfirm,
+              setDeleteRegistrationConfirm
+            )
+          }
           title="Delete Registration"
           message="Are you sure you want to delete this registration?"
           confirmText="Delete"

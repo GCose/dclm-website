@@ -8,8 +8,36 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
         await dbConnect();
 
         if (req.method === "GET") {
-            const retreats = await Retreat.find({}).sort({ year: -1, type: 1 });
-            return res.status(200).json({ retreats });
+            const { page, limit } = req.query;
+
+            if (page && limit) {
+                const pageNum = parseInt(page as string) || 1;
+                const limitNum = parseInt(limit as string) || 20;
+                const skip = (pageNum - 1) * limitNum;
+
+                const [retreats, total] = await Promise.all([
+                    Retreat.find({})
+                        .sort({ year: -1, type: 1 })
+                        .skip(skip)
+                        .limit(limitNum),
+                    Retreat.countDocuments({})
+                ]);
+
+                const totalPages = Math.ceil(total / limitNum);
+
+                return res.status(200).json({
+                    retreats,
+                    pagination: {
+                        total,
+                        page: pageNum,
+                        limit: limitNum,
+                        totalPages
+                    }
+                });
+            } else {
+                const retreats = await Retreat.find({}).sort({ year: -1, type: 1 });
+                return res.status(200).json({ retreats });
+            }
         }
 
         if (req.method === "POST") {

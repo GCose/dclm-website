@@ -8,7 +8,7 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
         await dbConnect();
 
         if (req.method === "GET") {
-            const { retreatId, page, limit, gender, category, nationality, invitedBy, dayRegistered } = req.query;
+            const { retreatId, page, limit, search, gender, category, nationality, invitedBy, dayRegistered } = req.query;
 
             const pageNum = parseInt(page as string) || 1;
             const limitNum = parseInt(limit as string) || 20;
@@ -17,6 +17,7 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
             const filter: Record<string, unknown> = {};
 
             if (retreatId) filter.retreatId = retreatId;
+            if (search) filter.name = { $regex: search, $options: 'i' };
             if (gender) filter.gender = gender;
             if (category) filter.category = category;
             if (nationality) filter.nationality = nationality;
@@ -25,7 +26,7 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
 
             const [registrations, total] = await Promise.all([
                 Registration.find(filter)
-                    .sort({ registrationDate: -1 })
+                    .sort({ createdAt: -1 })
                     .skip(skip)
                     .limit(limitNum),
                 Registration.countDocuments(filter)

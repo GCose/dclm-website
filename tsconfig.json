@@ -24,6 +24,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "utils/retreats/helpers.tsx"  ],
   "exclude": ["node_modules"]
 }

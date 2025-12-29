@@ -74,6 +74,7 @@ export interface RegistrationForm {
 }
 
 export interface RegistrationFilters {
+    search: string;
     gender: string;
     category: string;
     nationality: string;
@@ -190,4 +191,10 @@ export interface RegistrationsResponse {
         limit: number;
         totalPages: number;
     };
+}
+
+export interface RegistrationsDetailsModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    registration: Registration | null;
 }

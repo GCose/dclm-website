@@ -72,7 +72,7 @@ const Table = <T extends { _id?: string }>({
                     {columns.map((column) => (
                       <td
                         key={column.key}
-                        className="py-4 px-6 text-black/70 dark:text-white/70"
+                        className="py-4 px-6 text-black/70 dark:text-white/70 truncate max-w-xs"
                       >
                         {column.render
                           ? column.render(row[column.key as keyof T], row)

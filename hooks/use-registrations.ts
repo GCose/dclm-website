@@ -15,6 +15,7 @@ export const useRegistrations = ({ retreatId, page, filters }: UseRegistrationsP
     });
 
     if (retreatId) params.append("retreatId", retreatId);
+    if (filters.search) params.append("search", filters.search);
     if (filters.gender) params.append("gender", filters.gender);
     if (filters.category) params.append("category", filters.category);
     if (filters.nationality) params.append("nationality", filters.nationality);
