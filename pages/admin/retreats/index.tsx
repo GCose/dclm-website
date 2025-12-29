@@ -29,7 +29,7 @@ const Retreats = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [activeTab, setActiveTab] = useState<
     "overview" | "registrations" | "attendance"
-  >("overview");
+  >("registrations");
 
   const [retreatForm, setRetreatForm] = useState({
     year: new Date().getFullYear(),
