@@ -73,7 +73,7 @@ const RegistrationsTable = ({
 
   return (
     <div>
-      <div className="flex flex-col md:flex-col justify-between items-center mb-6">
+      <div className="flex flex-col md:flex-col justify-between items-center mb-6 gap-6 md:gap-0">
         <h2 className="text-[clamp(1.1rem,3vw,1.4rem)] font-bold uppercase text-navy dark:text-white">
           Registrations
         </h2>
