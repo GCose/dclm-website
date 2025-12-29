@@ -1,4 +1,11 @@
 import axios from "axios";
+import {
+  Retreat,
+  Registration,
+  AttendanceSession,
+  AttendanceRecord,
+  SessionTemplate,
+} from "@/types/interface/dashboard";
 import { toast, Toaster } from "sonner";
 import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
@@ -9,61 +16,8 @@ import RegistrationsTable from "@/components/dashboard/RegistrationTable";
 import EditRetreatForm from "@/components/dashboard/forms/EditRetreatForm";
 import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 import RegistrationModal from "@/components/dashboard/modals/RegistrationModal";
-import CreateRetreatModal from "@/components/dashboard/modals/CreateRetreatModal";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
-
-interface Retreat {
-  _id: string;
-  year: number;
-  type: "Easter" | "December";
-  status: "ongoing" | "completed";
-  totalDays: number;
-  dateFrom: string;
-  dateTo: string;
-  venue: string;
-  theme?: string;
-  createdAt: string;
-}
-
-interface Registration {
-  _id: string;
-  retreatId: string;
-  name: string;
-  gender: string;
-  address: string;
-  phone: string;
-  nationality: string;
-  invitedBy: string;
-  age: number;
-  dayRegistered: number;
-  createdAt: string;
-}
-
-interface AttendanceSession {
-  _id: string;
-  retreatId: string;
-  day: number;
-  date: string;
-  sessionName: string;
-  sessionTime: string;
-}
-
-interface AttendanceRecord {
-  _id?: string;
-  sessionId: string;
-  adultsMale: number;
-  adultsFemale: number;
-  youthMale: number;
-  youthFemale: number;
-  childrenMale: number;
-  childrenFemale: number;
-  total: number;
-}
-
-interface SessionTemplate {
-  sessionName: string;
-  sessionTime: string;
-}
+import CreateRetreatModal from "@/components/dashboard/modals/CreateRetreatModal";
 
 const Retreats = () => {
   const [retreats, setRetreats] = useState<Retreat[]>([]);
@@ -457,9 +411,9 @@ const Retreats = () => {
             {loading ? (
               <div className="bg-white dark:bg-navy/50 p-6 rounded-lg border border-black/10 dark:border-white/10">
                 <div className="animate-pulse space-y-4">
-                  <div className="h-10 bg-warm-gray dark:bg-white/10 rounded"></div>
-                  <div className="h-10 bg-warm-gray dark:bg-white/10 rounded"></div>
-                  <div className="h-10 bg-warm-gray dark:bg-white/10 rounded"></div>
+                  <div className="h-10 bg-gray-100 dark:bg-white/10 rounded"></div>
+                  <div className="h-10 bg-gray-100 dark:bg-white/10 rounded"></div>
+                  <div className="h-10 bg-gray-100 dark:bg-white/10 rounded"></div>
                 </div>
               </div>
             ) : retreats.length === 0 ? (
@@ -469,30 +423,30 @@ const Retreats = () => {
                 </p>
               </div>
             ) : (
-              <div className="bg-white dark:bg-navy/50 border border-black/0 dark:border-white/10 rounded-lg overflow-hidden">
+              <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 rounded-lg overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className="border-b border-black/0 dark:border-white/10 bg-gray-100 dark:bg-navy">
-                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-burgundy font-bold">
+                      <tr className="border-b border-black/10 dark:border-white/10 bg-gray-100 dark:bg-navy">
+                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                           Year
                         </th>
-                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-burgundy font-bold">
+                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                           Type
                         </th>
-                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-burgundy font-bold">
+                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                           Venue
                         </th>
-                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-burgundy font-bold">
+                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                           Dates
                         </th>
-                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-burgundy font-bold">
+                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                           Duration
                         </th>
-                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-burgundy font-bold">
+                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                           Status
                         </th>
-                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-burgundy font-bold">
+                        <th className="text-left py-4 px-6 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                           Actions
                         </th>
                       </tr>
@@ -657,7 +611,7 @@ const Retreats = () => {
         )}
 
         <CreateRetreatModal
-          show={showCreateModal}
+          isOpen={showCreateModal}
           onClose={() => {
             setShowCreateModal(false);
             resetRetreatForm();
@@ -668,7 +622,7 @@ const Retreats = () => {
         />
 
         <RegistrationModal
-          show={showRegModal}
+          isOpen={showRegModal}
           onClose={() => {
             setShowRegModal(false);
             resetRegForm();

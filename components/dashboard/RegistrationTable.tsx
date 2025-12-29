@@ -1,24 +1,5 @@
 import { Plus, Trash2 } from "lucide-react";
-
-interface Registration {
-  _id: string;
-  retreatId: string;
-  name: string;
-  gender: string;
-  address: string;
-  phone: string;
-  nationality: string;
-  invitedBy: string;
-  age: number;
-  dayRegistered: number;
-  createdAt: string;
-}
-
-interface RegistrationsTableProps {
-  registrations: Registration[];
-  onAdd: () => void;
-  onDelete: (id: string) => void;
-}
+import { RegistrationsTableProps } from "@/types/interface/dashboard";
 
 const RegistrationsTable = ({
   registrations,

@@ -12,7 +12,7 @@ interface RetreatForm {
 }
 
 interface CreateRetreatModalProps {
-  show: boolean;
+  isOpen: boolean;
   onClose: () => void;
   onSubmit: (e: React.FormEvent) => void;
   form: RetreatForm;
@@ -20,13 +20,13 @@ interface CreateRetreatModalProps {
 }
 
 const CreateRetreatModal = ({
-  show,
+  isOpen,
   onClose,
   onSubmit,
   form,
   setForm,
 }: CreateRetreatModalProps) => {
-  if (!show) return null;
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
@@ -46,7 +46,7 @@ const CreateRetreatModal = ({
         <form onSubmit={onSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Year *
               </label>
               <input
@@ -56,12 +56,12 @@ const CreateRetreatModal = ({
                 onChange={(e) =>
                   setForm({ ...form, year: parseInt(e.target.value) })
                 }
-                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
               />
             </div>
 
             <div>
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Type *
               </label>
               <select
@@ -73,7 +73,7 @@ const CreateRetreatModal = ({
                     type: e.target.value as "Easter" | "December",
                   })
                 }
-                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy cursor-pointer"
+                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
               >
                 <option value="Easter">Easter</option>
                 <option value="December">December</option>
@@ -81,7 +81,7 @@ const CreateRetreatModal = ({
             </div>
 
             <div>
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Status *
               </label>
               <select
@@ -93,7 +93,7 @@ const CreateRetreatModal = ({
                     status: e.target.value as "ongoing" | "completed",
                   })
                 }
-                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy cursor-pointer"
+                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
               >
                 <option value="ongoing">Ongoing</option>
                 <option value="completed">Completed</option>
@@ -101,7 +101,7 @@ const CreateRetreatModal = ({
             </div>
 
             <div>
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Total Days *
               </label>
               <input
@@ -113,12 +113,12 @@ const CreateRetreatModal = ({
                 onChange={(e) =>
                   setForm({ ...form, totalDays: parseInt(e.target.value) })
                 }
-                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
               />
             </div>
 
             <div>
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Date From *
               </label>
               <input
@@ -126,12 +126,12 @@ const CreateRetreatModal = ({
                 required
                 value={form.dateFrom}
                 onChange={(e) => setForm({ ...form, dateFrom: e.target.value })}
-                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy cursor-pointer"
+                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
               />
             </div>
 
             <div>
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Date To *
               </label>
               <input
@@ -139,12 +139,12 @@ const CreateRetreatModal = ({
                 required
                 value={form.dateTo}
                 onChange={(e) => setForm({ ...form, dateTo: e.target.value })}
-                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy cursor-pointer"
+                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Venue *
               </label>
               <input
@@ -152,19 +152,19 @@ const CreateRetreatModal = ({
                 required
                 value={form.venue}
                 onChange={(e) => setForm({ ...form, venue: e.target.value })}
-                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Theme
               </label>
               <input
                 type="text"
                 value={form.theme}
                 onChange={(e) => setForm({ ...form, theme: e.target.value })}
-                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
               />
             </div>
           </div>

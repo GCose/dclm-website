@@ -1,44 +1,10 @@
-import { Save } from "lucide-react";
 import { useState } from "react";
-
-interface AttendanceSession {
-  _id: string;
-  retreatId: string;
-  day: number;
-  date: string;
-  sessionName: string;
-  sessionTime: string;
-}
-
-interface AttendanceRecord {
-  _id?: string;
-  sessionId: string;
-  adultsMale: number;
-  adultsFemale: number;
-  youthMale: number;
-  youthFemale: number;
-  childrenMale: number;
-  childrenFemale: number;
-  total: number;
-}
-
-interface SessionTemplate {
-  sessionName: string;
-  sessionTime: string;
-}
-
-interface SessionFormProps {
-  totalDays: number;
-  retreatDateFrom: string;
-  retreatId: string;
-  sessions: AttendanceSession[];
-  attendanceRecords: AttendanceRecord[];
-  onGenerateSessions: (
-    sessionsPerFullDay: number,
-    templates: SessionTemplate[]
-  ) => Promise<void>;
-  onSaveAttendance: (records: AttendanceRecord[]) => void;
-}
+import { Save } from "lucide-react";
+import {
+  SessionFormProps,
+  SessionTemplate,
+  AttendanceRecord,
+} from "@/types/interface/dashboard";
 
 const SessionForm = ({
   totalDays,
@@ -151,7 +117,7 @@ const SessionForm = ({
           </h3>
 
           <div className="mb-6">
-            <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+            <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
               How many sessions for full days? *
             </label>
             <input
@@ -162,7 +128,7 @@ const SessionForm = ({
               onChange={(e) =>
                 handleSessionsPerFullDayChange(parseInt(e.target.value) || 1)
               }
-              className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+              className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
             />
             <p className="text-xs text-black/60 dark:text-white/60 mt-1">
               First and last days will have 1 session each. Full days (Day 2 to
@@ -171,20 +137,20 @@ const SessionForm = ({
           </div>
 
           <div className="mb-6">
-            <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-4">
+            <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-4">
               Define Session Template (for full days)
             </label>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-black/10 dark:border-white/10">
-                    <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-burgundy font-bold">
+                    <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                       Session #
                     </th>
-                    <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-burgundy font-bold">
+                    <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                       Session Name *
                     </th>
-                    <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-burgundy font-bold">
+                    <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                       Session Time *
                     </th>
                   </tr>
@@ -207,7 +173,7 @@ const SessionForm = ({
                             updateTemplate(index, "sessionName", e.target.value)
                           }
                           placeholder="e.g., Morning Prayer"
-                          className="w-full px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+                          className="w-full px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
                         />
                       </td>
                       <td className="py-3 px-4">
@@ -219,7 +185,7 @@ const SessionForm = ({
                             updateTemplate(index, "sessionTime", e.target.value)
                           }
                           placeholder="e.g., 6:00 AM - 8:00 AM"
-                          className="w-full px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+                          className="w-full px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
                         />
                       </td>
                     </tr>
@@ -243,7 +209,7 @@ const SessionForm = ({
   return (
     <div className="space-y-6">
       <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-6 rounded-lg">
-        <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-4">
+        <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-4">
           Select Day
         </label>
         <div className="flex flex-wrap gap-2">
@@ -283,28 +249,28 @@ const SessionForm = ({
             <table className="w-full">
               <thead>
                 <tr className="border-b border-black/10 dark:border-white/10">
-                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-burgundy font-bold">
+                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                     Session
                   </th>
-                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-burgundy font-bold">
+                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                     Adults Male
                   </th>
-                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-burgundy font-bold">
+                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                     Adults Female
                   </th>
-                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-burgundy font-bold">
+                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                     Youth Male
                   </th>
-                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-burgundy font-bold">
+                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                     Youth Female
                   </th>
-                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-burgundy font-bold">
+                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                     Children Male
                   </th>
-                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-burgundy font-bold">
+                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                     Children Female
                   </th>
-                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-burgundy font-bold">
+                  <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                     Total
                   </th>
                 </tr>
@@ -339,7 +305,7 @@ const SessionForm = ({
                               parseInt(e.target.value) || 0
                             )
                           }
-                          className="w-20 px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+                          className="w-20 px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
                         />
                       </td>
                       <td className="py-3 px-4">
@@ -354,7 +320,7 @@ const SessionForm = ({
                               parseInt(e.target.value) || 0
                             )
                           }
-                          className="w-20 px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+                          className="w-20 px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
                         />
                       </td>
                       <td className="py-3 px-4">
@@ -369,7 +335,7 @@ const SessionForm = ({
                               parseInt(e.target.value) || 0
                             )
                           }
-                          className="w-20 px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+                          className="w-20 px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
                         />
                       </td>
                       <td className="py-3 px-4">
@@ -384,7 +350,7 @@ const SessionForm = ({
                               parseInt(e.target.value) || 0
                             )
                           }
-                          className="w-20 px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+                          className="w-20 px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
                         />
                       </td>
                       <td className="py-3 px-4">
@@ -399,7 +365,7 @@ const SessionForm = ({
                               parseInt(e.target.value) || 0
                             )
                           }
-                          className="w-20 px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+                          className="w-20 px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
                         />
                       </td>
                       <td className="py-3 px-4">
@@ -414,7 +380,7 @@ const SessionForm = ({
                               parseInt(e.target.value) || 0
                             )
                           }
-                          className="w-20 px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+                          className="w-20 px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
                         />
                       </td>
                       <td className="py-3 px-4">

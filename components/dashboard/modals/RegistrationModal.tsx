@@ -1,34 +1,15 @@
 import { X } from "lucide-react";
-
-interface RegistrationForm {
-  name: string;
-  gender: "Male" | "Female";
-  address: string;
-  phone: string;
-  nationality: string;
-  invitedBy: string;
-  age: number;
-  dayRegistered: number;
-}
-
-interface RegistrationModalProps {
-  show: boolean;
-  onClose: () => void;
-  onSubmit: (e: React.FormEvent) => void;
-  form: RegistrationForm;
-  setForm: React.Dispatch<React.SetStateAction<RegistrationForm>>;
-  totalDays: number;
-}
+import { RegistrationModalProps } from "@/types/interface/dashboard";
 
 const RegistrationModal = ({
-  show,
+  isOpen,
   onClose,
   onSubmit,
   form,
   setForm,
   totalDays,
 }: RegistrationModalProps) => {
-  if (!show) return null;
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
@@ -139,7 +120,7 @@ const RegistrationModal = ({
 
             <div className="md:col-span-2">
               <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
-                Invited By *
+                Invited By / Worker / Member *
               </label>
               <input
                 type="text"

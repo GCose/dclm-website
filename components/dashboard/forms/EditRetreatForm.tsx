@@ -21,9 +21,9 @@ const EditRetreatForm = ({ onSubmit, form, setForm }: EditRetreatFormProps) => {
   return (
     <form
       onSubmit={onSubmit}
-      className="bg-white dark:bg-navy/50 border border-black/0 dark:border-white/10 p-8 rounded-lg"
+      className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-8 rounded-lg"
     >
-      <div className="flex justify-between items-center mb-6 border-b pb-4">
+      <div className="flex justify-between items-center mb-6 pb-4 border-b border-black/10 dark:border-white/10">
         <h2 className="text-lg font-bold uppercase text-navy dark:text-white">
           Edit Retreat
         </h2>
@@ -38,7 +38,7 @@ const EditRetreatForm = ({ onSubmit, form, setForm }: EditRetreatFormProps) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
         <div>
-          <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+          <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Year *
           </label>
           <input
@@ -48,12 +48,12 @@ const EditRetreatForm = ({ onSubmit, form, setForm }: EditRetreatFormProps) => {
             onChange={(e) =>
               setForm({ ...form, year: parseInt(e.target.value) })
             }
-            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
           />
         </div>
 
         <div>
-          <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+          <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Type *
           </label>
           <select
@@ -65,7 +65,7 @@ const EditRetreatForm = ({ onSubmit, form, setForm }: EditRetreatFormProps) => {
                 type: e.target.value as "Easter" | "December",
               })
             }
-            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy cursor-pointer"
+            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
           >
             <option value="Easter">Easter</option>
             <option value="December">December</option>
@@ -73,7 +73,7 @@ const EditRetreatForm = ({ onSubmit, form, setForm }: EditRetreatFormProps) => {
         </div>
 
         <div>
-          <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+          <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Status *
           </label>
           <select
@@ -85,7 +85,7 @@ const EditRetreatForm = ({ onSubmit, form, setForm }: EditRetreatFormProps) => {
                 status: e.target.value as "ongoing" | "completed",
               })
             }
-            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy cursor-pointer"
+            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
           >
             <option value="ongoing">Ongoing</option>
             <option value="completed">Completed</option>
@@ -93,7 +93,7 @@ const EditRetreatForm = ({ onSubmit, form, setForm }: EditRetreatFormProps) => {
         </div>
 
         <div>
-          <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+          <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Total Days *
           </label>
           <input
@@ -105,12 +105,12 @@ const EditRetreatForm = ({ onSubmit, form, setForm }: EditRetreatFormProps) => {
             onChange={(e) =>
               setForm({ ...form, totalDays: parseInt(e.target.value) })
             }
-            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
           />
         </div>
 
         <div>
-          <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+          <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Date From *
           </label>
           <input
@@ -118,12 +118,12 @@ const EditRetreatForm = ({ onSubmit, form, setForm }: EditRetreatFormProps) => {
             required
             value={form.dateFrom}
             onChange={(e) => setForm({ ...form, dateFrom: e.target.value })}
-            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy cursor-pointer"
+            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
           />
         </div>
 
         <div>
-          <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+          <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Date To *
           </label>
           <input
@@ -131,12 +131,12 @@ const EditRetreatForm = ({ onSubmit, form, setForm }: EditRetreatFormProps) => {
             required
             value={form.dateTo}
             onChange={(e) => setForm({ ...form, dateTo: e.target.value })}
-            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy cursor-pointer"
+            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
           />
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+          <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Venue *
           </label>
           <input
@@ -144,19 +144,19 @@ const EditRetreatForm = ({ onSubmit, form, setForm }: EditRetreatFormProps) => {
             required
             value={form.venue}
             onChange={(e) => setForm({ ...form, venue: e.target.value })}
-            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
           />
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm uppercase tracking-wider text-burgundy font-bold mb-2">
+          <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Theme
           </label>
           <input
             type="text"
             value={form.theme}
             onChange={(e) => setForm({ ...form, theme: e.target.value })}
-            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-burgundy"
+            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
           />
         </div>
       </div>
