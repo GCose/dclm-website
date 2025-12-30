@@ -63,7 +63,7 @@ const Table = <T extends { _id?: string }>({
                   <tr
                     key={row._id || index}
                     onClick={() => onRowClick?.(row)}
-                    className={`border-b border-black/10 dark:border-white/10 ${
+                    className={`border-b border-black/10 dark:border-white/20 ${
                       onRowClick
                         ? "hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
                         : ""

@@ -91,7 +91,7 @@ const CategoryAttendanceTable = ({
       label: "Session",
       render: (_: unknown, row: AttendanceSession) => (
         <div>
-          <div className="font-bold text-navy dark:text-white text-bas flex items-center gap-2">
+          <div className="font-bold text-navy dark:text-white text-base flex items-center gap-2">
             {row.sessionName}
             {row.isGSMessage && (
               <span className="px-2 py-0.5 bg-terracotta/20 text-terracotta text-[12px] uppercase tracking-wider font-bold rounded">
@@ -200,7 +200,7 @@ const CategoryAttendanceTable = ({
           } on Day ${day}`}
         />
 
-        <div className="bg-navy/5 dark:bg-white/5 px-4 py-4">
+        <div className="border-b border-navy/10 dark:border-white/20 px-4 py-4">
           <div className="flex items-center justify-between">
             <span className="font-bold uppercase text-navy dark:text-white text-base">
               Day {day} Totals
