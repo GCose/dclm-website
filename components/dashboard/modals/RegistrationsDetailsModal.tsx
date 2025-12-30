@@ -20,7 +20,7 @@ const RegistrationsDetailsModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-navy border border-black/10 dark:border-white/10 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-navy rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white dark:bg-navy border-b border-black/10 dark:border-white/10 px-6 py-4 flex justify-between items-center">
           <h2 className="text-xl font-bold uppercase text-navy dark:text-white">
             Registration Details
