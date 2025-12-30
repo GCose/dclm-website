@@ -1,6 +1,7 @@
 import axios from "axios";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Settings } from "lucide-react";
 import {
   Category,
   AttendanceSession,
@@ -27,26 +28,14 @@ const SessionsAndAttendanceTab = ({
   const [editingSession, setEditingSession] =
     useState<AttendanceSession | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showGlobalEditModal, setShowGlobalEditModal] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<{
     isOpen: boolean;
     id: string | null;
   }>({ isOpen: false, id: null });
 
-  // CRITICAL FIX: Filter sessions for CURRENT retreat only
   const retreatSessions = sessions.filter((s) => s.retreatId === retreat._id);
-
   const setupMode = retreatSessions.length === 0;
-
-  // DEBUG LOGGING
-  console.log("=== SessionsAndAttendanceTab Debug ===");
-  console.log("Retreat ID:", retreat._id);
-  console.log("Retreat Name:", retreat.year, retreat.type);
-  console.log("All sessions received:", sessions);
-  console.log("All sessions length:", sessions.length);
-  console.log("Filtered retreat sessions:", retreatSessions);
-  console.log("Retreat sessions length:", retreatSessions.length);
-  console.log("Setup mode:", setupMode);
-  console.log("======================================");
 
   const formatTime = (time: string) => {
     const [hours, minutes] = time.split(":");
@@ -68,10 +57,11 @@ const SessionsAndAttendanceTab = ({
 
         templates.forEach((template) => {
           const sessionNumber = template.sessionNumber;
+
           const isGSMessage =
-            (day === 1 && sessionNumber === templates.length) ||
-            (day === retreat.totalDays && sessionNumber === 1) ||
-            sessionNumber === 3;
+            sessionNumber === 1 ||
+            sessionNumber === 3 ||
+            sessionNumber === templates.length;
 
           const categories: Category[] = [
             "Adult",
@@ -92,6 +82,7 @@ const SessionsAndAttendanceTab = ({
 
           categories.forEach((category) => {
             if (day === 1 && sessionNumber !== templates.length) return;
+
             if (day === retreat.totalDays && sessionNumber !== 1) return;
 
             sessionsToCreate.push({
@@ -108,9 +99,7 @@ const SessionsAndAttendanceTab = ({
         });
       }
 
-      console.log(
-        `Creating ${sessionsToCreate.length} sessions for retreat ${retreat._id}...`
-      );
+      console.log(`Creating ${sessionsToCreate.length} sessions...`);
 
       await Promise.all(
         sessionsToCreate.map((session) =>
@@ -121,10 +110,28 @@ const SessionsAndAttendanceTab = ({
       toast.success(
         `Generated ${sessionsToCreate.length} sessions successfully`
       );
+      setShowGlobalEditModal(false);
       await onRefresh();
     } catch (error: unknown) {
       console.error("Error generating sessions:", error);
       toast.error("Failed to generate sessions");
+    }
+  };
+
+  const handleDeleteAllAndRegenerate = async (templates: SessionTemplate[]) => {
+    try {
+      await Promise.all(
+        retreatSessions.map((session) =>
+          axios.delete(`/api/attendance-sessions/${session._id}`)
+        )
+      );
+
+      toast.success("Deleted all existing sessions");
+
+      await handleGenerateSessions(templates);
+    } catch (error: unknown) {
+      console.error("Error deleting/regenerating sessions:", error);
+      toast.error("Failed to regenerate sessions");
     }
   };
 
@@ -178,12 +185,93 @@ const SessionsAndAttendanceTab = ({
     }
   };
 
+  const getExistingTemplates = (): SessionTemplate[] => {
+    const uniqueSessionNumbers = [
+      ...new Set(retreatSessions.map((s) => s.sessionNumber)),
+    ].sort((a, b) => a - b);
+
+    return uniqueSessionNumbers.map((sessionNum) => {
+      const sessionsForThisNumber = retreatSessions.filter(
+        (s) => s.sessionNumber === sessionNum
+      );
+
+      const adultSession = sessionsForThisNumber.find(
+        (s) => s.category === "Adult"
+      );
+      const youthSession = sessionsForThisNumber.find(
+        (s) => s.category === "Youth"
+      );
+      const campusSession = sessionsForThisNumber.find(
+        (s) => s.category === "Campus"
+      );
+      const childrenSession = sessionsForThisNumber.find(
+        (s) => s.category === "Children"
+      );
+
+      const timeStr = adultSession?.sessionTime || "";
+      const [start, end] = timeStr.split(" - ");
+
+      const convertTo24Hour = (time12: string) => {
+        if (!time12) return "";
+        const [time, period] = time12.split(" ");
+        const [hours, minutes] = time.split(":");
+        let hour = parseInt(hours);
+
+        if (period === "PM" && hour !== 12) hour += 12;
+        if (period === "AM" && hour === 12) hour = 0;
+
+        return `${hour.toString().padStart(2, "0")}:${minutes}`;
+      };
+
+      return {
+        sessionNumber: sessionNum,
+        startTime: convertTo24Hour(start),
+        endTime: convertTo24Hour(end),
+        adultName: adultSession?.sessionName || "",
+        youthName: youthSession?.sessionName || "",
+        campusName: campusSession?.sessionName || "",
+        childrenName: childrenSession?.sessionName || "",
+      };
+    });
+  };
+
   if (setupMode) {
     return (
       <SessionSetupForm
         totalDays={retreat.totalDays}
         onGenerate={handleGenerateSessions}
       />
+    );
+  }
+
+  if (showGlobalEditModal) {
+    return (
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-bold uppercase text-navy dark:text-white">
+            Edit All Sessions
+          </h3>
+          <button
+            onClick={() => setShowGlobalEditModal(false)}
+            className="px-4 py-2 text-sm uppercase tracking-wider text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
+
+        <div className="bg-terracotta/10 border border-terracotta/20 p-4 rounded">
+          <p className="text-sm text-terracotta">
+            <strong>Warning:</strong> Saving will delete all existing sessions
+            and create new ones. All attendance records will be deleted.
+          </p>
+        </div>
+
+        <SessionSetupForm
+          totalDays={retreat.totalDays}
+          onGenerate={handleDeleteAllAndRegenerate}
+          existingTemplates={getExistingTemplates()}
+        />
+      </div>
     );
   }
 
@@ -201,11 +289,21 @@ const SessionsAndAttendanceTab = ({
             </p>
           </div>
 
-          <DaySelector
-            selectedDay={selectedDay}
-            totalDays={retreat.totalDays}
-            onDayChange={setSelectedDay}
-          />
+          <div className="flex gap-3">
+            <button
+              onClick={() => setShowGlobalEditModal(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white text-sm uppercase tracking-wider hover:border-navy dark:hover:border-white transition-colors rounded cursor-pointer"
+            >
+              <Settings size={16} />
+              Edit All Sessions
+            </button>
+
+            <DaySelector
+              selectedDay={selectedDay}
+              totalDays={retreat.totalDays}
+              onDayChange={setSelectedDay}
+            />
+          </div>
         </div>
 
         <CategoryTabs

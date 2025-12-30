@@ -250,6 +250,7 @@ export interface SessionRowProps {
 export interface SessionSetupFormProps {
     totalDays: number;
     onGenerate: (templates: SessionTemplate[]) => Promise<void>;
+    existingTemplates?: SessionTemplate[];
 }
 
 export interface CategoryAttendanceTableProps {

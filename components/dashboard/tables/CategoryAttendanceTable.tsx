@@ -21,9 +21,9 @@ const CategoryAttendanceTable = ({
   >({});
   const [saving, setSaving] = useState(false);
 
-  const categorySessions = sessions.filter(
-    (s) => s.category === category && s.day === day
-  );
+  const categorySessions = sessions
+    .filter((s) => s.category === category && s.day === day)
+    .sort((a, b) => a.sessionNumber - b.sessionNumber);
 
   const getAttendanceForSession = (
     sessionId: string
@@ -31,10 +31,12 @@ const CategoryAttendanceTable = ({
     if (localAttendance[sessionId]) {
       return localAttendance[sessionId];
     }
+
     const existing = attendanceRecords.find((r) => r.sessionId === sessionId);
     if (existing) {
       return existing;
     }
+
     return {
       sessionId,
       male: 0,
@@ -72,11 +74,22 @@ const CategoryAttendanceTable = ({
       });
 
       await onSaveAttendance(recordsToSave);
-      setLocalAttendance({});
     } finally {
       setSaving(false);
     }
   };
+
+  const dayTotals = categorySessions.reduce(
+    (acc, session) => {
+      const attendance = getAttendanceForSession(session._id);
+      return {
+        male: acc.male + (attendance.male || 0),
+        female: acc.female + (attendance.female || 0),
+        total: acc.total + (attendance.total || 0),
+      };
+    },
+    { male: 0, female: 0, total: 0 }
+  );
 
   const columns = [
     {
@@ -175,7 +188,7 @@ const CategoryAttendanceTable = ({
 
   if (categorySessions.length === 0) {
     return (
-      <div className="text-center py-12 text-black/60 dark:text-white/60">
+      <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-8 rounded-lg text-center py-12 text-black/60 dark:text-white/60">
         No sessions scheduled for {category} Church on Day {day}
       </div>
     );
@@ -183,11 +196,41 @@ const CategoryAttendanceTable = ({
 
   return (
     <div className="space-y-6">
-      <Table
-        columns={columns}
-        data={categorySessions}
-        emptyMessage={`No sessions for ${category} Church on Day ${day}`}
-      />
+      <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 rounded-lg overflow-hidden">
+        <Table
+          columns={columns}
+          data={categorySessions}
+          emptyMessage={`No sessions for ${category} Church on Day ${day}`}
+        />
+
+        <div className="border-t-2 border-navy dark:border-white bg-navy/5 dark:bg-white/5">
+          <div className="flex items-center px-4 py-4">
+            <div className="flex-1">
+              <span className="font-bold uppercase text-navy dark:text-white text-sm">
+                Day {day} Total
+              </span>
+            </div>
+            <div className="flex gap-4 items-center">
+              <div className="w-20 text-center">
+                <span className="font-bold text-navy dark:text-white">
+                  {dayTotals.male}
+                </span>
+              </div>
+              <div className="w-20 text-center">
+                <span className="font-bold text-navy dark:text-white">
+                  {dayTotals.female}
+                </span>
+              </div>
+              <div className="w-20 text-center">
+                <span className="font-bold text-navy dark:text-white text-lg">
+                  {dayTotals.total}
+                </span>
+              </div>
+              <div className="w-[88px]">{/* Spacer for actions column */}</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <button
         onClick={handleSave}
