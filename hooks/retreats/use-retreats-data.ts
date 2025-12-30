@@ -22,7 +22,6 @@ export const useRetreatsData = (selectedRetreat: Retreat | null, filters?: Retre
                 limit: "20",
             });
 
-            if (filters?.search) params.append("search", filters.search);
             if (filters?.year) params.append("year", filters.year);
             if (filters?.type) params.append("type", filters.type);
 
@@ -92,7 +91,8 @@ export const useRetreatsData = (selectedRetreat: Retreat | null, filters?: Retre
 
     useEffect(() => {
         fetchRetreats(retreatsPage);
-    }, [retreatsPage, filters?.search, filters?.year, filters?.type]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [retreatsPage, filters?.year, filters?.type]);
 
     useEffect(() => {
         setSessions([]);

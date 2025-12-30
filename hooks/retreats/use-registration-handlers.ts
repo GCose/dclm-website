@@ -25,7 +25,11 @@ export const useRegistrationHandlers = (
             refreshRegistrations();
         } catch (error: unknown) {
             console.error("Error creating registration:", error);
-            toast.error("Failed to add registration");
+            if (axios.isAxiosError(error) && error.response?.data?.error) {
+                toast.error(error.response.data.error);
+            } else {
+                toast.error("Failed to add registration");
+            }
         }
     };
 
@@ -76,7 +80,11 @@ export const useRegistrationHandlers = (
             refreshRegistrations();
         } catch (error: unknown) {
             console.error("Error updating registration:", error);
-            toast.error("Failed to update registration");
+            if (axios.isAxiosError(error) && error.response?.data?.error) {
+                toast.error(error.response.data.error);
+            } else {
+                toast.error("Failed to update registration");
+            }
         }
     };
 
@@ -92,7 +100,11 @@ export const useRegistrationHandlers = (
             refreshRegistrations();
         } catch (error: unknown) {
             console.error("Error deleting registration:", error);
-            toast.error("Failed to delete registration");
+            if (axios.isAxiosError(error) && error.response?.data?.error) {
+                toast.error(error.response.data.error);
+            } else {
+                toast.error("Failed to delete registration");
+            }
         } finally {
             setDeleteRegistrationConfirm({ isOpen: false, id: null });
         }

@@ -38,7 +38,6 @@ export interface RetreatForm {
 }
 
 export interface RetreatFilters {
-    search: string;
     year: string;
     type: string;
 }
@@ -61,7 +60,7 @@ export interface Registration {
     nationality: string;
     invitedBy: string;
     category: string;
-    age: number;
+    age: string;
     dayRegistered: number;
     createdAt: string;
 }
@@ -74,7 +73,7 @@ export interface RegistrationForm {
     nationality: string;
     invitedBy: "Invited" | "Member" | "Worker";
     category: "Adult" | "Campus" | "Youth" | "Children";
-    age: number;
+    age: string;
     dayRegistered: number;
 }
 
@@ -180,7 +179,7 @@ export interface SessionFormProps {
 export interface TableColumn<T = unknown> {
     key: string;
     label: string;
-    render?: (value: unknown, row: T) => ReactNode;
+    render?: (value: unknown, row: T, index?: number) => ReactNode;
 }
 
 export interface TableProps<T = unknown> {
@@ -321,4 +320,23 @@ export interface EditRetreatFormProps {
     onSubmit: (e: React.FormEvent) => void;
     form: RetreatForm;
     setForm: React.Dispatch<React.SetStateAction<RetreatForm>>;
+}
+
+export interface Admin {
+    _id: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface AdminForm {
+    email: string;
+}
+
+export interface EditAdminModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSubmit: (e: React.FormEvent) => void;
+    form: AdminForm;
+    setForm: React.Dispatch<React.SetStateAction<AdminForm>>;
 }

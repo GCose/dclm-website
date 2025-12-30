@@ -58,7 +58,7 @@ const RegistrationsDetailsModal = ({
                 Age
               </label>
               <p className="text-[clamp(1rem,2vw,1.2rem)] text-navy dark:text-white">
-                {registration.age} years old
+                {registration.age}
               </p>
             </div>
 

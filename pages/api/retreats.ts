@@ -22,16 +22,10 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
         await dbConnect();
 
         if (req.method === "GET") {
-            const { page, limit, search, year, type } = req.query;
+            const { page, limit, year, type } = req.query;
 
             const filter: Record<string, unknown> = {};
 
-            if (search) {
-                filter.$or = [
-                    { venue: { $regex: search, $options: 'i' } },
-                    { theme: { $regex: search, $options: 'i' } }
-                ];
-            }
             if (year) filter.year = parseInt(year as string);
             if (type) filter.type = type;
 

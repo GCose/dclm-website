@@ -7,7 +7,7 @@ import {
   RegistrationFilters,
   RetreatFilters,
 } from "@/types/interface/dashboard";
-import { Plus, X, Search } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
 import { useDebounce } from "@/hooks/usedebounce";
@@ -25,8 +25,8 @@ import CreateRetreatModal from "@/components/dashboard/modals/CreateRetreatModal
 import RegistrationsTab from "@/components/dashboard/retreat-tabs/RegistrationsTab";
 import { useRegistrationHandlers } from "@/hooks/retreats/use-registration-handlers";
 import EditRegistrationModal from "@/components/dashboard/modals/EditRegistrationModal";
-import LoadingSkeleton from "@/components/dashboard/skeletons/page/RetreatsPageSkeleton";
 import SessionsAndAttendanceTab from "@/components/dashboard/retreat-tabs/sessions/SessionsAndAttendanceTab";
+import RetreatsPageSkeleton from "@/components/dashboard/skeletons/page/RetreatsPageSkeleton";
 
 const Retreats = () => {
   const [selectedRetreat, setSelectedRetreat] = useState<Retreat | null>(null);
@@ -46,17 +46,9 @@ const Retreats = () => {
   });
 
   const [retreatFilters, setRetreatFilters] = useState<RetreatFilters>({
-    search: "",
     year: "",
     type: "",
   });
-
-  const debouncedRetreatSearch = useDebounce(retreatFilters.search, 500);
-
-  const debouncedRetreatFilters = {
-    ...retreatFilters,
-    search: debouncedRetreatSearch,
-  };
 
   const [showRegModal, setShowRegModal] = useState(false);
   const [showEditRegModal, setShowEditRegModal] = useState(false);
@@ -70,7 +62,7 @@ const Retreats = () => {
     nationality: "",
     invitedBy: "Invited",
     category: "Adult",
-    age: 18,
+    age: "",
     dayRegistered: 1,
   });
 
@@ -114,7 +106,7 @@ const Retreats = () => {
     fetchRetreats,
     fetchSessions,
     fetchAttendanceRecords,
-  } = useRetreatsData(selectedRetreat, debouncedRetreatFilters);
+  } = useRetreatsData(selectedRetreat, retreatFilters);
 
   const {
     registrations,
@@ -169,7 +161,7 @@ const Retreats = () => {
       nationality: "",
       invitedBy: "Invited",
       category: "Adult",
-      age: 18,
+      age: "",
       dayRegistered: 1,
     });
   };
@@ -198,7 +190,6 @@ const Retreats = () => {
 
   const clearRetreatFilters = () => {
     setRetreatFilters({
-      search: "",
       year: "",
       type: "",
     });
@@ -238,27 +229,6 @@ const Retreats = () => {
                 <Plus size={20} />
                 Create Retreat
               </button>
-            </div>
-
-            <div className="my-6">
-              <div className="relative">
-                <Search
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-black/40 dark:text-white/40"
-                  size={20}
-                />
-                <input
-                  type="text"
-                  placeholder="Search by venue or theme..."
-                  value={retreatFilters.search}
-                  onChange={(e) =>
-                    handleRetreatFiltersChange({
-                      ...retreatFilters,
-                      search: e.target.value,
-                    })
-                  }
-                  className="w-full pl-12 pr-4 py-2 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white placeholder:text-black/40 dark:placeholder:text-white/40 focus:outline-none focus:border-navy dark:focus:border-white rounded"
-                />
-              </div>
             </div>
 
             <div className="mb-8">
@@ -320,7 +290,7 @@ const Retreats = () => {
             </div>
 
             {loading ? (
-              <LoadingSkeleton />
+              <RetreatsPageSkeleton />
             ) : (
               <Table
                 columns={retreatsColumns}

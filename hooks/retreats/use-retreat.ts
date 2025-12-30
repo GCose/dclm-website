@@ -23,7 +23,11 @@ const useRetreat = (
             fetchRetreats(retreatsPage);
         } catch (error: unknown) {
             console.error("Error creating retreat:", error);
-            toast.error("Failed to create retreat");
+            if (axios.isAxiosError(error) && error.response?.data?.error) {
+                toast.error(error.response.data.error);
+            } else {
+                toast.error("Failed to create retreat");
+            }
         }
     };
 
@@ -42,7 +46,11 @@ const useRetreat = (
             fetchRetreats(retreatsPage);
         } catch (error: unknown) {
             console.error("Error updating retreat:", error);
-            toast.error("Failed to update retreat");
+            if (axios.isAxiosError(error) && error.response?.data?.error) {
+                toast.error(error.response.data.error);
+            } else {
+                toast.error("Failed to update retreat");
+            }
         }
     };
 
@@ -63,7 +71,11 @@ const useRetreat = (
             }
         } catch (error: unknown) {
             console.error("Error deleting retreat:", error);
-            toast.error("Failed to delete retreat");
+            if (axios.isAxiosError(error) && error.response?.data?.error) {
+                toast.error(error.response.data.error);
+            } else {
+                toast.error("Failed to delete retreat");
+            }
         } finally {
             setDeleteRetreatConfirm({ isOpen: false, id: null });
         }

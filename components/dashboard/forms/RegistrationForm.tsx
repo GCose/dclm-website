@@ -59,13 +59,10 @@ const RegistrationForm = ({
             Age *
           </label>
           <input
-            type="number"
+            type="text"
             required
-            min="1"
             value={form.age}
-            onChange={(e) =>
-              setForm({ ...form, age: parseInt(e.target.value) })
-            }
+            onChange={(e) => setForm({ ...form, age: e.target.value })}
             className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
           />
         </div>
@@ -107,43 +104,17 @@ const RegistrationForm = ({
             className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
           >
             <option value="">Select Nationality</option>
-            {nationalities.map((nationality) => (
-              <option key={nationality} value={nationality}>
-                {nationality}
+            {nationalities.map((nat) => (
+              <option key={nat} value={nat}>
+                {nat}
               </option>
             ))}
           </select>
         </div>
 
-        <div className="md:col-span-2">
-          <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
-            Address *
-          </label>
-          <input
-            type="text"
-            required
-            value={form.address}
-            onChange={(e) => setForm({ ...form, address: e.target.value })}
-            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
-          />
-        </div>
-
         <div>
           <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
-            Phone *
-          </label>
-          <input
-            type="tel"
-            required
-            value={form.phone}
-            onChange={(e) => setForm({ ...form, phone: e.target.value })}
-            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
-            Invited By / Member / Worker *
+            Type *
           </label>
           <select
             required
@@ -163,6 +134,32 @@ const RegistrationForm = ({
         </div>
 
         <div className="md:col-span-2">
+          <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
+            Address *
+          </label>
+          <input
+            type="text"
+            required
+            value={form.address}
+            onChange={(e) => setForm({ ...form, address: e.target.value })}
+            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
+            Phone Number *
+          </label>
+          <input
+            type="tel"
+            required
+            value={form.phone}
+            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
+          />
+        </div>
+
+        <div>
           <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Day Registered *
           </label>

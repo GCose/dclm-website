@@ -24,7 +24,7 @@ const SessionCountsStep = ({
   };
 
   return (
-    <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-8 rounded-lg">
+    <div className="bg-white dark:bg-navy/50 ">
       <h3 className="text-lg font-bold uppercase text-navy dark:text-white mb-6">
         Set Up Sessions for Retreat
       </h3>
@@ -56,7 +56,7 @@ const SessionCountsStep = ({
 
       <button
         onClick={handleContinue}
-        className="w-full px-6 py-3 bg-navy dark:bg-white text-white dark:text-navy text-sm uppercase tracking-wider hover:bg-burgundy dark:hover:bg-burgundy dark:hover:text-white transition-colors rounded cursor-pointer"
+        className="m-auto px-6 py-3 bg-navy dark:bg-white text-white dark:text-navy text-sm uppercase tracking-wider hover:bg-burgundy dark:hover:bg-burgundy dark:hover:text-white transition-colors rounded cursor-pointer"
       >
         Continue to Define Sessions
       </button>
