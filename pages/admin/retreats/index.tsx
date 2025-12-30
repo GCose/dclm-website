@@ -25,8 +25,8 @@ import CreateRetreatModal from "@/components/dashboard/modals/CreateRetreatModal
 import RegistrationsTab from "@/components/dashboard/retreat-tabs/RegistrationsTab";
 import { useRegistrationHandlers } from "@/hooks/retreats/use-registration-handlers";
 import EditRegistrationModal from "@/components/dashboard/modals/EditRegistrationModal";
-import SessionsAndAttendanceTab from "@/components/dashboard/retreat-tabs/sessions/SessionsAndAttendanceTab";
 import RetreatsPageSkeleton from "@/components/dashboard/skeletons/page/RetreatsPageSkeleton";
+import SessionsAndAttendanceTab from "@/components/dashboard/retreat-tabs/sessions/SessionsAndAttendanceTab";
 
 const Retreats = () => {
   const [selectedRetreat, setSelectedRetreat] = useState<Retreat | null>(null);
@@ -57,7 +57,7 @@ const Retreats = () => {
   const [regForm, setRegForm] = useState<RegistrationForm>({
     name: "",
     gender: "Male",
-    address: "",
+    location: "",
     phone: "",
     nationality: "",
     invitedBy: "Invited",
@@ -156,7 +156,7 @@ const Retreats = () => {
     setRegForm({
       name: "",
       gender: "Male",
-      address: "",
+      location: "",
       phone: "",
       nationality: "",
       invitedBy: "Invited",

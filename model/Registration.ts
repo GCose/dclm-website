@@ -30,7 +30,7 @@ const registrationSchema = new mongoose.Schema(
             enum: ["Adult", "Campus", "Youth", "Children"],
             required: true,
         },
-        address: {
+        location: {
             type: String,
             required: true,
         },

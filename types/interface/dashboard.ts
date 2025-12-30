@@ -55,7 +55,7 @@ export interface Registration {
     retreatId: string;
     name: string;
     gender: string;
-    address: string;
+    location: string;
     phone: string;
     nationality: string;
     invitedBy: string;
@@ -68,7 +68,7 @@ export interface Registration {
 export interface RegistrationForm {
     name: string;
     gender: "Male" | "Female";
-    address: string;
+    location: string;
     phone: string;
     nationality: string;
     invitedBy: "Invited" | "Member" | "Worker";

@@ -31,7 +31,7 @@ const RegistrationsTab = ({
     { key: "category", label: "Category" },
     { key: "nationality", label: "Nationality" },
     { key: "phone", label: "Phone" },
-    { key: "address", label: "Address" },
+    { key: "location", label: "Location" },
     { key: "invitedBy", label: "Type" },
     {
       key: "dayRegistered",

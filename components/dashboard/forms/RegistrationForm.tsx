@@ -11,6 +11,17 @@ const nationalities = [
   "Other",
 ];
 
+const locations = [
+  "Santosu",
+  "College",
+  "Kiti",
+  "Kabekel",
+  "Kasasunda",
+  "Jalambang",
+  "Karton",
+  "Medina",
+];
+
 const RegistrationForm = ({
   form,
   setForm,
@@ -135,15 +146,21 @@ const RegistrationForm = ({
 
         <div className="md:col-span-2">
           <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
-            Address *
+            Location *
           </label>
-          <input
-            type="text"
+          <select
             required
-            value={form.address}
-            onChange={(e) => setForm({ ...form, address: e.target.value })}
-            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
-          />
+            value={form.location}
+            onChange={(e) => setForm({ ...form, location: e.target.value })}
+            className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
+          >
+            <option value="">Select Location</option>
+            {locations.map((loc) => (
+              <option key={loc} value={loc}>
+                {loc}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div>

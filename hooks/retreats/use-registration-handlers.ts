@@ -43,7 +43,7 @@ export const useRegistrationHandlers = (
         setRegForm({
             name: registration.name,
             gender: registration.gender as "Male" | "Female",
-            address: registration.address,
+            location: registration.location,
             phone: registration.phone,
             nationality: registration.nationality,
             invitedBy: registration.invitedBy as "Invited" | "Member" | "Worker",
