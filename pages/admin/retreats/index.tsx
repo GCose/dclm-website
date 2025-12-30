@@ -9,14 +9,12 @@ import {
 import { Plus, X } from "lucide-react";
 import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
-import Table from "@/components/dashboard/Table";
 import { useDebounce } from "@/hooks/usedebounce";
 import { formatDate } from "@/utils/retreats/helpers";
 import useRetreat from "@/hooks/retreats/use-retreat";
-import useSession from "@/hooks/retreats/use-sessions";
+import Table from "@/components/dashboard/tables/Table";
 import { useRegistrations } from "@/hooks/use-registrations";
 import { getRetreatsColumns } from "@/utils/retreats/columns";
-import SessionForm from "@/components/dashboard/forms/SessionForms";
 import { useRetreatsData } from "@/hooks/retreats/use-retreats-data";
 import EditRetreatForm from "@/components/dashboard/forms/EditRetreatForm";
 import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
@@ -27,6 +25,7 @@ import RegistrationsTab from "@/components/dashboard/retreat-tabs/RegistrationsT
 import { useRegistrationHandlers } from "@/hooks/retreats/use-registration-handlers";
 import EditRegistrationModal from "@/components/dashboard/modals/EditRegistrationModal";
 import LoadingSkeleton from "@/components/dashboard/skeletons/page/RetreatsPageSkeleton";
+import SessionsAndAttendanceTab from "@/components/dashboard/retreat-tabs/sessions/SessionsAndAttendanceTab";
 
 const Retreats = () => {
   const [selectedRetreat, setSelectedRetreat] = useState<Retreat | null>(null);
@@ -130,11 +129,10 @@ const Retreats = () => {
     confirmDeleteRegistration,
   } = useRegistrationHandlers(selectedRetreat, refreshRegistrations);
 
-  const { handleGenerateSessions, handleSaveAttendance } = useSession(
-    selectedRetreat,
-    fetchSessions,
-    fetchAttendanceRecords
-  );
+  const handleRefreshSessions = async () => {
+    await fetchSessions();
+    await fetchAttendanceRecords();
+  };
 
   const resetRetreatForm = () => {
     setRetreatForm({
@@ -186,6 +184,7 @@ const Retreats = () => {
     (retreat) => {
       setSelectedRetreat(retreat);
       loadRetreatToForm(retreat);
+      setActiveTab("registrations");
     },
     (id) => setDeleteRetreatConfirm({ isOpen: true, id })
   );
@@ -223,6 +222,7 @@ const Retreats = () => {
                 onRowClick={(retreat) => {
                   setSelectedRetreat(retreat);
                   loadRetreatToForm(retreat);
+                  setActiveTab("registrations");
                 }}
                 pagination={{
                   page: retreatsPage,
@@ -328,14 +328,11 @@ const Retreats = () => {
               )}
 
               {activeTab === "attendance" && (
-                <SessionForm
-                  totalDays={selectedRetreat.totalDays}
-                  retreatDateFrom={selectedRetreat.dateFrom}
-                  retreatId={selectedRetreat._id}
+                <SessionsAndAttendanceTab
+                  retreat={selectedRetreat}
                   sessions={sessions}
                   attendanceRecords={attendanceRecords}
-                  onGenerateSessions={handleGenerateSessions}
-                  onSaveAttendance={handleSaveAttendance}
+                  onRefresh={handleRefreshSessions}
                 />
               )}
             </div>

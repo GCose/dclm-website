@@ -1,6 +1,7 @@
 import dbConnect from "@/lib/mongodb";
 import { NextApiResponse } from "next";
 import AttendanceSession from "@/model/AttendanceSession";
+import AttendanceRecord from "@/model/AttendanceRecord";
 import { authMiddleware, AuthRequest } from "@/middleware/auth";
 
 async function handler(req: AuthRequest, res: NextApiResponse) {
@@ -36,6 +37,9 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
             if (!session) {
                 return res.status(404).json({ error: "Session not found" });
             }
+
+            await AttendanceRecord.deleteMany({ sessionId: id });
+
             return res.status(200).json({ message: "Session deleted" });
         }
 

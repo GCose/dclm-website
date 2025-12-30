@@ -7,13 +7,23 @@ const attendanceSessionSchema = new mongoose.Schema(
             ref: "Retreat",
             required: true,
         },
+        category: {
+            type: String,
+            enum: ["Adult", "Youth", "Campus", "Children"],
+            required: true,
+        },
+        sessionNumber: {
+            type: Number,
+            required: true,
+            min: 1,
+        },
         day: {
             type: Number,
             required: true,
             min: 1,
         },
         date: {
-            type: Date,
+            type: String,
             required: true,
         },
         sessionName: {
@@ -23,6 +33,10 @@ const attendanceSessionSchema = new mongoose.Schema(
         sessionTime: {
             type: String,
             required: true,
+        },
+        isGSMessage: {
+            type: Boolean,
+            default: false,
         },
         createdBy: {
             type: String,
@@ -37,7 +51,7 @@ const attendanceSessionSchema = new mongoose.Schema(
     }
 );
 
-attendanceSessionSchema.index({ retreatId: 1, day: 1 });
+attendanceSessionSchema.index({ retreatId: 1, category: 1, day: 1 });
 
 export default mongoose.models.AttendanceSession ||
     mongoose.model("AttendanceSession", attendanceSessionSchema);

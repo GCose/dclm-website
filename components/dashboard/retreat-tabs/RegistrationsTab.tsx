@@ -3,7 +3,7 @@ import {
   Registration,
   RegistrationsTableProps,
 } from "@/types/interface/dashboard";
-import Table from "@/components/dashboard/Table";
+import Table from "@/components/dashboard/tables/Table";
 import { Plus, Trash2, Edit, RefreshCw, Search, X } from "lucide-react";
 import RegistrationsDetailsModal from "@/components/dashboard/modals/RegistrationsDetailsModal";
 

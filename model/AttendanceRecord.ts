@@ -7,32 +7,12 @@ const attendanceRecordSchema = new mongoose.Schema(
             ref: "AttendanceSession",
             required: true,
         },
-        adultsMale: {
+        male: {
             type: Number,
             default: 0,
             min: 0,
         },
-        adultsFemale: {
-            type: Number,
-            default: 0,
-            min: 0,
-        },
-        youthMale: {
-            type: Number,
-            default: 0,
-            min: 0,
-        },
-        youthFemale: {
-            type: Number,
-            default: 0,
-            min: 0,
-        },
-        childrenMale: {
-            type: Number,
-            default: 0,
-            min: 0,
-        },
-        childrenFemale: {
+        female: {
             type: Number,
             default: 0,
             min: 0,
@@ -58,13 +38,7 @@ const attendanceRecordSchema = new mongoose.Schema(
 attendanceRecordSchema.index({ sessionId: 1 }, { unique: true });
 
 attendanceRecordSchema.pre("save", function () {
-    this.total =
-        this.adultsMale +
-        this.adultsFemale +
-        this.youthMale +
-        this.youthFemale +
-        this.childrenMale +
-        this.childrenFemale;
+    this.total = this.male + this.female;
 });
 
 export default mongoose.models.AttendanceRecord ||

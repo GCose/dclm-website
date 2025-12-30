@@ -118,30 +118,45 @@ export interface RegistrationsTableProps {
     totalDays: number;
 }
 
+export type Category = "Adult" | "Youth" | "Campus" | "Children";
+
 export interface AttendanceSession {
     _id: string;
     retreatId: string;
+    category: Category;
+    sessionNumber: number;
     day: number;
     date: string;
     sessionName: string;
     sessionTime: string;
+    isGSMessage: boolean;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export interface AttendanceRecord {
     _id?: string;
     sessionId: string;
-    adultsMale: number;
-    adultsFemale: number;
-    youthMale: number;
-    youthFemale: number;
-    childrenMale: number;
-    childrenFemale: number;
+    male: number;
+    female: number;
     total: number;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export interface SessionTemplate {
-    sessionName: string;
-    sessionTime: string;
+    sessionNumber: number;
+    startTime: string;
+    endTime: string;
+    adultName: string;
+    youthName: string;
+    campusName: string;
+    childrenName: string;
+}
+
+export interface SessionSetupData {
+    totalSessions: number;
+    templates: SessionTemplate[];
 }
 
 export interface SessionFormProps {
@@ -197,4 +212,59 @@ export interface RegistrationsDetailsModalProps {
     isOpen: boolean;
     onClose: () => void;
     registration: Registration | null;
+}
+
+export interface EditSessionModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    session: AttendanceSession | null;
+    onSave: (sessionId: string, updates: Partial<AttendanceSession>) => Promise<void>;
+}
+
+export interface AttendanceEntryProps {
+    retreat: Retreat;
+    sessions: AttendanceSession[];
+    attendanceRecords: AttendanceRecord[];
+    onRefresh: () => void;
+}
+
+export interface DaySelectorProps {
+    selectedDay: number;
+    totalDays: number;
+    onDayChange: (day: number) => void;
+}
+
+export interface CategoryTabsProps {
+    selectedCategory: Category;
+    onCategoryChange: (category: Category) => void;
+}
+
+export interface SessionRowProps {
+    session: AttendanceSession;
+    attendance: Partial<AttendanceRecord>;
+    onAttendanceChange: (field: "male" | "female", value: number) => void;
+    onEditSession: (session: AttendanceSession) => void;
+    onDeleteSession: (sessionId: string) => void;
+}
+
+export interface SessionSetupFormProps {
+    totalDays: number;
+    onGenerate: (templates: SessionTemplate[]) => Promise<void>;
+}
+
+export interface CategoryAttendanceTableProps {
+    category: Category;
+    day: number;
+    sessions: AttendanceSession[];
+    attendanceRecords: AttendanceRecord[];
+    onSaveAttendance: (records: Partial<AttendanceRecord>[]) => Promise<void>;
+    onEditSession: (session: AttendanceSession) => void;
+    onDeleteClick: (sessionId: string) => void;
+}
+
+export interface SessionsAndAttendanceTabProps {
+    retreat: Retreat;
+    sessions: AttendanceSession[];
+    attendanceRecords: AttendanceRecord[];
+    onRefresh: () => void;
 }

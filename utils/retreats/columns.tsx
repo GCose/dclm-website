@@ -33,8 +33,8 @@ export const getRetreatsColumns = (
       <span
         className={`px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${
           value === "ongoing"
-            ? "bg-terracotta/20 text-terracotta"
-            : "bg-green-500/20 text-green-600 dark:bg-green-500/30 dark:text-green-400"
+            ? "bg-green-500/20 text-green-600 dark:bg-green-500/30 dark:text-green-400"
+            : "bg-gray-200 text-gray-700 "
         }`}
       >
         {value as string}

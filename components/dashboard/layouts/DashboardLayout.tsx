@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { ReactNode, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   LayoutDashboard,
   Church,
@@ -13,11 +13,7 @@ import {
   Moon,
   LogOut,
 } from "lucide-react";
-
-interface DashboardLayoutProps {
-  children: ReactNode;
-  title?: string;
-}
+import { DashboardLayoutProps } from "@/types/interface/dashboard";
 
 const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
   const router = useRouter();
