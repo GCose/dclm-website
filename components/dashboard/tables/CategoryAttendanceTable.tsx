@@ -3,7 +3,6 @@ import { Save, Edit, Trash2 } from "lucide-react";
 import Table from "@/components/dashboard/tables/Table";
 import {
   AttendanceSession,
-  AttendanceRecord,
   CategoryAttendanceTableProps,
 } from "@/types/interface/dashboard";
 
@@ -16,8 +15,8 @@ const CategoryAttendanceTable = ({
   onEditSession,
   onDeleteClick,
 }: CategoryAttendanceTableProps) => {
-  const [localAttendance, setLocalAttendance] = useState<
-    Record<string, Partial<AttendanceRecord>>
+  const [editingValues, setEditingValues] = useState<
+    Record<string, { male: number; female: number }>
   >({});
   const [saving, setSaving] = useState(false);
 
@@ -27,22 +26,17 @@ const CategoryAttendanceTable = ({
 
   const getAttendanceForSession = (
     sessionId: string
-  ): Partial<AttendanceRecord> => {
-    if (localAttendance[sessionId]) {
-      return localAttendance[sessionId];
+  ): { male: number; female: number } => {
+    if (editingValues[sessionId]) {
+      return editingValues[sessionId];
     }
 
     const existing = attendanceRecords.find((r) => r.sessionId === sessionId);
     if (existing) {
-      return existing;
+      return { male: existing.male, female: existing.female };
     }
 
-    return {
-      sessionId,
-      male: 0,
-      female: 0,
-      total: 0,
-    };
+    return { male: 0, female: 0 };
   };
 
   const updateAttendance = (
@@ -51,12 +45,12 @@ const CategoryAttendanceTable = ({
     value: number
   ) => {
     const current = getAttendanceForSession(sessionId);
-    const updated = { ...current, [field]: value };
-    updated.total = (updated.male || 0) + (updated.female || 0);
-
-    setLocalAttendance({
-      ...localAttendance,
-      [sessionId]: updated,
+    setEditingValues({
+      ...editingValues,
+      [sessionId]: {
+        ...current,
+        [field]: value,
+      },
     });
   };
 
@@ -74,7 +68,8 @@ const CategoryAttendanceTable = ({
       });
 
       await onSaveAttendance(recordsToSave);
-      setLocalAttendance({});
+
+      setEditingValues({});
     } finally {
       setSaving(false);
     }

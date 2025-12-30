@@ -15,8 +15,8 @@ import { calculateDayDate } from "@/utils/retreats/helpers";
 import EditSessionModal from "../../modals/EditSessionModal";
 import ConfirmationModal from "../../modals/ConfirmationModal";
 import CategoryAttendanceTable from "../../tables/CategoryAttendanceTable";
-import CategorySessionDefineStep from "./CategorySessionDefineStep";
 import SessionCountsStep from "./SessionCountsStep";
+import CategorySessionDefineStep from "./CategorySessionDefineStep";
 
 const SessionsAndAttendanceTab = ({
   retreat,
@@ -280,7 +280,7 @@ const SessionsAndAttendanceTab = ({
   const handleEditSessions = () => {
     extractExistingData();
     setEditMode(true);
-    setSetupStep("counts");
+    setSetupStep("define");
   };
 
   const handleSaveAttendance = async (records: Partial<AttendanceRecord>[]) => {
@@ -334,7 +334,7 @@ const SessionsAndAttendanceTab = ({
   };
 
   if (setupMode || editMode) {
-    if (setupStep === "counts") {
+    if (setupMode && setupStep === "counts") {
       return (
         <SessionCountsStep
           counts={sessionCounts}
@@ -350,8 +350,15 @@ const SessionsAndAttendanceTab = ({
         categoryTemplates={categoryTemplates}
         onTemplatesChange={handleTemplatesChange}
         onGenerate={editMode ? handleUpdateSessions : handleGenerateSessions}
-        onBack={() => setSetupStep("counts")}
+        onBack={() => {
+          if (editMode) {
+            setEditMode(false);
+          } else {
+            setSetupStep("counts");
+          }
+        }}
         generating={generating}
+        editMode={editMode}
       />
     );
   }
@@ -359,24 +366,20 @@ const SessionsAndAttendanceTab = ({
   return (
     <>
       <div className="space-y-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-start gap-4">
           <div>
             <h2 className="text-[clamp(1.1rem,3vw,1.4rem)] font-bold uppercase text-navy dark:text-white">
               Sessions & Attendance
             </h2>
-            <p className="text-sm text-black/60 dark:text-white/60 mt-1">
-              {retreat.year} {retreat.type} Retreat - {retreat.totalDays} Days -{" "}
-              {retreatSessions.length} Sessions
-            </p>
           </div>
 
           <div className="flex gap-3">
             <button
               onClick={handleEditSessions}
-              className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white text-sm uppercase tracking-wider hover:border-navy dark:hover:border-white transition-colors rounded cursor-pointer"
+              className="flex items-center gap-2 px-4 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white text-sm uppercase tracking-wider hover:border-navy dark:hover:border-white transition-colors rounded cursor-pointer"
             >
               <Settings size={16} />
-              Manage Sessions
+              Edit Sessions
             </button>
 
             <DaySelector

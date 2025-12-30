@@ -299,6 +299,7 @@ export interface SessionCountsStepProps {
     onNext: () => void;
 }
 
+
 export interface CategorySessionDefineStepProps {
     counts: Record<Category, number>;
     categoryTemplates: Record<Category, CategorySessionTemplate[]>;
@@ -309,4 +310,5 @@ export interface CategorySessionDefineStepProps {
     onGenerate: () => void;
     onBack: () => void;
     generating: boolean;
+    editMode?: boolean;
 }

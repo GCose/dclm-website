@@ -13,6 +13,7 @@ const CategorySessionDefineStep = ({
   onGenerate,
   onBack,
   generating,
+  editMode = false,
 }: CategorySessionDefineStepProps) => {
   const categories: Category[] = ["Adult", "Campus", "Youth", "Children"];
   const [activeCategory, setActiveCategory] = useState<Category>("Adult");
@@ -63,13 +64,13 @@ const CategorySessionDefineStep = ({
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-bold uppercase text-navy dark:text-white">
-          Define Sessions for Each Category
+          {editMode ? "Edit Sessions" : "Define Sessions for Each Category"}
         </h3>
         <button
           onClick={onBack}
           className="px-4 py-2 text-sm uppercase tracking-wider text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white transition-colors"
         >
-          Back
+          {editMode ? "Cancel" : "Back"}
         </button>
       </div>
 
@@ -204,7 +205,11 @@ const CategorySessionDefineStep = ({
         className="w-full px-6 py-3 bg-navy dark:bg-white text-white dark:text-navy text-sm uppercase tracking-wider hover:bg-burgundy dark:hover:bg-burgundy dark:hover:text-white transition-colors rounded disabled:opacity-50 cursor-pointer"
       >
         {generating
-          ? "Generating Sessions..."
+          ? editMode
+            ? "Saving Changes..."
+            : "Generating Sessions..."
+          : editMode
+          ? "Save Changes"
           : "Generate Sessions for Retreat"}
       </button>
     </div>
