@@ -68,8 +68,6 @@ const CategoryAttendanceTable = ({
       });
 
       await onSaveAttendance(recordsToSave);
-
-      setEditingValues({});
     } finally {
       setSaving(false);
     }
