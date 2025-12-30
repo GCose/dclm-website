@@ -141,7 +141,7 @@ const SessionSetupForm = ({
                   </th>
                   <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                     Children Church *
-                  </th> 
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -176,7 +176,7 @@ const SessionSetupForm = ({
                           onChange={(e) =>
                             updateTemplate(index, "startTime", e.target.value)
                           }
-                          className="w-full px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
+                          className="w-full px-2 py-1 border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
                         />
                       </td>
                       <td className="py-3 px-4">
@@ -187,7 +187,7 @@ const SessionSetupForm = ({
                           onChange={(e) =>
                             updateTemplate(index, "endTime", e.target.value)
                           }
-                          className="w-full px-2 py-1 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
+                          className="w-full px-2 py-1 border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
                         />
                       </td>
                       <td className="py-3 px-4">

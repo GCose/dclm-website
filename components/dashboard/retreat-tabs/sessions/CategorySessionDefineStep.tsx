@@ -68,9 +68,9 @@ const CategorySessionDefineStep = ({
         </h3>
         <button
           onClick={onBack}
-          className="px-4 py-2 text-sm uppercase tracking-wider text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white transition-colors"
+          className="px-4 py-2 text-sm uppercase tracking-wider text-navy cursor-pointer border border-navy dark:border-white/50 dark:hover:border-white/80 rounded-sm hover:bg-navy hover:text-white dark:text-white/60 dark:hover:text-white transition-colors"
         >
-          {editMode ? "Cancel" : "Back"}
+          {editMode ? "Close" : "Back"}
         </button>
       </div>
 
@@ -87,7 +87,7 @@ const CategorySessionDefineStep = ({
               }`}
             >
               {category} {category === "Campus" ? "Fellowship" : "Church"}
-              <span className="ml-2 text-xs">
+              <span className="ml-2 text-sm">
                 ({counts[category]} sessions)
               </span>
             </button>
@@ -95,11 +95,11 @@ const CategorySessionDefineStep = ({
         </div>
       </div>
 
-      <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-8 rounded-lg">
-        <div className="overflow-x-auto">
+      <div className="bg-white dark:bg-navy/50 ">
+        <div className="overflow-x-auto rounded-lg">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-black/10 dark:border-white/10">
+              <tr className="bg-gray-100 dark:bg-white/5">
                 <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                   Session #
                 </th>
@@ -135,8 +135,8 @@ const CategorySessionDefineStep = ({
                           {index + 1}
                         </span>
                         {isGSMessage && (
-                          <span className="px-2 py-0.5 bg-terracotta/20 text-terracotta text-[10px] uppercase tracking-wider font-bold rounded">
-                            GS
+                          <span className="px-2 py-0.5 bg-terracotta/20 text-terracotta text-[12px] uppercase tracking-wider font-bold rounded">
+                            GS Message
                           </span>
                         )}
                       </div>
@@ -189,29 +189,31 @@ const CategorySessionDefineStep = ({
             </tbody>
           </table>
         </div>
+      </div>
 
+      <div className="w-full flex flex-col md:flex-row items-center justify-between gap-6 md:gap-0">
         <button
           onClick={addSession}
-          className="mt-4 flex items-center gap-2 px-4 py-2 text-sm uppercase tracking-wider text-navy dark:text-white border border-black/10 dark:border-white/10 hover:border-navy dark:hover:border-white transition-colors rounded cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2 text-sm uppercase tracking-wider text-navy dark:text-white border border-black/10 dark:border-white/10 hover:border-navy dark:hover:border-white transition-colors rounded cursor-pointer"
         >
           <Plus size={16} />
           Add Session
         </button>
-      </div>
 
-      <button
-        onClick={handleGenerate}
-        disabled={generating}
-        className="w-full px-6 py-3 bg-navy dark:bg-white text-white dark:text-navy text-sm uppercase tracking-wider hover:bg-burgundy dark:hover:bg-burgundy dark:hover:text-white transition-colors rounded disabled:opacity-50 cursor-pointer"
-      >
-        {generating
-          ? editMode
-            ? "Saving Changes..."
-            : "Generating Sessions..."
-          : editMode
-          ? "Save Changes"
-          : "Generate Sessions for Retreat"}
-      </button>
+        <button
+          onClick={handleGenerate}
+          disabled={generating}
+          className="px-6 py-3 bg-navy dark:bg-white text-white dark:text-navy text-sm uppercase tracking-wider hover:bg-burgundy dark:hover:bg-burgundy dark:hover:text-white transition-colors rounded disabled:opacity-50 cursor-pointer"
+        >
+          {generating
+            ? editMode
+              ? "Saving Changes..."
+              : "Generating Sessions..."
+            : editMode
+            ? "Save Changes"
+            : "Generate Sessions for Retreat"}
+        </button>
+      </div>
     </div>
   );
 };

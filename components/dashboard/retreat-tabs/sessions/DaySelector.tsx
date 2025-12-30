@@ -7,9 +7,6 @@ const DaySelector = ({
 }: DaySelectorProps) => {
   return (
     <div>
-      <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
-        Select Day
-      </label>
       <select
         value={selectedDay}
         onChange={(e) => onDayChange(parseInt(e.target.value))}

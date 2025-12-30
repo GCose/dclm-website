@@ -91,15 +91,15 @@ const CategoryAttendanceTable = ({
       label: "Session",
       render: (_: unknown, row: AttendanceSession) => (
         <div>
-          <div className="font-bold text-navy dark:text-white text-sm flex items-center gap-2">
+          <div className="font-bold text-navy dark:text-white text-bas flex items-center gap-2">
             {row.sessionName}
             {row.isGSMessage && (
-              <span className="px-2 py-0.5 bg-terracotta/20 text-terracotta text-[10px] uppercase tracking-wider font-bold rounded">
+              <span className="px-2 py-0.5 bg-terracotta/20 text-terracotta text-[12px] uppercase tracking-wider font-bold rounded">
                 GS Message
               </span>
             )}
           </div>
-          <div className="text-xs text-black/60 dark:text-white/60">
+          <div className="text-sm text-black/60 dark:text-white/60">
             {row.sessionTime}
           </div>
         </div>
@@ -191,7 +191,7 @@ const CategoryAttendanceTable = ({
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 rounded-lg overflow-hidden">
+      <div className="bg-white dark:bg-navy/50 rounded-lg overflow-hidden">
         <Table
           columns={columns}
           data={categorySessions}
@@ -200,19 +200,19 @@ const CategoryAttendanceTable = ({
           } on Day ${day}`}
         />
 
-        <div className="border-t-2 border-navy dark:border-white bg-navy/5 dark:bg-white/5 px-4 py-4">
+        <div className="bg-navy/5 dark:bg-white/5 px-4 py-4">
           <div className="flex items-center justify-between">
-            <span className="font-bold uppercase text-navy dark:text-white text-sm">
+            <span className="font-bold uppercase text-navy dark:text-white text-base">
               Day {day} Totals
             </span>
             <div className="flex gap-6 items-center">
-              <span className="text-sm text-navy dark:text-white">
+              <span className="text-base text-navy dark:text-white">
                 <strong>Total Male:</strong> {dayTotals.male}
               </span>
-              <span className="text-sm text-navy dark:text-white">
+              <span className="text-base text-navy dark:text-white">
                 <strong>Total Female:</strong> {dayTotals.female}
               </span>
-              <span className="text-sm text-navy dark:text-white">
+              <span className="text-base text-navy dark:text-white">
                 <strong>Grand Total:</strong>{" "}
                 <span className="text-lg">{dayTotals.total}</span>
               </span>
@@ -224,7 +224,7 @@ const CategoryAttendanceTable = ({
       <button
         onClick={handleSave}
         disabled={saving}
-        className="flex items-center gap-2 px-6 py-3 bg-navy dark:bg-white text-white dark:text-navy text-sm uppercase tracking-wider hover:bg-burgundy dark:hover:bg-burgundy dark:hover:text-white transition-colors rounded disabled:opacity-50 cursor-pointer"
+        className="flex items-center gap-2 px-6 py-3 bg-navy dark:bg-white text-white dark:text-navy text-base uppercase tracking-wider hover:bg-burgundy dark:hover:bg-burgundy dark:hover:text-white transition-colors rounded disabled:opacity-50 cursor-pointer"
       >
         <Save size={20} />
         {saving ? "Saving..." : `Save Attendance for Day ${day}`}

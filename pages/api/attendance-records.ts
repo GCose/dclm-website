@@ -11,16 +11,11 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
             const { sessionId } = req.query;
 
             if (sessionId) {
-                const record = await AttendanceRecord.findOne({ sessionId }).populate(
-                    "sessionId"
-                );
+                const record = await AttendanceRecord.findOne({ sessionId });
                 return res.status(200).json({ record });
             }
 
-            const records = await AttendanceRecord.find({}).populate({
-                path: "sessionId",
-                populate: { path: "retreatId" },
-            });
+            const records = await AttendanceRecord.find({});
             return res.status(200).json({ records });
         }
 

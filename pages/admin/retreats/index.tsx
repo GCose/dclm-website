@@ -246,7 +246,7 @@ const Retreats = () => {
                   setActiveTab("overview");
                   resetRetreatForm();
                 }}
-                className="flex items-center gap-2 px-4 py-2 text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white transition-colors cursor-pointer"
+                className="flex items-center gap-2 px-4 py-2 text-navy cursor-pointer border border-navy dark:border-white/50 dark:hover:border-white/80 rounded-sm hover:bg-navy hover:text-white dark:text-white/60 dark:hover:text-white transition-colors uppercase"
               >
                 <X size={20} />
                 Close

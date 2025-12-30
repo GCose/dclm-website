@@ -373,20 +373,19 @@ const SessionsAndAttendanceTab = ({
             </h2>
           </div>
 
-          <div className="flex gap-3">
-            <button
-              onClick={handleEditSessions}
-              className="flex items-center gap-2 px-4 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white text-sm uppercase tracking-wider hover:border-navy dark:hover:border-white transition-colors rounded cursor-pointer"
-            >
-              <Settings size={16} />
-              Edit Sessions
-            </button>
-
+          <div className="flex items-center justify-center gap-4">
             <DaySelector
               selectedDay={selectedDay}
               totalDays={retreat.totalDays}
               onDayChange={setSelectedDay}
             />
+            <button
+              onClick={handleEditSessions}
+              className="flex items-center gap-2 p-2 text-navy cursor-pointer border border-navy dark:border-white/50 dark:hover:border-white/80 rounded-sm hover:bg-navy hover:text-white dark:text-white/60 dark:hover:text-white transition-colors uppercase tracking-tight"
+            >
+              <Settings size={16} />
+              Edit Sessions
+            </button>
           </div>
         </div>
 

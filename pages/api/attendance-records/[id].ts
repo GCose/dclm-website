@@ -10,10 +10,7 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
         await dbConnect();
 
         if (req.method === "GET") {
-            const record = await AttendanceRecord.findById(id).populate({
-                path: "sessionId",
-                populate: { path: "retreatId" },
-            });
+            const record = await AttendanceRecord.findById(id);
             if (!record) {
                 return res.status(404).json({ error: "Record not found" });
             }

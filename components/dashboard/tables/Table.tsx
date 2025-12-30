@@ -22,7 +22,7 @@ const Table = <T extends { _id?: string }>({
 
   return (
     <div>
-      <div className="bg-white dark:bg-navy/50 border border-black/0 dark:border-white/10 rounded-lg overflow-hidden relative">
+      <div className="bg-white dark:bg-navy/50 rounded-lg overflow-hidden relative">
         {loading && (
           <div className="absolute inset-0 bg-white/80 dark:bg-navy/80 backdrop-blur-sm flex items-center justify-center z-10">
             <div className="flex flex-col items-center gap-3">
@@ -37,7 +37,7 @@ const Table = <T extends { _id?: string }>({
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-black/10 dark:border-white/10 bg-gray-100 dark:bg-navy">
+              <tr className=" bg-gray-100 dark:bg-white/5">
                 {columns.map((column) => (
                   <th
                     key={column.key}
