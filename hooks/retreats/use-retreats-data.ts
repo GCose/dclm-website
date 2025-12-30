@@ -1,9 +1,9 @@
 import axios from "axios";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
-import { Retreat, AttendanceSession, AttendanceRecord } from "@/types/interface/dashboard";
+import { Retreat, AttendanceSession, AttendanceRecord, RetreatFilters } from "@/types/interface/dashboard";
 
-export const useRetreatsData = (selectedRetreat: Retreat | null) => {
+export const useRetreatsData = (selectedRetreat: Retreat | null, filters?: RetreatFilters) => {
     const [retreats, setRetreats] = useState<Retreat[]>([]);
     const [loading, setLoading] = useState(true);
     const [sessions, setSessions] = useState<AttendanceSession[]>([]);
@@ -12,11 +12,21 @@ export const useRetreatsData = (selectedRetreat: Retreat | null) => {
     const [retreatsPage, setRetreatsPage] = useState(1);
     const [retreatsTotalPages, setRetreatsTotalPages] = useState(1);
     const [retreatsTotal, setRetreatsTotal] = useState(0);
+    const [uniqueYears, setUniqueYears] = useState<number[]>([]);
 
     const fetchRetreats = async (page: number) => {
         setLoading(true);
         try {
-            const { data } = await axios.get(`/api/retreats?page=${page}&limit=20`);
+            const params = new URLSearchParams({
+                page: String(page),
+                limit: "20",
+            });
+
+            if (filters?.search) params.append("search", filters.search);
+            if (filters?.year) params.append("year", filters.year);
+            if (filters?.type) params.append("type", filters.type);
+
+            const { data } = await axios.get(`/api/retreats?${params.toString()}`);
             const retreatsData = Array.isArray(data.retreats)
                 ? data.retreats
                 : data.retreats || [];
@@ -26,6 +36,9 @@ export const useRetreatsData = (selectedRetreat: Retreat | null) => {
                 setRetreatsTotal(data.pagination.total);
                 setRetreatsTotalPages(data.pagination.totalPages);
             }
+
+            const years = Array.from(new Set<number>(retreatsData.map((r: Retreat) => r.year))).sort((a: number, b: number) => b - a);
+            setUniqueYears(years);
         } catch (error: unknown) {
             console.error("Error fetching retreats:", error);
             toast.error("Failed to fetch retreats");
@@ -57,7 +70,7 @@ export const useRetreatsData = (selectedRetreat: Retreat | null) => {
         } catch (error: unknown) {
             console.error("Error fetching sessions:", error);
             toast.error("Failed to fetch sessions");
-            setSessions([]); // Clear sessions on error
+            setSessions([]);
         }
     };
 
@@ -73,16 +86,15 @@ export const useRetreatsData = (selectedRetreat: Retreat | null) => {
             setAttendanceRecords(recordsData);
         } catch (error: unknown) {
             console.error("Error fetching attendance records:", error);
-            setAttendanceRecords([]); // Clear records on error
+            setAttendanceRecords([]);
         }
     };
 
     useEffect(() => {
         fetchRetreats(retreatsPage);
-    }, [retreatsPage]);
+    }, [retreatsPage, filters?.search, filters?.year, filters?.type]);
 
     useEffect(() => {
-        // CRITICAL FIX: Clear sessions immediately when retreat changes
         setSessions([]);
         setAttendanceRecords([]);
 
@@ -113,7 +125,6 @@ export const useRetreatsData = (selectedRetreat: Retreat | null) => {
             } catch (error: unknown) {
                 console.error("Error fetching retreat data:", error);
                 toast.error("Failed to fetch retreat data");
-                // Keep state cleared on error
                 setSessions([]);
                 setAttendanceRecords([]);
             }
@@ -130,6 +141,7 @@ export const useRetreatsData = (selectedRetreat: Retreat | null) => {
         setRetreatsPage,
         retreatsTotalPages,
         retreatsTotal,
+        uniqueYears,
         sessions,
         setSessions,
         attendanceRecords,

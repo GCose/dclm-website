@@ -1,23 +1,5 @@
 import { X } from "lucide-react";
-
-interface RetreatForm {
-  year: number;
-  type: "Easter" | "December";
-  status: "ongoing" | "completed";
-  totalDays: number;
-  dateFrom: string;
-  dateTo: string;
-  venue: string;
-  theme: string;
-}
-
-interface CreateRetreatModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (e: React.FormEvent) => void;
-  form: RetreatForm;
-  setForm: React.Dispatch<React.SetStateAction<RetreatForm>>;
-}
+import { CreateRetreatModalProps } from "@/types/interface/dashboard";
 
 const CreateRetreatModal = ({
   isOpen,
@@ -82,33 +64,12 @@ const CreateRetreatModal = ({
 
             <div>
               <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
-                Status *
-              </label>
-              <select
-                required
-                value={form.status}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    status: e.target.value as "ongoing" | "completed",
-                  })
-                }
-                className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
-              >
-                <option value="ongoing">Ongoing</option>
-                <option value="completed">Completed</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                 Total Days *
               </label>
               <input
                 type="number"
                 required
                 min="1"
-                max="5"
                 value={form.totalDays}
                 onChange={(e) =>
                   setForm({ ...form, totalDays: parseInt(e.target.value) })

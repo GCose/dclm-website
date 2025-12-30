@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Retreat, RetreatForm } from "@/types/interface/dashboard";
 
-const useRetreats = (
+const useRetreat = (
     fetchRetreats: (page: number) => Promise<void>,
     retreatsPage: number,
     setSelectedRetreat: (retreat: Retreat | null) => void,
@@ -76,4 +76,4 @@ const useRetreats = (
     };
 };
 
-export default useRetreats;
+export default useRetreat;

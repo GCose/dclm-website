@@ -5,8 +5,9 @@ import {
   Registration,
   RegistrationForm,
   RegistrationFilters,
+  RetreatFilters,
 } from "@/types/interface/dashboard";
-import { Plus, X } from "lucide-react";
+import { Plus, X, Search } from "lucide-react";
 import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
 import { useDebounce } from "@/hooks/usedebounce";
@@ -37,13 +38,25 @@ const Retreats = () => {
   const [retreatForm, setRetreatForm] = useState({
     year: new Date().getFullYear(),
     type: "Easter" as "Easter" | "December",
-    status: "ongoing" as "ongoing" | "completed",
     totalDays: 1,
     dateFrom: "",
     dateTo: "",
     venue: "",
     theme: "",
   });
+
+  const [retreatFilters, setRetreatFilters] = useState<RetreatFilters>({
+    search: "",
+    year: "",
+    type: "",
+  });
+
+  const debouncedRetreatSearch = useDebounce(retreatFilters.search, 500);
+
+  const debouncedRetreatFilters = {
+    ...retreatFilters,
+    search: debouncedRetreatSearch,
+  };
 
   const [showRegModal, setShowRegModal] = useState(false);
   const [showEditRegModal, setShowEditRegModal] = useState(false);
@@ -95,12 +108,13 @@ const Retreats = () => {
     setRetreatsPage,
     retreatsTotalPages,
     retreatsTotal,
+    uniqueYears,
     sessions,
     attendanceRecords,
     fetchRetreats,
     fetchSessions,
     fetchAttendanceRecords,
-  } = useRetreatsData(selectedRetreat);
+  } = useRetreatsData(selectedRetreat, debouncedRetreatFilters);
 
   const {
     registrations,
@@ -138,7 +152,6 @@ const Retreats = () => {
     setRetreatForm({
       year: new Date().getFullYear(),
       type: "Easter",
-      status: "ongoing",
       totalDays: 1,
       dateFrom: "",
       dateTo: "",
@@ -165,7 +178,6 @@ const Retreats = () => {
     setRetreatForm({
       year: retreat.year,
       type: retreat.type,
-      status: retreat.status,
       totalDays: retreat.totalDays,
       dateFrom: retreat.dateFrom.split("T")[0],
       dateTo: retreat.dateTo.split("T")[0],
@@ -178,6 +190,21 @@ const Retreats = () => {
     setRegFilters(filters);
     setRegPage(1);
   };
+
+  const handleRetreatFiltersChange = (filters: RetreatFilters) => {
+    setRetreatFilters(filters);
+    setRetreatsPage(1);
+  };
+
+  const clearRetreatFilters = () => {
+    setRetreatFilters({
+      search: "",
+      year: "",
+      type: "",
+    });
+  };
+
+  const hasActiveRetreatFilters = retreatFilters.year || retreatFilters.type;
 
   const retreatsColumns = getRetreatsColumns(
     formatDate,
@@ -195,7 +222,7 @@ const Retreats = () => {
       <div>
         {!selectedRetreat ? (
           <>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
               <div>
                 <h1 className="text-[clamp(1.5rem,5vw,2rem)] font-bold uppercase text-navy dark:text-white mb-2">
                   Retreats
@@ -211,6 +238,85 @@ const Retreats = () => {
                 <Plus size={20} />
                 Create Retreat
               </button>
+            </div>
+
+            <div className="my-6">
+              <div className="relative">
+                <Search
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-black/40 dark:text-white/40"
+                  size={20}
+                />
+                <input
+                  type="text"
+                  placeholder="Search by venue or theme..."
+                  value={retreatFilters.search}
+                  onChange={(e) =>
+                    handleRetreatFiltersChange({
+                      ...retreatFilters,
+                      search: e.target.value,
+                    })
+                  }
+                  className="w-full pl-12 pr-4 py-2 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white placeholder:text-black/40 dark:placeholder:text-white/40 focus:outline-none focus:border-navy dark:focus:border-white rounded"
+                />
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-[clamp(0.8rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
+                    Year
+                  </label>
+                  <select
+                    value={retreatFilters.year}
+                    onChange={(e) =>
+                      handleRetreatFiltersChange({
+                        ...retreatFilters,
+                        year: e.target.value,
+                      })
+                    }
+                    className="w-full px-3 py-2 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white rounded cursor-pointer"
+                  >
+                    <option value="">All</option>
+                    {uniqueYears.map((year) => (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[clamp(0.8rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
+                    Type
+                  </label>
+                  <select
+                    value={retreatFilters.type}
+                    onChange={(e) =>
+                      handleRetreatFiltersChange({
+                        ...retreatFilters,
+                        type: e.target.value,
+                      })
+                    }
+                    className="w-full px-3 py-2 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white rounded cursor-pointer"
+                  >
+                    <option value="">All</option>
+                    <option value="Easter">Easter</option>
+                    <option value="December">December</option>
+                  </select>
+                </div>
+
+                <div className="flex items-end">
+                  <button
+                    onClick={clearRetreatFilters}
+                    disabled={!hasActiveRetreatFilters}
+                    className="w-full flex items-center border justify-center gap-2 px-4 py-2 text-sm text-burgundy hover:bg-burgundy/10 rounded transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                  >
+                    <X size={16} />
+                    Clear Filters
+                  </button>
+                </div>
+              </div>
             </div>
 
             {loading ? (
@@ -230,7 +336,7 @@ const Retreats = () => {
                   total: retreatsTotal,
                   onPageChange: setRetreatsPage,
                 }}
-                emptyMessage="No retreats yet. Create your first retreat to get started."
+                emptyMessage="No retreats found"
               />
             )}
           </>

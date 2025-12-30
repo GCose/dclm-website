@@ -14,6 +14,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { DashboardLayoutProps } from "@/types/interface/dashboard";
+import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 
 const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
   const router = useRouter();
@@ -26,6 +27,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
   });
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
 
   useEffect(() => {
     if (darkMode) {
@@ -36,7 +38,12 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
     localStorage.setItem("darkMode", darkMode.toString());
   }, [darkMode]);
 
-  const handleSignOut = async () => {
+  const handleSignOutClick = () => {
+    setUserDropdownOpen(false);
+    setShowSignOutConfirm(true);
+  };
+
+  const confirmSignOut = async () => {
     try {
       await axios.post("/api/logout");
       router.push("/admin/login");
@@ -196,7 +203,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
                         </div>
                         <div className="p-2">
                           <button
-                            onClick={handleSignOut}
+                            onClick={handleSignOutClick}
                             className="w-full flex items-center cursor-pointer gap-3 px-4 py-3 text-left text-black/70 dark:text-white/70 hover:bg-black/5 dark:hover:bg-white/10 rounded-lg transition-colors"
                           >
                             <LogOut size={18} />
@@ -218,6 +225,16 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
           </main>
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={showSignOutConfirm}
+        onClose={() => setShowSignOutConfirm(false)}
+        onConfirm={confirmSignOut}
+        title="Sign Out"
+        message="Are you sure you want to sign out?"
+        confirmText="Sign Out"
+        cancelText="Cancel"
+      />
     </>
   );
 };

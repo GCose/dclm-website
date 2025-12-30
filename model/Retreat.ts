@@ -13,7 +13,7 @@ const retreatSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ["ongoing", "completed"],
+            enum: ["upcoming", "ongoing", "completed"],
             default: "ongoing",
         },
         totalDays: {

@@ -18,7 +18,7 @@ export interface Retreat {
     _id: string;
     year: number;
     type: "Easter" | "December";
-    status: "ongoing" | "completed";
+    status: "upcoming" | "ongoing" | "completed";
     totalDays: number;
     dateFrom: string;
     dateTo: string;
@@ -30,12 +30,17 @@ export interface Retreat {
 export interface RetreatForm {
     year: number;
     type: "Easter" | "December";
-    status: "ongoing" | "completed";
     totalDays: number;
     dateFrom: string;
     dateTo: string;
     venue: string;
     theme: string;
+}
+
+export interface RetreatFilters {
+    search: string;
+    year: string;
+    type: string;
 }
 
 export interface CreateRetreatModalProps {
@@ -299,7 +304,6 @@ export interface SessionCountsStepProps {
     onNext: () => void;
 }
 
-
 export interface CategorySessionDefineStepProps {
     counts: Record<Category, number>;
     categoryTemplates: Record<Category, CategorySessionTemplate[]>;
@@ -311,4 +315,10 @@ export interface CategorySessionDefineStepProps {
     onBack: () => void;
     generating: boolean;
     editMode?: boolean;
+}
+
+export interface EditRetreatFormProps {
+    onSubmit: (e: React.FormEvent) => void;
+    form: RetreatForm;
+    setForm: React.Dispatch<React.SetStateAction<RetreatForm>>;
 }
