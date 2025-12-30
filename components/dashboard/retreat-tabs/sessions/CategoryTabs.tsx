@@ -4,7 +4,7 @@ const CategoryTabs = ({
   selectedCategory,
   onCategoryChange,
 }: CategoryTabsProps) => {
-  const categories: Category[] = ["Adult", "Youth", "Campus", "Children"];
+  const categories: Category[] = ["Adult", "Campus", "Youth", "Children"];
 
   return (
     <div className="border-b border-black/10 dark:border-white/10 mb-6">
@@ -19,7 +19,7 @@ const CategoryTabs = ({
                 : "text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white"
             }`}
           >
-            {category} Church
+            {category} {category === "Campus" ? "Fellowship" : "Church"}
           </button>
         ))}
       </div>

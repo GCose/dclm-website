@@ -141,7 +141,7 @@ const SessionSetupForm = ({
                   </th>
                   <th className="text-left py-3 px-4 text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold">
                     Children Church *
-                  </th>
+                  </th> 
                 </tr>
               </thead>
               <tbody>

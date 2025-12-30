@@ -1,21 +1,22 @@
 import axios from "axios";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Settings } from "lucide-react";
 import {
   Category,
   AttendanceSession,
   AttendanceRecord,
-  SessionTemplate,
   SessionsAndAttendanceTabProps,
+  CategorySessionTemplate,
 } from "@/types/interface/dashboard";
 import DaySelector from "./DaySelector";
 import CategoryTabs from "./CategoryTabs";
 import { calculateDayDate } from "@/utils/retreats/helpers";
-import SessionSetupForm from "../../forms/SessionSetupForm";
 import EditSessionModal from "../../modals/EditSessionModal";
 import ConfirmationModal from "../../modals/ConfirmationModal";
 import CategoryAttendanceTable from "../../tables/CategoryAttendanceTable";
+import CategorySessionDefineStep from "./CategorySessionDefineStep";
+import SessionCountsStep from "./SessionCountsStep";
 
 const SessionsAndAttendanceTab = ({
   retreat,
@@ -28,14 +29,120 @@ const SessionsAndAttendanceTab = ({
   const [editingSession, setEditingSession] =
     useState<AttendanceSession | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [showGlobalEditModal, setShowGlobalEditModal] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<{
     isOpen: boolean;
     id: string | null;
   }>({ isOpen: false, id: null });
 
+  const [setupStep, setSetupStep] = useState<"counts" | "define">("counts");
+  const [editMode, setEditMode] = useState(false);
+  const [generating, setGenerating] = useState(false);
+
+  const [sessionCounts, setSessionCounts] = useState<Record<Category, number>>({
+    Adult: 7,
+    Campus: 8,
+    Youth: 6,
+    Children: 7,
+  });
+
+  const [categoryTemplates, setCategoryTemplates] = useState<
+    Record<Category, CategorySessionTemplate[]>
+  >({
+    Adult: [],
+    Campus: [],
+    Youth: [],
+    Children: [],
+  });
+
   const retreatSessions = sessions.filter((s) => s.retreatId === retreat._id);
   const setupMode = retreatSessions.length === 0;
+
+  useEffect(() => {
+    if (setupMode) {
+      const categories: Category[] = ["Adult", "Campus", "Youth", "Children"];
+      const emptyTemplates: Record<Category, CategorySessionTemplate[]> = {
+        Adult: [],
+        Campus: [],
+        Youth: [],
+        Children: [],
+      };
+
+      categories.forEach((category) => {
+        const count = sessionCounts[category];
+        emptyTemplates[category] = Array.from({ length: count }, (_, i) => ({
+          sessionNumber: i + 1,
+          startTime: "",
+          endTime: "",
+          name: "",
+        }));
+      });
+
+      setCategoryTemplates(emptyTemplates);
+    }
+  }, [setupMode, sessionCounts]);
+
+  const extractExistingData = () => {
+    const categories: Category[] = ["Adult", "Campus", "Youth", "Children"];
+    const counts: Record<Category, number> = {
+      Adult: 0,
+      Campus: 0,
+      Youth: 0,
+      Children: 0,
+    };
+    const templates: Record<Category, CategorySessionTemplate[]> = {
+      Adult: [],
+      Campus: [],
+      Youth: [],
+      Children: [],
+    };
+
+    categories.forEach((category) => {
+      const categorySessions = retreatSessions
+        .filter((s) => s.category === category)
+        .sort((a, b) => a.sessionNumber - b.sessionNumber);
+
+      const uniqueSessions = Array.from(
+        new Set(categorySessions.map((s) => s.sessionNumber))
+      ).sort((a, b) => a - b);
+
+      counts[category] = uniqueSessions.length;
+
+      templates[category] = uniqueSessions.map((sessionNum) => {
+        const session = categorySessions.find(
+          (s) => s.sessionNumber === sessionNum
+        );
+        if (!session) {
+          return {
+            sessionNumber: sessionNum,
+            startTime: "",
+            endTime: "",
+            name: "",
+          };
+        }
+
+        const [start, end] = session.sessionTime.split(" - ");
+        const convertTo24Hour = (time12: string) => {
+          if (!time12) return "";
+          const [time, period] = time12.split(" ");
+          const [hours, minutes] = time.split(":");
+          let hour = parseInt(hours);
+          if (period === "PM" && hour !== 12) hour += 12;
+          if (period === "AM" && hour === 12) hour = 0;
+          return `${hour.toString().padStart(2, "0")}:${minutes}`;
+        };
+
+        return {
+          sessionNumber: sessionNum,
+          startTime: convertTo24Hour(start),
+          endTime: convertTo24Hour(end),
+          name: session.sessionName,
+        };
+      });
+    });
+
+    setSessionCounts(counts);
+    setCategoryTemplates(templates);
+  };
 
   const formatTime = (time: string) => {
     const [hours, minutes] = time.split(":");
@@ -45,8 +152,51 @@ const SessionsAndAttendanceTab = ({
     return `${displayHour}:${minutes} ${ampm}`;
   };
 
-  const handleGenerateSessions = async (templates: SessionTemplate[]) => {
+  const handleCountsNext = () => {
+    const categories: Category[] = ["Adult", "Campus", "Youth", "Children"];
+    const newTemplates: Record<Category, CategorySessionTemplate[]> = {
+      Adult: [],
+      Campus: [],
+      Youth: [],
+      Children: [],
+    };
+
+    categories.forEach((category) => {
+      const count = sessionCounts[category];
+      const existing = categoryTemplates[category] || [];
+      newTemplates[category] = Array.from({ length: count }, (_, i) => {
+        if (existing[i]) return existing[i];
+        return {
+          sessionNumber: i + 1,
+          startTime: "",
+          endTime: "",
+          name: "",
+        };
+      });
+    });
+
+    setCategoryTemplates(newTemplates);
+    setSetupStep("define");
+  };
+
+  const handleTemplatesChange = (
+    category: Category,
+    templates: CategorySessionTemplate[]
+  ) => {
+    setCategoryTemplates({
+      ...categoryTemplates,
+      [category]: templates,
+    });
+    setSessionCounts({
+      ...sessionCounts,
+      [category]: templates.length,
+    });
+  };
+
+  const handleGenerateSessions = async () => {
+    setGenerating(true);
     try {
+      const categories: Category[] = ["Adult", "Campus", "Youth", "Children"];
       const sessionsToCreate: Omit<
         AttendanceSession,
         "_id" | "createdAt" | "updatedAt"
@@ -55,35 +205,27 @@ const SessionsAndAttendanceTab = ({
       for (let day = 1; day <= retreat.totalDays; day++) {
         const dayDate = calculateDayDate(retreat, day);
 
-        templates.forEach((template) => {
-          const sessionNumber = template.sessionNumber;
+        categories.forEach((category) => {
+          const templates = categoryTemplates[category];
 
-          const isGSMessage =
-            sessionNumber === 1 ||
-            sessionNumber === 3 ||
-            sessionNumber === templates.length;
+          templates.forEach((template, index) => {
+            const sessionNumber = template.sessionNumber;
+            const isFirstDay = day === 1;
+            const isLastDay = day === retreat.totalDays;
+            const isLastSession = index === templates.length - 1;
+            const isFirstSession = index === 0;
 
-          const categories: Category[] = [
-            "Adult",
-            "Youth",
-            "Campus",
-            "Children",
-          ];
-          const categoryNames = {
-            Adult: template.adultName,
-            Youth: template.youthName,
-            Campus: template.campusName,
-            Children: template.childrenName,
-          };
+            if (isFirstDay && !isLastSession) return;
+            if (isLastDay && !isFirstSession) return;
 
-          const sessionTime = `${formatTime(template.startTime)} - ${formatTime(
-            template.endTime
-          )}`;
+            const isGSMessage =
+              sessionNumber === 1 ||
+              sessionNumber === 3 ||
+              sessionNumber === templates.length;
 
-          categories.forEach((category) => {
-            if (day === 1 && sessionNumber !== templates.length) return;
-
-            if (day === retreat.totalDays && sessionNumber !== 1) return;
+            const sessionTime = `${formatTime(
+              template.startTime
+            )} - ${formatTime(template.endTime)}`;
 
             sessionsToCreate.push({
               retreatId: retreat._id,
@@ -91,15 +233,13 @@ const SessionsAndAttendanceTab = ({
               sessionNumber,
               day,
               date: dayDate,
-              sessionName: categoryNames[category],
+              sessionName: template.name,
               sessionTime,
               isGSMessage,
             });
           });
         });
       }
-
-      console.log(`Creating ${sessionsToCreate.length} sessions...`);
 
       await Promise.all(
         sessionsToCreate.map((session) =>
@@ -110,15 +250,18 @@ const SessionsAndAttendanceTab = ({
       toast.success(
         `Generated ${sessionsToCreate.length} sessions successfully`
       );
-      setShowGlobalEditModal(false);
+      setEditMode(false);
       await onRefresh();
     } catch (error: unknown) {
       console.error("Error generating sessions:", error);
       toast.error("Failed to generate sessions");
+    } finally {
+      setGenerating(false);
     }
   };
 
-  const handleDeleteAllAndRegenerate = async (templates: SessionTemplate[]) => {
+  const handleUpdateSessions = async () => {
+    setGenerating(true);
     try {
       await Promise.all(
         retreatSessions.map((session) =>
@@ -126,13 +269,18 @@ const SessionsAndAttendanceTab = ({
         )
       );
 
-      toast.success("Deleted all existing sessions");
-
-      await handleGenerateSessions(templates);
+      await handleGenerateSessions();
     } catch (error: unknown) {
-      console.error("Error deleting/regenerating sessions:", error);
-      toast.error("Failed to regenerate sessions");
+      console.error("Error updating sessions:", error);
+      toast.error("Failed to update sessions");
+      setGenerating(false);
     }
+  };
+
+  const handleEditSessions = () => {
+    extractExistingData();
+    setEditMode(true);
+    setSetupStep("counts");
   };
 
   const handleSaveAttendance = async (records: Partial<AttendanceRecord>[]) => {
@@ -185,93 +333,26 @@ const SessionsAndAttendanceTab = ({
     }
   };
 
-  const getExistingTemplates = (): SessionTemplate[] => {
-    const uniqueSessionNumbers = [
-      ...new Set(retreatSessions.map((s) => s.sessionNumber)),
-    ].sort((a, b) => a - b);
-
-    return uniqueSessionNumbers.map((sessionNum) => {
-      const sessionsForThisNumber = retreatSessions.filter(
-        (s) => s.sessionNumber === sessionNum
-      );
-
-      const adultSession = sessionsForThisNumber.find(
-        (s) => s.category === "Adult"
-      );
-      const youthSession = sessionsForThisNumber.find(
-        (s) => s.category === "Youth"
-      );
-      const campusSession = sessionsForThisNumber.find(
-        (s) => s.category === "Campus"
-      );
-      const childrenSession = sessionsForThisNumber.find(
-        (s) => s.category === "Children"
-      );
-
-      const timeStr = adultSession?.sessionTime || "";
-      const [start, end] = timeStr.split(" - ");
-
-      const convertTo24Hour = (time12: string) => {
-        if (!time12) return "";
-        const [time, period] = time12.split(" ");
-        const [hours, minutes] = time.split(":");
-        let hour = parseInt(hours);
-
-        if (period === "PM" && hour !== 12) hour += 12;
-        if (period === "AM" && hour === 12) hour = 0;
-
-        return `${hour.toString().padStart(2, "0")}:${minutes}`;
-      };
-
-      return {
-        sessionNumber: sessionNum,
-        startTime: convertTo24Hour(start),
-        endTime: convertTo24Hour(end),
-        adultName: adultSession?.sessionName || "",
-        youthName: youthSession?.sessionName || "",
-        campusName: campusSession?.sessionName || "",
-        childrenName: childrenSession?.sessionName || "",
-      };
-    });
-  };
-
-  if (setupMode) {
-    return (
-      <SessionSetupForm
-        totalDays={retreat.totalDays}
-        onGenerate={handleGenerateSessions}
-      />
-    );
-  }
-
-  if (showGlobalEditModal) {
-    return (
-      <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <h3 className="text-lg font-bold uppercase text-navy dark:text-white">
-            Edit All Sessions
-          </h3>
-          <button
-            onClick={() => setShowGlobalEditModal(false)}
-            className="px-4 py-2 text-sm uppercase tracking-wider text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white transition-colors"
-          >
-            Cancel
-          </button>
-        </div>
-
-        <div className="bg-terracotta/10 border border-terracotta/20 p-4 rounded">
-          <p className="text-sm text-terracotta">
-            <strong>Warning:</strong> Saving will delete all existing sessions
-            and create new ones. All attendance records will be deleted.
-          </p>
-        </div>
-
-        <SessionSetupForm
-          totalDays={retreat.totalDays}
-          onGenerate={handleDeleteAllAndRegenerate}
-          existingTemplates={getExistingTemplates()}
+  if (setupMode || editMode) {
+    if (setupStep === "counts") {
+      return (
+        <SessionCountsStep
+          counts={sessionCounts}
+          onCountsChange={setSessionCounts}
+          onNext={handleCountsNext}
         />
-      </div>
+      );
+    }
+
+    return (
+      <CategorySessionDefineStep
+        counts={sessionCounts}
+        categoryTemplates={categoryTemplates}
+        onTemplatesChange={handleTemplatesChange}
+        onGenerate={editMode ? handleUpdateSessions : handleGenerateSessions}
+        onBack={() => setSetupStep("counts")}
+        generating={generating}
+      />
     );
   }
 
@@ -291,11 +372,11 @@ const SessionsAndAttendanceTab = ({
 
           <div className="flex gap-3">
             <button
-              onClick={() => setShowGlobalEditModal(true)}
+              onClick={handleEditSessions}
               className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white text-sm uppercase tracking-wider hover:border-navy dark:hover:border-white transition-colors rounded cursor-pointer"
             >
               <Settings size={16} />
-              Edit All Sessions
+              Manage Sessions
             </button>
 
             <DaySelector

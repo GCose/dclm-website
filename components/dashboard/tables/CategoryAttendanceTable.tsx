@@ -74,6 +74,7 @@ const CategoryAttendanceTable = ({
       });
 
       await onSaveAttendance(recordsToSave);
+      setLocalAttendance({});
     } finally {
       setSaving(false);
     }
@@ -85,7 +86,7 @@ const CategoryAttendanceTable = ({
       return {
         male: acc.male + (attendance.male || 0),
         female: acc.female + (attendance.female || 0),
-        total: acc.total + (attendance.total || 0),
+        total: acc.total + ((attendance.male || 0) + (attendance.female || 0)),
       };
     },
     { male: 0, female: 0, total: 0 }
@@ -189,7 +190,8 @@ const CategoryAttendanceTable = ({
   if (categorySessions.length === 0) {
     return (
       <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-8 rounded-lg text-center py-12 text-black/60 dark:text-white/60">
-        No sessions scheduled for {category} Church on Day {day}
+        No sessions scheduled for {category}{" "}
+        {category === "Campus" ? "Fellowship" : "Church"} on Day {day}
       </div>
     );
   }
@@ -200,33 +202,27 @@ const CategoryAttendanceTable = ({
         <Table
           columns={columns}
           data={categorySessions}
-          emptyMessage={`No sessions for ${category} Church on Day ${day}`}
+          emptyMessage={`No sessions for ${category} ${
+            category === "Campus" ? "Fellowship" : "Church"
+          } on Day ${day}`}
         />
 
-        <div className="border-t-2 border-navy dark:border-white bg-navy/5 dark:bg-white/5">
-          <div className="flex items-center px-4 py-4">
-            <div className="flex-1">
-              <span className="font-bold uppercase text-navy dark:text-white text-sm">
-                Day {day} Total
+        <div className="border-t-2 border-navy dark:border-white bg-navy/5 dark:bg-white/5 px-4 py-4">
+          <div className="flex items-center justify-between">
+            <span className="font-bold uppercase text-navy dark:text-white text-sm">
+              Day {day} Totals
+            </span>
+            <div className="flex gap-6 items-center">
+              <span className="text-sm text-navy dark:text-white">
+                <strong>Total Male:</strong> {dayTotals.male}
               </span>
-            </div>
-            <div className="flex gap-4 items-center">
-              <div className="w-20 text-center">
-                <span className="font-bold text-navy dark:text-white">
-                  {dayTotals.male}
-                </span>
-              </div>
-              <div className="w-20 text-center">
-                <span className="font-bold text-navy dark:text-white">
-                  {dayTotals.female}
-                </span>
-              </div>
-              <div className="w-20 text-center">
-                <span className="font-bold text-navy dark:text-white text-lg">
-                  {dayTotals.total}
-                </span>
-              </div>
-              <div className="w-[88px]">{/* Spacer for actions column */}</div>
+              <span className="text-sm text-navy dark:text-white">
+                <strong>Total Female:</strong> {dayTotals.female}
+              </span>
+              <span className="text-sm text-navy dark:text-white">
+                <strong>Grand Total:</strong>{" "}
+                <span className="text-lg">{dayTotals.total}</span>
+              </span>
             </div>
           </div>
         </div>

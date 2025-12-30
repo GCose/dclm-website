@@ -269,3 +269,44 @@ export interface SessionsAndAttendanceTabProps {
     attendanceRecords: AttendanceRecord[];
     onRefresh: () => void;
 }
+
+export interface CategorySessionTemplate {
+    sessionNumber: number;
+    startTime: string;
+    endTime: string;
+    name: string;
+}
+
+export interface CategorySessionConfig {
+    category: "Adult" | "Campus" | "Youth" | "Children";
+    sessionCount: number;
+    templates: CategorySessionTemplate[];
+}
+
+export interface SessionSetupState {
+    step: "counts" | "define";
+    configs: {
+        Adult: CategorySessionConfig;
+        Campus: CategorySessionConfig;
+        Youth: CategorySessionConfig;
+        Children: CategorySessionConfig;
+    };
+}
+
+export interface SessionCountsStepProps {
+    counts: Record<Category, number>;
+    onCountsChange: (counts: Record<Category, number>) => void;
+    onNext: () => void;
+}
+
+export interface CategorySessionDefineStepProps {
+    counts: Record<Category, number>;
+    categoryTemplates: Record<Category, CategorySessionTemplate[]>;
+    onTemplatesChange: (
+        category: Category,
+        templates: CategorySessionTemplate[]
+    ) => void;
+    onGenerate: () => void;
+    onBack: () => void;
+    generating: boolean;
+}
