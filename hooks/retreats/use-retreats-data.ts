@@ -9,11 +9,9 @@ export const useRetreatsData = (selectedRetreat: Retreat | null) => {
     const [sessions, setSessions] = useState<AttendanceSession[]>([]);
     const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
 
-
     const [retreatsPage, setRetreatsPage] = useState(1);
     const [retreatsTotalPages, setRetreatsTotalPages] = useState(1);
     const [retreatsTotal, setRetreatsTotal] = useState(0);
-
 
     const fetchRetreats = async (page: number) => {
         setLoading(true);
@@ -38,27 +36,44 @@ export const useRetreatsData = (selectedRetreat: Retreat | null) => {
     };
 
     const fetchSessions = async () => {
-        if (!selectedRetreat) return;
+        if (!selectedRetreat) {
+            setSessions([]);
+            return;
+        }
+
         try {
             const { data } = await axios.get(
                 `/api/attendance-sessions?retreatId=${selectedRetreat._id}`
             );
+
+            console.log('API Response:', data);
+
             const sessionsData = Array.isArray(data) ? data : data.sessions || [];
+
+            console.log('Parsed sessions:', sessionsData);
+            console.log('Sessions count:', sessionsData.length);
+
             setSessions(sessionsData);
         } catch (error: unknown) {
             console.error("Error fetching sessions:", error);
             toast.error("Failed to fetch sessions");
+            setSessions([]); // Clear sessions on error
         }
     };
 
     const fetchAttendanceRecords = async () => {
-        if (!selectedRetreat) return;
+        if (!selectedRetreat) {
+            setAttendanceRecords([]);
+            return;
+        }
+
         try {
             const { data } = await axios.get(`/api/attendance-records`);
             const recordsData = Array.isArray(data) ? data : data.records || [];
             setAttendanceRecords(recordsData);
         } catch (error: unknown) {
             console.error("Error fetching attendance records:", error);
+            setAttendanceRecords([]); // Clear records on error
         }
     };
 
@@ -67,6 +82,10 @@ export const useRetreatsData = (selectedRetreat: Retreat | null) => {
     }, [retreatsPage]);
 
     useEffect(() => {
+        // CRITICAL FIX: Clear sessions immediately when retreat changes
+        setSessions([]);
+        setAttendanceRecords([]);
+
         if (!selectedRetreat) return;
 
         const fetchRetreatData = async () => {
@@ -76,6 +95,9 @@ export const useRetreatsData = (selectedRetreat: Retreat | null) => {
                     axios.get(`/api/attendance-records`),
                 ]);
 
+                console.log('Sessions API response:', sessionsRes.data);
+                console.log('Records API response:', recordsRes.data);
+
                 const sessionsData = Array.isArray(sessionsRes.data)
                     ? sessionsRes.data
                     : sessionsRes.data.sessions || [];
@@ -83,11 +105,17 @@ export const useRetreatsData = (selectedRetreat: Retreat | null) => {
                     ? recordsRes.data
                     : recordsRes.data.records || [];
 
+                console.log('Final sessions data:', sessionsData);
+                console.log('Final sessions length:', sessionsData.length);
+
                 setSessions(sessionsData);
                 setAttendanceRecords(recordsData);
             } catch (error: unknown) {
                 console.error("Error fetching retreat data:", error);
                 toast.error("Failed to fetch retreat data");
+                // Keep state cleared on error
+                setSessions([]);
+                setAttendanceRecords([]);
             }
         };
 

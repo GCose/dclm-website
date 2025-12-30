@@ -75,12 +75,12 @@ const SessionSetupForm = ({ onGenerate }: SessionSetupFormProps) => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-8 rounded-lg">
+      <div className="bg-white dark:bg-navy/50">
         <h3 className="text-lg font-bold uppercase text-navy dark:text-white mb-6">
           Set Up Sessions for Retreat
         </h3>
 
-        <div className="mb-6">
+        <div className="mb-12">
           <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             How many sessions for this retreat? *
           </label>
@@ -94,10 +94,6 @@ const SessionSetupForm = ({ onGenerate }: SessionSetupFormProps) => {
             }
             className="w-full md:w-64 px-4 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
           />
-          <p className="text-xs text-black/60 dark:text-white/60 mt-1">
-            All categories will have {totalSessions} sessions. First and last
-            days will have special scheduling.
-          </p>
         </div>
 
         <div className="mb-6">

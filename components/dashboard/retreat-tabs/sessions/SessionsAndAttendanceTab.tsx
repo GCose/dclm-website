@@ -32,7 +32,21 @@ const SessionsAndAttendanceTab = ({
     id: string | null;
   }>({ isOpen: false, id: null });
 
-  const setupMode = sessions.length === 0;
+  // CRITICAL FIX: Filter sessions for CURRENT retreat only
+  const retreatSessions = sessions.filter((s) => s.retreatId === retreat._id);
+
+  const setupMode = retreatSessions.length === 0;
+
+  // DEBUG LOGGING
+  console.log("=== SessionsAndAttendanceTab Debug ===");
+  console.log("Retreat ID:", retreat._id);
+  console.log("Retreat Name:", retreat.year, retreat.type);
+  console.log("All sessions received:", sessions);
+  console.log("All sessions length:", sessions.length);
+  console.log("Filtered retreat sessions:", retreatSessions);
+  console.log("Retreat sessions length:", retreatSessions.length);
+  console.log("Setup mode:", setupMode);
+  console.log("======================================");
 
   const formatTime = (time: string) => {
     const [hours, minutes] = time.split(":");
@@ -94,14 +108,20 @@ const SessionsAndAttendanceTab = ({
         });
       }
 
+      console.log(
+        `Creating ${sessionsToCreate.length} sessions for retreat ${retreat._id}...`
+      );
+
       await Promise.all(
         sessionsToCreate.map((session) =>
           axios.post("/api/attendance-sessions", session)
         )
       );
 
-      toast.success("Sessions generated successfully");
-      onRefresh();
+      toast.success(
+        `Generated ${sessionsToCreate.length} sessions successfully`
+      );
+      await onRefresh();
     } catch (error: unknown) {
       console.error("Error generating sessions:", error);
       toast.error("Failed to generate sessions");
@@ -114,7 +134,7 @@ const SessionsAndAttendanceTab = ({
         records.map((record) => axios.post("/api/attendance-records", record))
       );
       toast.success("Attendance saved successfully");
-      onRefresh();
+      await onRefresh();
     } catch (error: unknown) {
       console.error("Error saving attendance:", error);
       toast.error("Failed to save attendance");
@@ -133,7 +153,7 @@ const SessionsAndAttendanceTab = ({
     try {
       await axios.patch(`/api/attendance-sessions/${sessionId}`, updates);
       toast.success("Session updated successfully");
-      onRefresh();
+      await onRefresh();
     } catch (error: unknown) {
       console.error("Error updating session:", error);
       toast.error("Failed to update session");
@@ -151,7 +171,7 @@ const SessionsAndAttendanceTab = ({
       await axios.delete(`/api/attendance-sessions/${deleteConfirm.id}`);
       toast.success("Session deleted successfully");
       setDeleteConfirm({ isOpen: false, id: null });
-      onRefresh();
+      await onRefresh();
     } catch (error: unknown) {
       console.error("Error deleting session:", error);
       toast.error("Failed to delete session");
@@ -176,7 +196,8 @@ const SessionsAndAttendanceTab = ({
               Sessions & Attendance
             </h2>
             <p className="text-sm text-black/60 dark:text-white/60 mt-1">
-              {retreat.year} {retreat.type} Retreat - {retreat.totalDays} Days
+              {retreat.year} {retreat.type} Retreat - {retreat.totalDays} Days -{" "}
+              {retreatSessions.length} Sessions
             </p>
           </div>
 
@@ -195,7 +216,7 @@ const SessionsAndAttendanceTab = ({
         <CategoryAttendanceTable
           category={selectedCategory}
           day={selectedDay}
-          sessions={sessions}
+          sessions={retreatSessions}
           attendanceRecords={attendanceRecords}
           onSaveAttendance={handleSaveAttendance}
           onEditSession={handleEditSession}
