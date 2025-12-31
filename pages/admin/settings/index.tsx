@@ -19,13 +19,39 @@ const Settings = () => {
           <h1 className="text-[clamp(1.5rem,5vw,2rem)] font-bold uppercase text-navy dark:text-white mb-2">
             Settings
           </h1>
-          <p className="text-sm text-black/60 dark:text-white/60">
-            Manage your account and preferences
-          </p>
         </div>
 
-        <div className="flex gap-8">
-          <div className="w-48 space-y-2 border-r dark:border-white/40 pr-4">
+        <div className="md:hidden border-b border-black/10 dark:border-white/10">
+          <div className="flex gap-2">
+            <button
+              onClick={() => setActiveTab("profile")}
+              className={`flex items-center gap-2 px-4 py-3 border-b-2 transition-colors cursor-pointer ${
+                activeTab === "profile"
+                  ? "border-navy dark:border-white text-navy dark:text-white font-bold"
+                  : "border-transparent text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white"
+              }`}
+            >
+              <User size={18} />
+              <span className="text-sm uppercase tracking-wider">Profile</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("appearance")}
+              className={`flex items-center gap-2 px-4 py-3 border-b-2 transition-colors cursor-pointer ${
+                activeTab === "appearance"
+                  ? "border-navy dark:border-white text-navy dark:text-white font-bold"
+                  : "border-transparent text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white"
+              }`}
+            >
+              <Palette size={18} />
+              <span className="text-sm uppercase tracking-wider">
+                Appearance
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div className="md:flex gap-8">
+          <div className="hidden md:block w-48 space-y-2 border-r dark:border-white/40 pr-4">
             <button
               onClick={() => setActiveTab("profile")}
               className={`w-full flex items-center rounded-sm gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors cursor-pointer ${
@@ -52,7 +78,7 @@ const Settings = () => {
             </button>
           </div>
 
-          <div className="flex-1">
+          <div className="flex-1 mt-6 md:mt-0">
             {activeTab === "profile" && <ProfileTab />}
             {activeTab === "appearance" && <AppearanceTab />}
           </div>

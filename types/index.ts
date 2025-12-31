@@ -141,6 +141,7 @@ export type SessionDetailsItem = {
     male: number;
     female: number;
     total: number;
+    isGSMessage: boolean;
 };
 
 export interface jsPDFWithAutoTable extends jsPDF {

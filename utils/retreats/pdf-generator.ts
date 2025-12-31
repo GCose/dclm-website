@@ -2,45 +2,44 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { jsPDFWithAutoTable } from "@/types";
 import { ReportData } from "@/types/interface/report";
-import { getDateRange } from "@/utils/retreats/report-helpers";
 
 const generateRetreatPDF = async (reportData: ReportData) => {
     const doc = new jsPDF() as jsPDFWithAutoTable;
     const pageWidth = doc.internal.pageSize.getWidth();
     let yPosition = 20;
 
+    try {
+        const logoImg = new Image();
+        logoImg.src = "/limages/logo.png";
+        await new Promise((resolve, reject) => {
+            logoImg.onload = resolve;
+            logoImg.onerror = reject;
+        });
+        doc.addImage(logoImg, "PNG", pageWidth / 2 - 15, yPosition, 30, 30);
+        yPosition += 35;
+    } catch (error) {
+        console.error("Error loading logo:", error);
+    }
+
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
+    doc.setFontSize(14);
     doc.text("DEEPER CHRISTIAN LIFE MINISTRY", pageWidth / 2, yPosition, { align: "center" });
 
-    yPosition += 7;
-    doc.setFontSize(14);
+    yPosition += 6;
+    doc.setFontSize(12);
     doc.text("WEST COAST REGION", pageWidth / 2, yPosition, { align: "center" });
 
-    yPosition += 7;
+    yPosition += 6;
     doc.text("BRIKAMA TOWN, THE GAMBIA", pageWidth / 2, yPosition, { align: "center" });
 
-    yPosition += 12;
-    doc.setFontSize(18);
+    yPosition += 8;
+    doc.setFontSize(16);
     doc.text(
         `${reportData.retreat.year} ${reportData.retreat.type.toUpperCase()} RETREAT`,
         pageWidth / 2,
         yPosition,
         { align: "center" }
     );
-
-    yPosition += 10;
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.text(getDateRange(reportData.retreat.dateFrom, reportData.retreat.dateTo), pageWidth / 2, yPosition, { align: "center" });
-
-    yPosition += 5;
-    doc.text(`Venue: ${reportData.retreat.venue}`, pageWidth / 2, yPosition, { align: "center" });
-
-    if (reportData.retreat.theme) {
-        yPosition += 5;
-        doc.text(`Theme: ${reportData.retreat.theme}`, pageWidth / 2, yPosition, { align: "center" });
-    }
 
     yPosition += 15;
 
@@ -58,7 +57,7 @@ const generateRetreatPDF = async (reportData: ReportData) => {
             ["Female", reportData.registrationSummary.female.toString(), `${reportData.registrationSummary.femalePercentage}%`],
         ],
         theme: "grid",
-        headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: "bold" },
+        headStyles: { fillColor: [29, 40, 97], textColor: 255, fontStyle: "bold" },
         styles: { fontSize: 10 },
     });
 
@@ -78,7 +77,7 @@ const generateRetreatPDF = async (reportData: ReportData) => {
             `${item.percentage}%`,
         ]),
         theme: "grid",
-        headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: "bold" },
+        headStyles: { fillColor: [29, 40, 97], textColor: 255, fontStyle: "bold" },
         styles: { fontSize: 10 },
     });
 
@@ -103,7 +102,7 @@ const generateRetreatPDF = async (reportData: ReportData) => {
             `${item.percentage}%`,
         ]),
         theme: "grid",
-        headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: "bold" },
+        headStyles: { fillColor: [29, 40, 97], textColor: 255, fontStyle: "bold" },
         styles: { fontSize: 10 },
     });
 
@@ -128,7 +127,7 @@ const generateRetreatPDF = async (reportData: ReportData) => {
             `${item.percentage}%`,
         ]),
         theme: "grid",
-        headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: "bold" },
+        headStyles: { fillColor: [29, 40, 97], textColor: 255, fontStyle: "bold" },
         styles: { fontSize: 10 },
     });
 
@@ -153,7 +152,7 @@ const generateRetreatPDF = async (reportData: ReportData) => {
             `${item.percentage}%`,
         ]),
         theme: "grid",
-        headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: "bold" },
+        headStyles: { fillColor: [29, 40, 97], textColor: 255, fontStyle: "bold" },
         styles: { fontSize: 10 },
     });
 
@@ -179,7 +178,7 @@ const generateRetreatPDF = async (reportData: ReportData) => {
             item.total.toString(),
         ]),
         theme: "grid",
-        headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: "bold" },
+        headStyles: { fillColor: [29, 40, 97], textColor: 255, fontStyle: "bold" },
         styles: { fontSize: 10 },
     });
 
@@ -209,7 +208,7 @@ const generateRetreatPDF = async (reportData: ReportData) => {
                 item.total.toString(),
             ]),
             theme: "grid",
-            headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: "bold" },
+            headStyles: { fillColor: [29, 40, 97], textColor: 255, fontStyle: "bold" },
             styles: { fontSize: 9 },
         });
 
@@ -236,11 +235,67 @@ const generateRetreatPDF = async (reportData: ReportData) => {
                 ["Total", reportData.attendanceData.averageAttendance.total.toString()],
             ],
             theme: "grid",
-            headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: "bold" },
+            headStyles: { fillColor: [29, 40, 97], textColor: 255, fontStyle: "bold" },
             styles: { fontSize: 10 },
         });
 
         if (reportData.attendanceData.sessionDetails.length > 0) {
+            const gsSessions = reportData.attendanceData.sessionDetails.filter(
+                session => session.isGSMessage
+            );
+
+            if (gsSessions.length > 0) {
+                doc.addPage();
+                yPosition = 20;
+
+                const gsCategories = ["Adult", "Campus", "Youth", "Children"];
+
+                gsCategories.forEach((category, index) => {
+                    const categorySessions = gsSessions.filter(
+                        session => session.category === category
+                    );
+
+                    if (categorySessions.length === 0) return;
+
+                    if (index > 0) {
+                        yPosition = doc.lastAutoTable.finalY + 15;
+                        if (yPosition > 240) {
+                            doc.addPage();
+                            yPosition = 20;
+                        }
+                    }
+
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(12);
+                    const categoryTitle = `${category.toUpperCase()} CHURCH - GS MESSAGE ATTENDANCE`;
+                    doc.text(categoryTitle, 14, yPosition);
+                    yPosition += 7;
+
+                    autoTable(doc, {
+                        startY: yPosition,
+                        head: [["Day", "Session Name", "Time", "Male", "Female", "Total"]],
+                        body: categorySessions.map(item => [
+                            item.day.toString(),
+                            item.sessionName,
+                            item.sessionTime,
+                            item.male.toString(),
+                            item.female.toString(),
+                            item.total.toString(),
+                        ]),
+                        theme: "grid",
+                        headStyles: { fillColor: [29, 40, 97], textColor: 255, fontStyle: "bold" },
+                        styles: { fontSize: 9 },
+                    });
+
+                    const categoryTotal = categorySessions.reduce((sum, session) => sum + session.total, 0);
+                    yPosition = doc.lastAutoTable.finalY + 5;
+
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(10);
+                    doc.text(`${category} Church Total GS Attendance: ${categoryTotal}`, 14, yPosition);
+                });
+            }
+
             doc.addPage();
             yPosition = 20;
 
@@ -279,7 +334,7 @@ const generateRetreatPDF = async (reportData: ReportData) => {
                         item.total.toString(),
                     ]),
                     theme: "grid",
-                    headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: "bold" },
+                    headStyles: { fillColor: [29, 40, 97], textColor: 255, fontStyle: "bold" },
                     styles: { fontSize: 9 },
                 });
             });

@@ -228,6 +228,33 @@ const OverviewTab = ({
     },
   ];
 
+  const gsSessions =
+    reportData.attendanceData?.sessionDetails.filter(
+      (session) => session.isGSMessage
+    ) || [];
+
+  const gsCategories = ["Adult", "Campus", "Youth", "Children"];
+
+  const categoryTotal = reportData.categoryBreakdown.reduce(
+    (sum, item) => sum + item.count,
+    0
+  );
+
+  const nationalityTotal = reportData.nationalityBreakdown.reduce(
+    (sum, item) => sum + item.count,
+    0
+  );
+
+  const locationTotal = reportData.locationBreakdown.reduce(
+    (sum, item) => sum + item.count,
+    0
+  );
+
+  const typeTotal = reportData.typeBreakdown.reduce(
+    (sum, item) => sum + item.count,
+    0
+  );
+
   return (
     <div className="space-y-10">
       <div className="flex flex-col md:flex-row justify-between items-start">
@@ -267,9 +294,15 @@ const OverviewTab = ({
       </div>
 
       <div className="bg-white dark:bg-navy/50 rounded-lg">
-        <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white mb-4">
-          Registration by Category
-        </h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white">
+            Registration by Category
+          </h3>
+          <div className="text-sm text-navy dark:text-white">
+            <span className="font-bold">Total:</span>{" "}
+            <span className="text-lg font-bold">{categoryTotal}</span>
+          </div>
+        </div>
         <Table
           columns={categoryColumns}
           data={reportData.categoryBreakdown}
@@ -278,9 +311,15 @@ const OverviewTab = ({
       </div>
 
       <div className="bg-white dark:bg-navy/50 rounded-lg">
-        <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white mb-4">
-          Registration by Nationality
-        </h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white">
+            Registration by Nationality
+          </h3>
+          <div className="text-sm text-navy dark:text-white">
+            <span className="font-bold">Total:</span>{" "}
+            <span className="text-lg font-bold">{nationalityTotal}</span>
+          </div>
+        </div>
         <Table
           columns={nationalityColumns}
           data={reportData.nationalityBreakdown}
@@ -289,9 +328,15 @@ const OverviewTab = ({
       </div>
 
       <div className="bg-white dark:bg-navy/50 rounded-lg">
-        <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white mb-4">
-          Registration by Location
-        </h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white">
+            Registration by Location
+          </h3>
+          <div className="text-sm text-navy dark:text-white">
+            <span className="font-bold">Total:</span>{" "}
+            <span className="text-lg font-bold">{locationTotal}</span>
+          </div>
+        </div>
         <Table
           columns={locationColumns}
           data={reportData.locationBreakdown}
@@ -300,9 +345,15 @@ const OverviewTab = ({
       </div>
 
       <div className="bg-white dark:bg-navy/50 rounded-lg">
-        <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white mb-4">
-          Registration by Type
-        </h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white">
+            Registration by Type
+          </h3>
+          <div className="text-sm text-navy dark:text-white">
+            <span className="font-bold">Total:</span>{" "}
+            <span className="text-lg font-bold">{typeTotal}</span>
+          </div>
+        </div>
         <Table
           columns={typeColumns}
           data={reportData.typeBreakdown}
@@ -345,6 +396,47 @@ const OverviewTab = ({
             />
           </div>
 
+          {gsSessions.length > 0 && (
+            <>
+              {gsCategories.map((category) => {
+                const categorySessions = gsSessions.filter(
+                  (session) => session.category === category
+                );
+
+                if (categorySessions.length === 0) return null;
+
+                const gsCategoryTotal = categorySessions.reduce(
+                  (sum, session) => sum + session.total,
+                  0
+                );
+
+                return (
+                  <div
+                    key={category}
+                    className="bg-white dark:bg-navy/50 rounded-lg"
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white">
+                        {category} Church - GS Message Attendance
+                      </h3>
+                      <div className="text-sm text-navy dark:text-white">
+                        <span className="font-bold">Total:</span>{" "}
+                        <span className="text-lg font-bold">
+                          {gsCategoryTotal}
+                        </span>
+                      </div>
+                    </div>
+                    <Table
+                      columns={sessionDetailsColumns}
+                      data={categorySessions}
+                      emptyMessage={`No GS sessions for ${category}`}
+                    />
+                  </div>
+                );
+              })}
+            </>
+          )}
+
           {reportData.attendanceData.sessionDetails.length > 0 && (
             <>
               {["Adult", "Campus", "Youth", "Children"].map((category) => {
@@ -355,14 +447,27 @@ const OverviewTab = ({
 
                 if (categorySessions.length === 0) return null;
 
+                const sessionCategoryTotal = categorySessions.reduce(
+                  (sum, session) => sum + session.total,
+                  0
+                );
+
                 return (
                   <div
                     key={category}
                     className="bg-white dark:bg-navy/50 rounded-lg"
                   >
-                    <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white mb-4">
-                      {category} Church - Session Attendance
-                    </h3>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white">
+                        {category} Church - Session Attendance
+                      </h3>
+                      <div className="text-sm text-navy dark:text-white">
+                        <span className="font-bold">Total:</span>{" "}
+                        <span className="text-lg font-bold">
+                          {sessionCategoryTotal}
+                        </span>
+                      </div>
+                    </div>
                     <Table
                       columns={sessionDetailsColumns}
                       data={categorySessions}
