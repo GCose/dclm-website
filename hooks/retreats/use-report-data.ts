@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import useSWR from "swr";
 import axios from "axios";
-import { toast } from "sonner";
+import { useMemo } from "react";
 import { ReportData, UseReportDataParams } from "@/types/interface/report";
 import { Registration, AttendanceSession, AttendanceRecord } from "@/types/interface/dashboard";
 import {
@@ -14,10 +14,12 @@ import {
     calculateAverageAttendance,
 } from "@/utils/retreats/report-helpers";
 
-export const useReportData = (retreat: UseReportDataParams | null) => {
-    const [reportData, setReportData] = useState<ReportData | null>(null);
-    const [loading, setLoading] = useState(true);
+const fetcher = async (url: string) => {
+    const { data } = await axios.get(url);
+    return data;
+};
 
+export const useReportData = (retreat: UseReportDataParams | null) => {
     const retreatId = retreat?.retreatId;
     const year = retreat?.year;
     const type = retreat?.type;
@@ -27,87 +29,142 @@ export const useReportData = (retreat: UseReportDataParams | null) => {
     const theme = retreat?.theme;
     const totalDays = retreat?.totalDays;
 
-    useEffect(() => {
-        if (!retreatId) {
-            setReportData(null);
-            setLoading(false);
-            return;
+    const registrationsKey = retreatId
+        ? `/api/registrations?retreatId=${retreatId}&limit=1000`
+        : null;
+
+    const sessionsKey = retreatId
+        ? `/api/attendance-sessions?retreatId=${retreatId}`
+        : null;
+
+    const recordsKey = retreatId ? "/api/attendance-records" : null;
+
+    const { data: registrationsData, error: registrationsError } = useSWR(
+        registrationsKey,
+        fetcher,
+        {
+            revalidateOnFocus: false,
+            revalidateOnReconnect: true,
+        }
+    );
+
+    const { data: sessionsData, error: sessionsError } = useSWR(
+        sessionsKey,
+        fetcher,
+        {
+            revalidateOnFocus: false,
+            revalidateOnReconnect: true,
+        }
+    );
+
+    const { data: recordsData, error: recordsError } = useSWR(
+        recordsKey,
+        fetcher,
+        {
+            revalidateOnFocus: false,
+            revalidateOnReconnect: true,
+        }
+    );
+
+    const loading =
+        !registrationsData || !sessionsData || !recordsData;
+
+    const hasError = registrationsError || sessionsError || recordsError;
+
+    const reportData = useMemo(() => {
+        if (!retreat || !registrationsData || !sessionsData || !recordsData) {
+            return null;
         }
 
-        const fetchReportData = async () => {
-            setLoading(true);
-            try {
-                const [registrationsRes, sessionsRes, recordsRes] = await Promise.all([
-                    axios.get(`/api/registrations?retreatId=${retreatId}&limit=1000`),
-                    axios.get(`/api/attendance-sessions?retreatId=${retreatId}`),
-                    axios.get(`/api/attendance-records`),
-                ]);
+        const registrations: Registration[] = Array.isArray(
+            registrationsData.registrations
+        )
+            ? registrationsData.registrations
+            : [];
 
-                const registrations: Registration[] = Array.isArray(registrationsRes.data.registrations)
-                    ? registrationsRes.data.registrations
-                    : [];
+        const sessions: AttendanceSession[] = Array.isArray(
+            sessionsData.sessions
+        )
+            ? sessionsData.sessions
+            : sessionsData.sessions || [];
 
-                const sessions: AttendanceSession[] = Array.isArray(sessionsRes.data.sessions)
-                    ? sessionsRes.data.sessions
-                    : sessionsRes.data.sessions || [];
+        const allRecords: AttendanceRecord[] = Array.isArray(
+            recordsData.records
+        )
+            ? recordsData.records
+            : recordsData.records || [];
 
-                const allRecords: AttendanceRecord[] = Array.isArray(recordsRes.data.records)
-                    ? recordsRes.data.records
-                    : recordsRes.data.records || [];
+        const attendanceRecords = allRecords.filter((record) =>
+            sessions.some((session) => session._id === record.sessionId)
+        );
 
-                const attendanceRecords = allRecords.filter(record =>
-                    sessions.some(session => session._id === record.sessionId)
-                );
+        const total = registrations.length;
+        const male = registrations.filter((r) => r.gender === "Male").length;
+        const female = registrations.filter((r) => r.gender === "Female").length;
 
-                const total = registrations.length;
-                const male = registrations.filter(r => r.gender === "Male").length;
-                const female = registrations.filter(r => r.gender === "Female").length;
+        const dailyAttendanceStats =
+            sessions.length > 0 && totalDays
+                ? calculateDailyAttendance(sessions, attendanceRecords, totalDays)
+                : [];
 
-                const dailyAttendanceStats = sessions.length > 0 && totalDays
-                    ? calculateDailyAttendance(sessions, attendanceRecords, totalDays)
-                    : [];
-
-                const report: ReportData = {
-                    retreat: {
-                        year: year || 0,
-                        type: type || "Easter",
-                        dateFrom: dateFrom || "",
-                        dateTo: dateTo || "",
-                        venue: venue || "",
-                        theme: theme,
-                        totalDays: totalDays || 0,
-                    },
-                    registrationSummary: {
-                        total,
-                        male,
-                        female,
-                        malePercentage: total > 0 ? Math.round((male / total) * 100) : 0,
-                        femalePercentage: total > 0 ? Math.round((female / total) * 100) : 0,
-                    },
-                    categoryBreakdown: calculateCategoryBreakdown(registrations),
-                    nationalityBreakdown: calculateNationalityBreakdown(registrations),
-                    locationBreakdown: calculateLocationBreakdown(registrations),
-                    typeBreakdown: calculateTypeBreakdown(registrations),
-                    dailyRegistrations: calculateDailyRegistrations(registrations, totalDays || 0),
-                    attendanceData: sessions.length > 0 ? {
+        const report: ReportData = {
+            retreat: {
+                year: year || 0,
+                type: type || "Easter",
+                dateFrom: dateFrom || "",
+                dateTo: dateTo || "",
+                venue: venue || "",
+                theme: theme,
+                totalDays: totalDays || 0,
+            },
+            registrationSummary: {
+                total,
+                male,
+                female,
+                malePercentage: total > 0 ? Math.round((male / total) * 100) : 0,
+                femalePercentage:
+                    total > 0 ? Math.round((female / total) * 100) : 0,
+            },
+            categoryBreakdown: calculateCategoryBreakdown(registrations),
+            nationalityBreakdown: calculateNationalityBreakdown(registrations),
+            locationBreakdown: calculateLocationBreakdown(registrations),
+            typeBreakdown: calculateTypeBreakdown(registrations),
+            dailyRegistrations: calculateDailyRegistrations(
+                registrations,
+                totalDays || 0
+            ),
+            attendanceData:
+                sessions.length > 0
+                    ? {
                         dailyAttendance: dailyAttendanceStats,
-                        sessionDetails: calculateSessionDetails(sessions, attendanceRecords),
-                        averageAttendance: calculateAverageAttendance(dailyAttendanceStats),
-                    } : undefined,
-                };
-
-                setReportData(report);
-            } catch (error) {
-                console.error("Error fetching report data:", error);
-                toast.error("Failed to load report data");
-                setReportData(null);
-            } finally {
-                setLoading(false);
-            }
+                        sessionDetails: calculateSessionDetails(
+                            sessions,
+                            attendanceRecords
+                        ),
+                        averageAttendance:
+                            calculateAverageAttendance(dailyAttendanceStats),
+                    }
+                    : undefined,
         };
 
-        fetchReportData();
-    }, [retreatId, year, type, dateFrom, dateTo, venue, theme, totalDays]);
+        return report;
+    }, [
+        retreat,
+        registrationsData,
+        sessionsData,
+        recordsData,
+        year,
+        type,
+        dateFrom,
+        dateTo,
+        venue,
+        theme,
+        totalDays,
+    ]);
 
-    return { reportData, loading };
+    return {
+        reportData,
+        loading,
+        error: hasError ? "Failed to load report data" : null,
+    };
 };

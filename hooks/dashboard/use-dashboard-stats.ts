@@ -1,31 +1,28 @@
+import useSWR from "swr";
 import axios from "axios";
-import { useState, useEffect } from "react";
 import { DashboardStats } from "@/types/interface/dashboard";
 
+const fetcher = async (url: string): Promise<DashboardStats> => {
+    const { data } = await axios.get(url);
+    return data;
+};
+
 const useDashboardStats = () => {
-    const [stats, setStats] = useState<DashboardStats | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { data, error, isLoading, mutate } = useSWR<DashboardStats>(
+        "/api/dashboard/stats",
+        fetcher,
+        {
+            revalidateOnFocus: false,
+            revalidateOnReconnect: true,
+        }
+    );
 
-    useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                setLoading(true);
-                const response = await axios.get("/api/dashboard/stats");
-                setStats(response.data);
-                setError(null);
-            } catch (err) {
-                console.error("Error fetching dashboard stats:", err);
-                setError("Failed to load dashboard stats");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchStats();
-    }, []);
-
-    return { stats, loading, error };
+    return {
+        stats: data || null,
+        loading: isLoading,
+        error: error ? "Failed to load dashboard stats" : null,
+        refresh: mutate,
+    };
 };
 
 export default useDashboardStats;

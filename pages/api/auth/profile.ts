@@ -14,15 +14,16 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
             }
 
             return res.status(200).json({
+                name: admin.name,
                 email: admin.email,
             });
         }
 
         if (req.method === "PUT") {
-            const { email } = req.body;
+            const { name, email } = req.body;
 
-            if (!email) {
-                return res.status(400).json({ error: "Email is required" });
+            if (!name || !email) {
+                return res.status(400).json({ error: "Name and email are required" });
             }
 
             if (email !== req.user?.email) {
@@ -34,7 +35,7 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
 
             const admin = await Admin.findOneAndUpdate(
                 { email: req.user?.email },
-                { email },
+                { name, email },
                 { new: true, runValidators: true }
             ).select("-password");
 
@@ -43,6 +44,7 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
             }
 
             return res.status(200).json({
+                name: admin.name,
                 email: admin.email,
             });
         }

@@ -200,7 +200,7 @@ const CategoryAttendanceTable = ({
           } on Day ${day}`}
         />
 
-        <div className="border-b border-navy/10 dark:border-white/20 px-4 py-4">
+        <div className="border-y border-navy/10 dark:border-white/20 px-4 py-4">
           <div className="flex items-center justify-between">
             <span className="font-bold uppercase text-navy dark:text-white text-base">
               Day {day} Totals

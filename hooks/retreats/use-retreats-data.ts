@@ -1,153 +1,117 @@
+import useSWR from "swr";
 import axios from "axios";
 import { toast } from "sonner";
-import { useState, useEffect } from "react";
-import { Retreat, AttendanceSession, AttendanceRecord, RetreatFilters } from "@/types/interface/dashboard";
+import { useMemo } from "react";
+import { RecordsResponse, Retreat, RetreatFilters, RetreatsResponse, SessionsResponse } from "@/types/interface/dashboard";
 
-export const useRetreatsData = (selectedRetreat: Retreat | null, filters?: RetreatFilters) => {
-    const [retreats, setRetreats] = useState<Retreat[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [sessions, setSessions] = useState<AttendanceSession[]>([]);
-    const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
+const fetcher = async (url: string) => {
+    const { data } = await axios.get(url);
+    return data;
+};
 
-    const [retreatsPage, setRetreatsPage] = useState(1);
-    const [retreatsTotalPages, setRetreatsTotalPages] = useState(1);
-    const [retreatsTotal, setRetreatsTotal] = useState(0);
-    const [uniqueYears, setUniqueYears] = useState<number[]>([]);
+export const useRetreatsData = (
+    selectedRetreat: Retreat | null,
+    filters?: RetreatFilters,
+    page: number = 1
+) => {
+    const retreatsParams = new URLSearchParams({
+        page: String(page),
+        limit: "20",
+    });
 
-    const fetchRetreats = async (page: number) => {
-        setLoading(true);
-        try {
-            const params = new URLSearchParams({
-                page: String(page),
-                limit: "20",
-            });
+    if (filters?.year) retreatsParams.append("year", filters.year);
+    if (filters?.type) retreatsParams.append("type", filters.type);
 
-            if (filters?.year) params.append("year", filters.year);
-            if (filters?.type) params.append("type", filters.type);
+    const retreatsKey = `/api/retreats?${retreatsParams.toString()}`;
 
-            const { data } = await axios.get(`/api/retreats?${params.toString()}`);
-            const retreatsData = Array.isArray(data.retreats)
-                ? data.retreats
-                : data.retreats || [];
-            setRetreats(retreatsData);
-
-            if (data.pagination) {
-                setRetreatsTotal(data.pagination.total);
-                setRetreatsTotalPages(data.pagination.totalPages);
-            }
-
-            const years = Array.from(new Set<number>(retreatsData.map((r: Retreat) => r.year))).sort((a: number, b: number) => b - a);
-            setUniqueYears(years);
-        } catch (error: unknown) {
+    const {
+        data: retreatsData,
+        isLoading: retreatsLoading,
+        mutate: mutateRetreats,
+    } = useSWR<RetreatsResponse>(retreatsKey, fetcher, {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: true,
+        onError: (error) => {
             console.error("Error fetching retreats:", error);
             toast.error("Failed to fetch retreats");
-            setRetreats([]);
-        } finally {
-            setLoading(false);
-        }
-    };
+        },
+    });
 
-    const fetchSessions = async () => {
-        if (!selectedRetreat) {
-            setSessions([]);
-            return;
-        }
+    const sessionsKey = selectedRetreat
+        ? `/api/attendance-sessions?retreatId=${selectedRetreat._id}`
+        : null;
 
-        try {
-            const { data } = await axios.get(
-                `/api/attendance-sessions?retreatId=${selectedRetreat._id}`
-            );
-
-            console.log('API Response:', data);
-
-            const sessionsData = Array.isArray(data) ? data : data.sessions || [];
-
-            console.log('Parsed sessions:', sessionsData);
-            console.log('Sessions count:', sessionsData.length);
-
-            setSessions(sessionsData);
-        } catch (error: unknown) {
+    const {
+        data: sessionsData,
+        mutate: mutateSessions,
+    } = useSWR<SessionsResponse>(sessionsKey, fetcher, {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: true,
+        onError: (error) => {
             console.error("Error fetching sessions:", error);
             toast.error("Failed to fetch sessions");
-            setSessions([]);
-        }
-    };
+        },
+    });
 
-    const fetchAttendanceRecords = async () => {
-        if (!selectedRetreat) {
-            setAttendanceRecords([]);
-            return;
-        }
+    const recordsKey = selectedRetreat ? "/api/attendance-records" : null;
 
-        try {
-            const { data } = await axios.get(`/api/attendance-records`);
-            const recordsData = Array.isArray(data) ? data : data.records || [];
-            setAttendanceRecords(recordsData);
-        } catch (error: unknown) {
+    const {
+        data: recordsData,
+        mutate: mutateRecords,
+    } = useSWR<RecordsResponse>(recordsKey, fetcher, {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: true,
+        onError: (error) => {
             console.error("Error fetching attendance records:", error);
-            setAttendanceRecords([]);
+        },
+    });
+
+    const retreats = useMemo(() => {
+        if (Array.isArray(retreatsData?.retreats)) {
+            return retreatsData.retreats;
         }
-    };
+        return [];
+    }, [retreatsData]);
 
-    useEffect(() => {
-        fetchRetreats(retreatsPage);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [retreatsPage, filters?.year, filters?.type]);
+    const uniqueYears = useMemo(() => {
+        const years = Array.from(
+            new Set<number>(retreats.map((r: Retreat) => r.year))
+        ).sort((a: number, b: number) => b - a);
+        return years;
+    }, [retreats]);
 
-    useEffect(() => {
-        setSessions([]);
-        setAttendanceRecords([]);
+    const sessions = useMemo(() => {
+        if (!sessionsData) return [];
+        const data = Array.isArray(sessionsData)
+            ? sessionsData
+            : sessionsData.sessions || [];
+        return data;
+    }, [sessionsData]);
 
-        if (!selectedRetreat) return;
-
-        const fetchRetreatData = async () => {
-            try {
-                const [sessionsRes, recordsRes] = await Promise.all([
-                    axios.get(`/api/attendance-sessions?retreatId=${selectedRetreat._id}`),
-                    axios.get(`/api/attendance-records`),
-                ]);
-
-                console.log('Sessions API response:', sessionsRes.data);
-                console.log('Records API response:', recordsRes.data);
-
-                const sessionsData = Array.isArray(sessionsRes.data)
-                    ? sessionsRes.data
-                    : sessionsRes.data.sessions || [];
-                const recordsData = Array.isArray(recordsRes.data)
-                    ? recordsRes.data
-                    : recordsRes.data.records || [];
-
-                console.log('Final sessions data:', sessionsData);
-                console.log('Final sessions length:', sessionsData.length);
-
-                setSessions(sessionsData);
-                setAttendanceRecords(recordsData);
-            } catch (error: unknown) {
-                console.error("Error fetching retreat data:", error);
-                toast.error("Failed to fetch retreat data");
-                setSessions([]);
-                setAttendanceRecords([]);
-            }
-        };
-
-        fetchRetreatData();
-    }, [selectedRetreat]);
+    const attendanceRecords = useMemo(() => {
+        if (!recordsData) return [];
+        const data = Array.isArray(recordsData)
+            ? recordsData
+            : recordsData.records || [];
+        return data;
+    }, [recordsData]);
 
     return {
         retreats,
-        setRetreats,
-        loading,
-        retreatsPage,
-        setRetreatsPage,
-        retreatsTotalPages,
-        retreatsTotal,
+        loading: retreatsLoading,
+        retreatsPage: retreatsData?.pagination?.page || page,
+        retreatsTotalPages: retreatsData?.pagination?.totalPages || 1,
+        retreatsTotal: retreatsData?.pagination?.total || 0,
         uniqueYears,
         sessions,
-        setSessions,
         attendanceRecords,
-        setAttendanceRecords,
-        fetchRetreats,
-        fetchSessions,
-        fetchAttendanceRecords,
+        fetchRetreats: mutateRetreats,
+        fetchSessions: mutateSessions,
+        fetchAttendanceRecords: mutateRecords,
+        refreshAll: () => {
+            mutateRetreats();
+            mutateSessions();
+            mutateRecords();
+        },
     };
 };

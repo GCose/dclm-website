@@ -1,20 +1,34 @@
+import useSWR from "swr";
 import axios from "axios";
+import { useState } from "react";
 import { Toaster, toast } from "sonner";
 import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
-import { useState, useEffect } from "react";
 import Table from "@/components/dashboard/tables/Table";
-import { Admin, AdminForm } from "@/types/interface/dashboard";
 import EditAdminModal from "@/components/dashboard/modals/EditAdminModal";
 import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
+import { Admin, AdminForm, AdminsResponse } from "@/types/interface/dashboard";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 
+const fetcher = async (url: string): Promise<AdminsResponse> => {
+  const { data } = await axios.get(url);
+  return data;
+};
+
 const Admins = () => {
-  const [admins, setAdmins] = useState<Admin[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, error, isLoading, mutate } = useSWR<AdminsResponse>(
+    "/api/admins",
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: true,
+    }
+  );
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingAdmin, setEditingAdmin] = useState<Admin | null>(null);
   const [adminForm, setAdminForm] = useState<AdminForm>({
+    name: "",
     email: "",
   });
 
@@ -23,22 +37,7 @@ const Admins = () => {
     id: string | null;
   }>({ isOpen: false, id: null });
 
-  const fetchAdmins = async () => {
-    setLoading(true);
-    try {
-      const { data } = await axios.get("/api/admins");
-      setAdmins(data.admins || []);
-    } catch (error: unknown) {
-      console.error("Error fetching admins:", error);
-      toast.error("Failed to fetch admins");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchAdmins();
-  }, []);
+  const admins = data?.admins || [];
 
   const handleUpdateAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,8 +48,8 @@ const Admins = () => {
       toast.success("Admin updated successfully");
       setShowEditModal(false);
       setEditingAdmin(null);
-      setAdminForm({ email: "" });
-      fetchAdmins();
+      setAdminForm({ name: "", email: "" });
+      mutate();
     } catch (error: unknown) {
       console.error("Error updating admin:", error);
       if (axios.isAxiosError(error) && error.response?.data?.error) {
@@ -67,7 +66,7 @@ const Admins = () => {
     try {
       await axios.delete(`/api/admins/${deleteConfirm.id}`);
       toast.success("Admin deleted successfully");
-      fetchAdmins();
+      mutate();
     } catch (error: unknown) {
       console.error("Error deleting admin:", error);
       if (axios.isAxiosError(error) && error.response?.data?.error) {
@@ -97,6 +96,10 @@ const Admins = () => {
       ),
     },
     {
+      key: "name",
+      label: "Name",
+    },
+    {
       key: "email",
       label: "Email",
     },
@@ -106,6 +109,10 @@ const Admins = () => {
       render: (value: unknown) => formatDate(value as string),
     },
   ];
+
+  if (error) {
+    toast.error("Failed to fetch admins");
+  }
 
   return (
     <DashboardLayout title="Admins">
@@ -122,28 +129,19 @@ const Admins = () => {
           </div>
         </div>
 
-        {loading ? (
-          <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 rounded-lg p-8">
-            <div className="flex items-center justify-center">
-              <div className="text-black/60 dark:text-white/60">
-                Loading admins...
-              </div>
-            </div>
-          </div>
-        ) : (
-          <Table
-            columns={adminsColumns}
-            data={admins}
-            emptyMessage="No admin accounts found"
-          />
-        )}
+        <Table
+          columns={adminsColumns}
+          data={admins}
+          emptyMessage="No admin accounts found"
+          loading={isLoading}
+        />
 
         <EditAdminModal
           isOpen={showEditModal}
           onClose={() => {
             setShowEditModal(false);
             setEditingAdmin(null);
-            setAdminForm({ email: "" });
+            setAdminForm({ name: "", email: "" });
           }}
           onSubmit={handleUpdateAdmin}
           form={adminForm}

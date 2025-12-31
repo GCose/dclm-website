@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useUser } from "@/hooks/use-user";
 import { useState, useEffect } from "react";
 import { LayoutDashboard, Church, Users, Settings, LogOut } from "lucide-react";
 import { DashboardLayoutProps } from "@/types/interface/dashboard";
@@ -10,10 +11,10 @@ import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 
 const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
   const router = useRouter();
+  const { name, email } = useUser();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
-  const [userEmail, setUserEmail] = useState<string>("");
 
   useEffect(() => {
     const applyTheme = () => {
@@ -36,19 +37,6 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
     };
 
     applyTheme();
-  }, []);
-
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const response = await axios.get("/api/auth/profile");
-        setUserEmail(response.data.email || "");
-      } catch (error: unknown) {
-        console.error("Error fetching user profile:", error);
-      }
-    };
-
-    fetchUserProfile();
   }, []);
 
   const handleSignOutClick = () => {
@@ -177,7 +165,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <div className="relative w-8 h-8">
                     <Image
                       fill
@@ -186,9 +174,9 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
                       className="object-contain"
                     />
                   </div>
-                  {userEmail && (
-                    <span className="text-sm text-black/70 dark:text-white/70">
-                      {userEmail}
+                  {name && (
+                    <span className="hidden md:block text-sm font-medium text-navy dark:text-white">
+                      {name}
                     </span>
                   )}
                 </div>
@@ -222,11 +210,11 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
                       <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-navy border border-black/10 dark:border-white/10 rounded-lg shadow-lg z-20">
                         <div className="p-4 border-b border-black/10 dark:border-white/10">
                           <p className="text-sm font-bold uppercase text-navy dark:text-white">
-                            DCLM
+                            {name || "DCLM"}
                           </p>
-                          {userEmail && (
+                          {email && (
                             <p className="text-xs text-black/60 dark:text-white/60 mt-1">
-                              {userEmail}
+                              {email}
                             </p>
                           )}
                         </div>

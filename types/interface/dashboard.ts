@@ -381,3 +381,52 @@ export interface UseNationalityDistributionProps {
     year?: string;
     type?: string;
 }
+
+export interface RegistrationTrendsResponse {
+    trends: RegistrationTrend[];
+}
+
+export interface NationalityDistributionResponse {
+    distribution: NationalityDistribution[];
+}
+
+export interface RetreatsResponse {
+    retreats: Retreat[];
+    pagination: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    };
+}
+
+export interface SessionsResponse {
+    sessions?: AttendanceSession[];
+}
+
+export interface RecordsResponse {
+    records?: AttendanceRecord[];
+}
+
+export interface UserProfile {
+    name: string;
+    email: string;
+}
+
+
+export interface AdminsResponse {
+    admins: Admin[];
+}
+
+export interface Admin {
+    _id: string;
+    name: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface AdminForm {
+    name: string;
+    email: string;
+}

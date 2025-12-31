@@ -2,6 +2,10 @@ import { IAdmin } from '@/types';
 import { Schema, model, models } from 'mongoose';
 
 const AdminSchema = new Schema<IAdmin>({
+    name: {
+        type: String,
+        required: true
+    },
     email: {
         type: String,
         required: true,

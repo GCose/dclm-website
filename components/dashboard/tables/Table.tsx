@@ -45,7 +45,7 @@ const Table = <T,>({
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className=" bg-gray-100 dark:bg-white/5">
+              <tr className="bg-gray-100 dark:bg-white/5">
                 {columns.map((column) => (
                   <th
                     key={column.key}
@@ -71,9 +71,9 @@ const Table = <T,>({
                   <tr
                     key={getRowKey(row, index)}
                     onClick={() => onRowClick?.(row)}
-                    className={`border-b border-black/10 dark:border-white/20 ${
+                    className={`even:bg-gray-50 dark:even:bg-white/2 ${
                       onRowClick
-                        ? "hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
+                        ? "hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer"
                         : ""
                     } transition-colors`}
                   >

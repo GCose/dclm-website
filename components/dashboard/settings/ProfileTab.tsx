@@ -1,12 +1,14 @@
 import axios from "axios";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { useUser } from "@/hooks/use-user";
 import { useState, useEffect } from "react";
 
 const ProfileTab = () => {
-  const [loading, setLoading] = useState(true);
+  const { user, loading, refreshUser } = useUser();
   const [saving, setSaving] = useState(false);
   const [profile, setProfile] = useState({
+    name: "",
     email: "",
   });
   const [passwordData, setPasswordData] = useState({
@@ -16,31 +18,23 @@ const ProfileTab = () => {
   });
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get("/api/auth/profile");
-        setProfile({
-          email: response.data.email || "",
-        });
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-        toast.error("Failed to load profile");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, []);
+    if (user) {
+      setProfile({
+        name: user.name || "",
+        email: user.email || "",
+      });
+    }
+  }, [user]);
 
   const handleProfileUpdate = async () => {
     try {
       setSaving(true);
       await axios.put("/api/auth/profile", {
+        name: profile.name,
         email: profile.email,
       });
       toast.success("Profile updated successfully");
+      await refreshUser();
     } catch (error: unknown) {
       console.error("Error updating profile:", error);
       if (axios.isAxiosError(error) && error.response?.data?.error) {
@@ -105,12 +99,27 @@ const ProfileTab = () => {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-black/70 dark:text-white/70 mb-2">
+              Name
+            </label>
+            <input
+              type="text"
+              value={profile.name}
+              onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+              className="w-full px-4 py-2 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white rounded focus:outline-none focus:border-navy dark:focus:border-white"
+              placeholder="Your name"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-black/70 dark:text-white/70 mb-2">
               Email Address
             </label>
             <input
               type="email"
               value={profile.email}
-              onChange={(e) => setProfile({ email: e.target.value })}
+              onChange={(e) =>
+                setProfile({ ...profile, email: e.target.value })
+              }
               className="w-full px-4 py-2 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white rounded focus:outline-none focus:border-navy dark:focus:border-white"
               placeholder="your.email@example.com"
             />

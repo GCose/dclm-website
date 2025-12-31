@@ -1,35 +1,35 @@
-import { useState, useEffect } from "react";
+import useSWR from "swr";
 import axios from "axios";
-import { NationalityDistribution, UseNationalityDistributionProps } from "@/types/interface/dashboard";
+import { NationalityDistributionResponse, UseNationalityDistributionProps } from "@/types/interface/dashboard";
+
+
+const fetcher = async (url: string): Promise<NationalityDistributionResponse> => {
+    const { data } = await axios.get(url);
+    return data;
+};
 
 const useNationalityDistribution = ({ year, type }: UseNationalityDistributionProps = {}) => {
-    const [distribution, setDistribution] = useState<NationalityDistribution[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const params = new URLSearchParams();
+    if (year) params.append("year", year);
+    if (type) params.append("type", type);
 
-    useEffect(() => {
-        const fetchDistribution = async () => {
-            try {
-                setLoading(true);
-                const params = new URLSearchParams();
-                if (year) params.append("year", year);
-                if (type) params.append("type", type);
+    const key = `/api/dashboard/nationality-distribution?${params.toString()}`;
 
-                const response = await axios.get(`/api/dashboard/nationality-distribution?${params.toString()}`);
-                setDistribution(response.data.distribution);
-                setError(null);
-            } catch (err) {
-                console.error("Error fetching nationality distribution:", err);
-                setError("Failed to load nationality distribution");
-            } finally {
-                setLoading(false);
-            }
-        };
+    const { data, error, isLoading, mutate } = useSWR<NationalityDistributionResponse>(
+        key,
+        fetcher,
+        {
+            revalidateOnFocus: false,
+            revalidateOnReconnect: true,
+        }
+    );
 
-        fetchDistribution();
-    }, [year, type]);
-
-    return { distribution, loading, error, refetch: () => { } };
+    return {
+        distribution: data?.distribution || [],
+        loading: isLoading,
+        error: error ? "Failed to load nationality distribution" : null,
+        refetch: mutate,
+    };
 };
 
 export default useNationalityDistribution;

@@ -1,31 +1,28 @@
+import useSWR from "swr";
 import axios from "axios";
-import { useState, useEffect } from "react";
-import { RegistrationTrend } from "@/types/interface/dashboard";
+import { RegistrationTrendsResponse } from "@/types/interface/dashboard";
+
+const fetcher = async (url: string): Promise<RegistrationTrendsResponse> => {
+    const { data } = await axios.get(url);
+    return data;
+};
 
 const useRegistrationTrends = () => {
-    const [trends, setTrends] = useState<RegistrationTrend[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { data, error, isLoading, mutate } = useSWR<RegistrationTrendsResponse>(
+        "/api/dashboard/registration-trends",
+        fetcher,
+        {
+            revalidateOnFocus: false,
+            revalidateOnReconnect: true,
+        }
+    );
 
-    useEffect(() => {
-        const fetchTrends = async () => {
-            try {
-                setLoading(true);
-                const response = await axios.get("/api/dashboard/registration-trends");
-                setTrends(response.data.trends);
-                setError(null);
-            } catch (err) {
-                console.error("Error fetching registration trends:", err);
-                setError("Failed to load registration trends");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchTrends();
-    }, []);
-
-    return { trends, loading, error };
+    return {
+        trends: data?.trends || [],
+        loading: isLoading,
+        error: error ? "Failed to load registration trends" : null,
+        refresh: mutate,
+    };
 };
 
 export default useRegistrationTrends;
