@@ -1,11 +1,11 @@
-import { GetServerSideProps } from "next";
-import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
+import { Toaster } from "sonner";
 import { requireAuth } from "@/lib/auth";
-import StatCard from "@/components/dashboard/stats/StatCard";
+import { GetServerSideProps } from "next";
+import StatCard from "@/components/dashboard/StatsCard";
+import useDashboardStats from "@/hooks/dashboard/use-dashboard-stats";
+import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 import RegistrationTrendsChart from "@/components/dashboard/charts/RegistrationTrendsChart";
 import NationalityDistributionChart from "@/components/dashboard/charts/NationalityDistributionChart";
-import { useDashboardStats } from "@/hooks/dashboard/use-dashboard-stats";
-import { Toaster } from "sonner";
 
 const Dashboard = () => {
   const { stats, loading } = useDashboardStats();
