@@ -1,65 +1,57 @@
+import bcrypt from "bcryptjs";
 import Admin from "@/model/Admin";
 import dbConnect from "@/lib/mongodb";
 import { NextApiResponse } from "next";
 import { authMiddleware, AuthRequest } from "@/middleware/auth";
 
 async function handler(req: AuthRequest, res: NextApiResponse) {
-    const { id } = req.query;
-
     try {
         await dbConnect();
 
         if (req.method === "GET") {
-            if (id) {
-                const admin = await Admin.findById(id).select("-password");
-                if (!admin) {
-                    return res.status(404).json({ error: "Admin not found" });
-                }
-                return res.status(200).json(admin);
-            } else {
-                const admins = await Admin.find().select("-password").sort({ createdAt: -1 });
-                return res.status(200).json({ admins });
-            }
+            const admins = await Admin.find().select("-password").sort({ createdAt: -1 });
+            return res.status(200).json({ admins });
         }
 
-        if (req.method === "PATCH") {
-            const { name, email } = req.body;
+        if (req.method === "POST") {
+            const { name, email, password } = req.body;
 
-            if (!name || !email) {
-                return res.status(400).json({ error: "Name and email are required" });
+            if (!name || !email || !password) {
+                return res.status(400).json({ error: "Name, email and password are required" });
             }
 
-            const existingAdmin = await Admin.findOne({ email, _id: { $ne: id } });
+            if (password.length < 6) {
+                return res.status(400).json({ error: "Password must be at least 6 characters" });
+            }
+
+            const existingAdmin = await Admin.findOne({ email });
             if (existingAdmin) {
                 return res.status(400).json({ error: "Email already in use" });
             }
 
-            const admin = await Admin.findByIdAndUpdate(
-                id,
-                { name, email },
-                { new: true, runValidators: true }
-            ).select("-password");
+            const hashedPassword = await bcrypt.hash(password, 10);
 
-            if (!admin) {
-                return res.status(404).json({ error: "Admin not found" });
-            }
+            const admin = await Admin.create({
+                name,
+                email,
+                password: hashedPassword
+            });
 
-            return res.status(200).json(admin);
+            return res.status(201).json({
+                message: "Admin created successfully",
+                admin: {
+                    _id: admin._id,
+                    name: admin.name,
+                    email: admin.email
+                }
+            });
         }
 
-        if (req.method === "DELETE") {
-            const admin = await Admin.findByIdAndDelete(id);
-            if (!admin) {
-                return res.status(404).json({ error: "Admin not found" });
-            }
-            return res.status(200).json({ message: "Admin deleted successfully" });
-        }
-
-        res.setHeader("Allow", ["GET", "PATCH", "DELETE"]);
-        return res.status(405).json({ error: "Method not allowed" });
-    } catch (error) {
-        console.error("Error in admins API:", error);
-        return res.status(500).json({ error: "Internal server error" });
+        res.setHeader("Allow", ["GET", "POST"]);
+        res.status(405).end(`Method ${req.method} Not Allowed`);
+    } catch (error: unknown) {
+        console.error("Admins API Error:", error);
+        res.status(500).json({ error: "Server error" });
     }
 }
 
