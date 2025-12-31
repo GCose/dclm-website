@@ -1,9 +1,10 @@
 import axios from "axios";
 import { toast } from "sonner";
-import { Retreat, RetreatForm } from "@/types/interface/dashboard";
+import { KeyedMutator } from "swr";
+import { Retreat, RetreatForm, RetreatsResponse } from "@/types/interface/dashboard";
 
 const useRetreat = (
-    fetchRetreats: (page: number) => Promise<void>,
+    refreshRetreats: KeyedMutator<RetreatsResponse>,
     retreatsPage: number,
     setSelectedRetreat: (retreat: Retreat | null) => void,
     selectedRetreat: Retreat | null
@@ -20,7 +21,7 @@ const useRetreat = (
             toast.success("Retreat created successfully");
             setShowCreateModal(false);
             resetRetreatForm();
-            fetchRetreats(retreatsPage);
+            await refreshRetreats();
         } catch (error: unknown) {
             console.error("Error creating retreat:", error);
             if (axios.isAxiosError(error) && error.response?.data?.error) {
@@ -43,7 +44,7 @@ const useRetreat = (
 
             const retreatRes = await axios.get(`/api/retreats/${selectedRetreat._id}`);
             setSelectedRetreat(retreatRes.data);
-            fetchRetreats(retreatsPage);
+            await refreshRetreats();
         } catch (error: unknown) {
             console.error("Error updating retreat:", error);
             if (axios.isAxiosError(error) && error.response?.data?.error) {
@@ -64,7 +65,7 @@ const useRetreat = (
             await axios.delete(`/api/retreats/${deleteRetreatConfirm.id}`);
             toast.success("Retreat deleted");
 
-            fetchRetreats(retreatsPage);
+            await refreshRetreats();
 
             if (selectedRetreat?._id === deleteRetreatConfirm.id) {
                 setSelectedRetreat(null);

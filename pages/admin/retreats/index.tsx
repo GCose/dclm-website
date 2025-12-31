@@ -52,6 +52,7 @@ const Retreats = () => {
     theme: "",
   });
 
+  const [retreatsPage, setRetreatsPage] = useState(1);
   const [retreatFilters, setRetreatFilters] = useState<RetreatFilters>({
     year: "",
     type: "",
@@ -103,17 +104,15 @@ const Retreats = () => {
   const {
     retreats,
     loading,
-    retreatsPage,
-    setRetreatsPage,
-    retreatsTotalPages,
-    retreatsTotal,
+    totalPages: retreatsTotalPages,
+    total: retreatsTotal,
     uniqueYears,
     sessions,
     attendanceRecords,
-    fetchRetreats,
-    fetchSessions,
-    fetchAttendanceRecords,
-  } = useRetreatsData(selectedRetreat, retreatFilters);
+    refreshRetreats,
+    refreshSessions,
+    refreshRecords,
+  } = useRetreatsData(selectedRetreat, retreatFilters, retreatsPage);
 
   const {
     registrations,
@@ -143,7 +142,7 @@ const Retreats = () => {
   );
 
   const { handleCreateRetreat, confirmDeleteRetreat } = useRetreat(
-    fetchRetreats,
+    refreshRetreats,
     retreatsPage,
     setSelectedRetreat,
     selectedRetreat
@@ -157,8 +156,8 @@ const Retreats = () => {
   } = useRegistrationHandlers(selectedRetreat, refreshRegistrations);
 
   const handleRefreshSessions = async () => {
-    await fetchSessions();
-    await fetchAttendanceRecords();
+    await refreshSessions();
+    await refreshRecords();
   };
 
   const handleGeneratePDF = async () => {
@@ -189,7 +188,7 @@ const Retreats = () => {
       setShowEditRetreatModal(false);
       setEditingRetreat(null);
       resetRetreatForm();
-      fetchRetreats(retreatsPage);
+      refreshRetreats();
     } catch (error: unknown) {
       console.error("Error updating retreat:", error);
       if (axios.isAxiosError(error) && error.response?.data?.error) {

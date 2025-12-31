@@ -2,7 +2,25 @@ import useSWR from "swr";
 import axios from "axios";
 import { toast } from "sonner";
 import { useMemo } from "react";
-import { RecordsResponse, Retreat, RetreatFilters, RetreatsResponse, SessionsResponse } from "@/types/interface/dashboard";
+import { Retreat, AttendanceSession, AttendanceRecord, RetreatFilters } from "@/types/interface/dashboard";
+
+interface RetreatsResponse {
+    retreats: Retreat[];
+    pagination: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    };
+}
+
+interface SessionsResponse {
+    sessions?: AttendanceSession[];
+}
+
+interface RecordsResponse {
+    records?: AttendanceRecord[];
+}
 
 const fetcher = async (url: string) => {
     const { data } = await axios.get(url);
@@ -11,8 +29,8 @@ const fetcher = async (url: string) => {
 
 export const useRetreatsData = (
     selectedRetreat: Retreat | null,
-    filters?: RetreatFilters,
-    page: number = 1
+    filters: RetreatFilters,
+    page: number
 ) => {
     const retreatsParams = new URLSearchParams({
         page: String(page),
@@ -99,15 +117,14 @@ export const useRetreatsData = (
     return {
         retreats,
         loading: retreatsLoading,
-        retreatsPage: retreatsData?.pagination?.page || page,
-        retreatsTotalPages: retreatsData?.pagination?.totalPages || 1,
-        retreatsTotal: retreatsData?.pagination?.total || 0,
+        totalPages: retreatsData?.pagination?.totalPages || 1,
+        total: retreatsData?.pagination?.total || 0,
         uniqueYears,
         sessions,
         attendanceRecords,
-        fetchRetreats: mutateRetreats,
-        fetchSessions: mutateSessions,
-        fetchAttendanceRecords: mutateRecords,
+        refreshRetreats: mutateRetreats,
+        refreshSessions: mutateSessions,
+        refreshRecords: mutateRecords,
         refreshAll: () => {
             mutateRetreats();
             mutateSessions();

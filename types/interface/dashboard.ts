@@ -430,3 +430,13 @@ export interface AdminForm {
     name: string;
     email: string;
 }
+
+export interface RetreatsResponse {
+    retreats: Retreat[];
+    pagination: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    };
+}
