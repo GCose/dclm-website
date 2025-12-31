@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Loader2 } from "lucide-react";
-import { useRegistrationTrends } from "@/hooks/dashboard/use-registration-trends";
+import useRegistrationTrends from "@/hooks/dashboard/use-registration-trends";
 
 const RegistrationTrendsChart = () => {
   const { trends, loading, error } = useRegistrationTrends();

@@ -8,8 +8,8 @@ import {
   Tooltip,
 } from "recharts";
 import { Loader2 } from "lucide-react";
-import { useNationalityDistribution } from "@/hooks/dashboard/use-nationality-distribution";
 import axios from "axios";
+import useNationalityDistribution from "@/hooks/dashboard/use-nationality-distribution";
 
 const COLORS = [
   "#2980b9",
