@@ -9,7 +9,7 @@ const StatCard = ({
 }: StatCardProps) => {
   if (loading) {
     return (
-      <div className="bg-gray-100 dark:bg-navy/50 p-6 rounded-lg h-40 animate-pulse" />
+      <div className="bg-gray-100 dark:bg-white/5 p-6 rounded-lg h-40 animate-pulse" />
     );
   }
 

@@ -4,39 +4,29 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import {
-  LayoutDashboard,
-  Church,
-  Users,
-  Settings,
-  Sun,
-  Moon,
-  LogOut,
-} from "lucide-react";
 import { DashboardLayoutProps } from "@/types/interface/dashboard";
+import { LayoutDashboard, Church, Users, Settings, LogOut } from "lucide-react";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 
 const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
   const router = useRouter();
-  const [darkMode, setDarkMode] = useState(() => {
-    if (typeof window !== "undefined") {
-      const savedMode = localStorage.getItem("darkMode");
-      return savedMode === "true";
-    }
-    return false;
-  });
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
+  const [userEmail, setUserEmail] = useState<string>("");
 
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-    localStorage.setItem("darkMode", darkMode.toString());
-  }, [darkMode]);
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axios.get("/api/auth/profile");
+        setUserEmail(response.data.email || "");
+      } catch (error: unknown) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const handleSignOutClick = () => {
     setUserDropdownOpen(false);
@@ -133,7 +123,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
 
         <div className="lg:pl-64 flex flex-col min-h-screen">
           <header className="sticky top-0 z-30 bg-white dark:bg-navy border-b border-black/10 dark:border-white/10 transition-colors duration-300">
-            <div className="flex items-center justify-between px-6 py-2">
+            <div className="flex items-center justify-between px-6 py-4">
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -164,26 +154,40 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               </div>
 
               <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setDarkMode(!darkMode)}
-                  className="p-2 text-navy dark:text-white cursor-pointer hover:bg-black/5 dark:hover:bg-white/10 rounded-lg transition-colors"
-                >
-                  {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-                </button>
+                <div className="flex items-center gap-2">
+                  <div className="relative w-8 h-8">
+                    <Image
+                      fill
+                      src="/images/logo.png"
+                      alt="User"
+                      className="object-contain"
+                    />
+                  </div>
+                  {userEmail && (
+                    <span className="text-sm text-black/70 dark:text-white/70">
+                      {userEmail}
+                    </span>
+                  )}
+                </div>
 
                 <div className="relative">
                   <button
                     onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    className="flex items-center gap-2 p-2 cursor-pointer hover:bg-black/5 dark:hover:bg-white/10 rounded-lg transition-colors"
+                    className="p-2 cursor-pointer hover:bg-black/5 dark:hover:bg-white/10 rounded-lg transition-colors"
                   >
-                    <div className="relative w-8 h-8">
-                      <Image
-                        fill
-                        src="/images/logo.png"
-                        alt="User"
-                        className="object-contain"
+                    <svg
+                      className="w-4 h-4 text-navy dark:text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
                       />
-                    </div>
+                    </svg>
                   </button>
 
                   {userDropdownOpen && (
@@ -197,9 +201,11 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
                           <p className="text-sm font-bold uppercase text-navy dark:text-white">
                             DCLM
                           </p>
-                          <p className="text-xs text-black/60 dark:text-white/60 mt-1">
-                            admin@dclm.org
-                          </p>
+                          {userEmail && (
+                            <p className="text-xs text-black/60 dark:text-white/60 mt-1">
+                              {userEmail}
+                            </p>
+                          )}
                         </div>
                         <div className="p-2">
                           <button

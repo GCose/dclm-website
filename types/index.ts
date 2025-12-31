@@ -144,3 +144,7 @@ export interface jsPDFWithAutoTable extends jsPDF {
         finalY: number;
     };
 }
+
+export type SettingsTab = "profile" | "appearance";
+
+export type Theme = "light" | "dark" | "system";
