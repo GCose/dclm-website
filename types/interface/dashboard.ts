@@ -340,3 +340,38 @@ export interface EditAdminModalProps {
     form: AdminForm;
     setForm: React.Dispatch<React.SetStateAction<AdminForm>>;
 }
+
+export interface StatCardProps {
+    title: string;
+    value: string | number;
+    subtitle?: string;
+    loading?: boolean;
+}
+
+export interface DashboardStats {
+    totalRetreats: number;
+    avgRegistrationsPerRetreat: number;
+    avgAttendancePerRetreat: number;
+    highestAttended: {
+        year: number;
+        type: string;
+        count: number;
+    };
+}
+
+export interface RegistrationTrend {
+    year: number;
+    Easter: number;
+    December: number;
+}
+
+export
+    interface NationalityDistribution {
+    nationality: string;
+    count: number;
+}
+
+export interface UseNationalityDistributionProps {
+    year?: string;
+    type?: string;
+}
