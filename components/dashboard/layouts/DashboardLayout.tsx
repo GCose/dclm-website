@@ -150,7 +150,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="lg:hidden p-2 text-navy dark:text-white"
+                  className="lg:hidden py-2 text-navy dark:text-white"
                 >
                   <svg
                     className="w-6 h-6"
@@ -170,7 +170,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
                 <Link
                   href="/"
                   target="_blank"
-                  className="text-sm uppercase tracking-wider text-black/60 dark:text-white/60 hover:text-burgundy dark:hover:text-burgundy transition-colors"
+                  className="hidden md:block text-sm uppercase tracking-wider text-black/60 dark:text-white/60 hover:text-burgundy dark:hover:text-burgundy transition-colors"
                 >
                   View Website
                 </Link>

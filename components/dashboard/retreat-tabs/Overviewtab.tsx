@@ -230,7 +230,7 @@ const OverviewTab = ({
 
   return (
     <div className="space-y-10">
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col md:flex-row justify-between items-start">
         <div>
           <h2 className="text-[clamp(1.1rem,3vw,1.4rem)] font-bold uppercase text-navy dark:text-white mb-2">
             Retreat Overview & Report
