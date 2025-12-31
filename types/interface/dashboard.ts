@@ -351,13 +351,18 @@ export interface StatCardProps {
 
 export interface DashboardStats {
     totalRetreats: number;
-    avgRegistrationsPerRetreat: number;
-    avgAttendancePerRetreat: number;
-    highestAttended: {
+    latestRetreat: {
+        year: number;
+        type: string;
+        count: number;
+    } | null;
+    bestPerformance: {
         year: number;
         type: string;
         count: number;
     };
+    currentYearTotal: number;
+    currentYear: number;
 }
 
 export interface RegistrationTrend {

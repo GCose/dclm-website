@@ -2,7 +2,7 @@ import { Toaster } from "sonner";
 import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
 import StatCard from "@/components/dashboard/StatsCard";
-import { Calendar, Users, TrendingUp, Trophy } from "lucide-react";
+import { Church, Calendar, Trophy, Users } from "lucide-react";
 import useDashboardStats from "@/hooks/dashboard/use-dashboard-stats";
 import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 import RegistrationTrendsChart from "@/components/dashboard/charts/RegistrationTrendsChart";
@@ -28,37 +28,37 @@ const Dashboard = () => {
           <StatCard
             title="Total Retreats"
             value={stats?.totalRetreats ?? 0}
-            subtitle="All time"
+            subtitle="All retreats in system"
+            icon={Church}
+            loading={loading}
+          />
+          <StatCard
+            title="Latest Retreat"
+            value={stats?.latestRetreat?.count ?? 0}
+            subtitle={
+              stats?.latestRetreat
+                ? `${stats.latestRetreat.type} ${stats.latestRetreat.year}`
+                : "No retreats yet"
+            }
             icon={Calendar}
             loading={loading}
           />
           <StatCard
-            title="Avg Registrations"
-            value={stats?.avgRegistrationsPerRetreat ?? 0}
-            subtitle="Per retreat"
-            icon={Users}
-            loading={loading}
-          />
-          <StatCard
-            title="Avg Attendance"
-            value={stats?.avgAttendancePerRetreat ?? 0}
-            subtitle="Per retreat"
-            icon={TrendingUp}
-            loading={loading}
-          />
-          <StatCard
-            title="Highest Attended"
-            value={
-              stats?.highestAttended.count
-                ? `${stats.highestAttended.count}`
-                : "N/A"
-            }
+            title="Best Performance"
+            value={stats?.bestPerformance?.count ?? 0}
             subtitle={
-              stats?.highestAttended.year
-                ? `${stats.highestAttended.year} ${stats.highestAttended.type}`
-                : ""
+              stats?.bestPerformance?.year
+                ? `${stats.bestPerformance.type} ${stats.bestPerformance.year}`
+                : "No data yet"
             }
             icon={Trophy}
+            loading={loading}
+          />
+          <StatCard
+            title={`${stats?.currentYear ?? new Date().getFullYear()} Total`}
+            value={stats?.currentYearTotal ?? 0}
+            subtitle="This year's registrations"
+            icon={Users}
             loading={loading}
           />
         </div>
