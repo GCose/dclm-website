@@ -24,13 +24,13 @@ const Settings = () => {
           </p>
         </div>
 
-        <div className="flex gap-8 border-r">
-          <div className="w-48 space-y-2">
+        <div className="flex gap-8">
+          <div className="w-48 space-y-2 border-r dark:border-white/40 pr-4">
             <button
               onClick={() => setActiveTab("profile")}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
+              className={`w-full flex items-center rounded-sm gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors cursor-pointer ${
                 activeTab === "profile"
-                  ? "text-navy dark:text-white font-bold"
+                  ? "text-navy dark:text-white font-bold bg-gray-100 dark:bg-white/5"
                   : "text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white"
               }`}
             >
@@ -39,9 +39,9 @@ const Settings = () => {
             </button>
             <button
               onClick={() => setActiveTab("appearance")}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
+              className={`w-full flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/3 px-4 py-3 text-left transition-colors ${
                 activeTab === "appearance"
-                  ? "text-navy dark:text-white font-bold"
+                  ? "text-navy dark:text-white font-bold bg-gray-100 dark:bg-white/5"
                   : "text-black/60 dark:text-white/60 hover:text-navy dark:hover:text-white"
               }`}
             >

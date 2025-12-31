@@ -4,8 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { DashboardLayoutProps } from "@/types/interface/dashboard";
 import { LayoutDashboard, Church, Users, Settings, LogOut } from "lucide-react";
+import { DashboardLayoutProps } from "@/types/interface/dashboard";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 
 const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
@@ -14,6 +14,29 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
   const [userEmail, setUserEmail] = useState<string>("");
+
+  useEffect(() => {
+    const applyTheme = () => {
+      const savedTheme = localStorage.getItem("theme");
+
+      if (savedTheme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else if (savedTheme === "light") {
+        document.documentElement.classList.remove("dark");
+      } else {
+        const systemPrefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        if (systemPrefersDark) {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      }
+    };
+
+    applyTheme();
+  }, []);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
