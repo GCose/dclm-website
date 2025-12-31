@@ -1,4 +1,4 @@
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
 import { useState } from "react";
 import {
   Retreat,
@@ -17,23 +17,26 @@ import Table from "@/components/dashboard/tables/Table";
 import { useRegistrations } from "@/hooks/use-registrations";
 import { getRetreatsColumns } from "@/utils/retreats/columns";
 import { useRetreatsData } from "@/hooks/retreats/use-retreats-data";
-import EditRetreatForm from "@/components/dashboard/forms/EditRetreatForm";
 import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 import RegistrationModal from "@/components/dashboard/modals/RegistrationModal";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 import CreateRetreatModal from "@/components/dashboard/modals/CreateRetreatModal";
+import OverviewTab from "@/components/dashboard/retreat-tabs/Overviewtab";
 import RegistrationsTab from "@/components/dashboard/retreat-tabs/RegistrationsTab";
 import { useRegistrationHandlers } from "@/hooks/retreats/use-registration-handlers";
 import EditRegistrationModal from "@/components/dashboard/modals/EditRegistrationModal";
 import RetreatsPageSkeleton from "@/components/dashboard/skeletons/page/RetreatsPageSkeleton";
 import SessionsAndAttendanceTab from "@/components/dashboard/retreat-tabs/sessions/SessionsAndAttendanceTab";
+import { generateRetreatPDF } from "@/utils/retreats/pdf-generator";
+import { useReportData } from "@/hooks/retreats/use-report-data";
 
 const Retreats = () => {
   const [selectedRetreat, setSelectedRetreat] = useState<Retreat | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [generatingPDF, setGeneratingPDF] = useState(false);
   const [activeTab, setActiveTab] = useState<
     "overview" | "registrations" | "attendance"
-  >("registrations");
+  >("overview");
 
   const [retreatForm, setRetreatForm] = useState({
     year: new Date().getFullYear(),
@@ -120,13 +123,27 @@ const Retreats = () => {
     filters: debouncedFilters,
   });
 
-  const { handleCreateRetreat, handleUpdateRetreat, confirmDeleteRetreat } =
-    useRetreat(
-      fetchRetreats,
-      retreatsPage,
-      setSelectedRetreat,
-      selectedRetreat
-    );
+  const { reportData } = useReportData(
+    selectedRetreat
+      ? {
+          retreatId: selectedRetreat._id,
+          year: selectedRetreat.year,
+          type: selectedRetreat.type,
+          dateFrom: selectedRetreat.dateFrom,
+          dateTo: selectedRetreat.dateTo,
+          venue: selectedRetreat.venue,
+          theme: selectedRetreat.theme,
+          totalDays: selectedRetreat.totalDays,
+        }
+      : null
+  );
+
+  const { handleCreateRetreat, confirmDeleteRetreat } = useRetreat(
+    fetchRetreats,
+    retreatsPage,
+    setSelectedRetreat,
+    selectedRetreat
+  );
 
   const {
     handleCreateRegistration,
@@ -138,6 +155,24 @@ const Retreats = () => {
   const handleRefreshSessions = async () => {
     await fetchSessions();
     await fetchAttendanceRecords();
+  };
+
+  const handleGeneratePDF = async () => {
+    if (!reportData) {
+      toast.error("Report data not available");
+      return;
+    }
+
+    setGeneratingPDF(true);
+    try {
+      await generateRetreatPDF(reportData);
+      toast.success("PDF report generated successfully");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Failed to generate PDF report");
+    } finally {
+      setGeneratingPDF(false);
+    }
   };
 
   const resetRetreatForm = () => {
@@ -202,7 +237,7 @@ const Retreats = () => {
     (retreat) => {
       setSelectedRetreat(retreat);
       loadRetreatToForm(retreat);
-      setActiveTab("registrations");
+      setActiveTab("overview");
     },
     (id) => setDeleteRetreatConfirm({ isOpen: true, id })
   );
@@ -298,7 +333,7 @@ const Retreats = () => {
                 onRowClick={(retreat) => {
                   setSelectedRetreat(retreat);
                   loadRetreatToForm(retreat);
-                  setActiveTab("registrations");
+                  setActiveTab("overview");
                 }}
                 pagination={{
                   page: retreatsPage,
@@ -366,10 +401,10 @@ const Retreats = () => {
 
             <div>
               {activeTab === "overview" && (
-                <EditRetreatForm
-                  onSubmit={(e) => handleUpdateRetreat(e, retreatForm)}
-                  form={retreatForm}
-                  setForm={setRetreatForm}
+                <OverviewTab
+                  retreat={selectedRetreat}
+                  onGeneratePDF={handleGeneratePDF}
+                  generatingPDF={generatingPDF}
                 />
               )}
 
