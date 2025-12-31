@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import {
   Category,
   CategorySessionDefineStepProps,
@@ -7,7 +8,6 @@ import {
 } from "@/types/interface/dashboard";
 
 const CategorySessionDefineStep = ({
-  counts,
   categoryTemplates,
   onTemplatesChange,
   onGenerate,
@@ -53,7 +53,9 @@ const CategorySessionDefineStep = ({
     });
 
     if (!allValid) {
-      alert("Please fill in all session names and times for all categories");
+      toast.error(
+        "Please fill in all session names and times for all categories"
+      );
       return;
     }
 
@@ -88,7 +90,7 @@ const CategorySessionDefineStep = ({
             >
               {category} {category === "Campus" ? "Fellowship" : "Church"}
               <span className="ml-2 text-sm">
-                ({counts[category]} sessions)
+                ({categoryTemplates[category].length} sessions)
               </span>
             </button>
           ))}

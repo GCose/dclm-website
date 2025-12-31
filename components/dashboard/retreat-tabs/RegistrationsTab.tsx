@@ -104,7 +104,7 @@ const RegistrationsTab = ({
     <div>
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-6 md:gap-0">
         <h2 className="text-[clamp(1.1rem,3vw,1.4rem)] font-bold uppercase text-navy dark:text-white">
-          Registrations
+          Retreat Registrations
         </h2>
         <div className="flex gap-2">
           <button

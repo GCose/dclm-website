@@ -1,5 +1,6 @@
 import { Toaster, toast } from "sonner";
 import { useState } from "react";
+import axios from "axios";
 import {
   Retreat,
   Registration,
@@ -21,6 +22,7 @@ import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 import RegistrationModal from "@/components/dashboard/modals/RegistrationModal";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 import CreateRetreatModal from "@/components/dashboard/modals/CreateRetreatModal";
+import EditRetreatModal from "@/components/dashboard/modals/EditRetreatModal";
 import OverviewTab from "@/components/dashboard/retreat-tabs/Overviewtab";
 import RegistrationsTab from "@/components/dashboard/retreat-tabs/RegistrationsTab";
 import { useRegistrationHandlers } from "@/hooks/retreats/use-registration-handlers";
@@ -32,7 +34,9 @@ import { useReportData } from "@/hooks/retreats/use-report-data";
 
 const Retreats = () => {
   const [selectedRetreat, setSelectedRetreat] = useState<Retreat | null>(null);
+  const [editingRetreat, setEditingRetreat] = useState<Retreat | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditRetreatModal, setShowEditRetreatModal] = useState(false);
   const [generatingPDF, setGeneratingPDF] = useState(false);
   const [activeTab, setActiveTab] = useState<
     "overview" | "registrations" | "attendance"
@@ -175,6 +179,27 @@ const Retreats = () => {
     }
   };
 
+  const handleEditRetreatSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingRetreat) return;
+
+    try {
+      await axios.patch(`/api/retreats/${editingRetreat._id}`, retreatForm);
+      toast.success("Retreat updated successfully");
+      setShowEditRetreatModal(false);
+      setEditingRetreat(null);
+      resetRetreatForm();
+      fetchRetreats(retreatsPage);
+    } catch (error: unknown) {
+      console.error("Error updating retreat:", error);
+      if (axios.isAxiosError(error) && error.response?.data?.error) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error("Failed to update retreat");
+      }
+    }
+  };
+
   const resetRetreatForm = () => {
     setRetreatForm({
       year: new Date().getFullYear(),
@@ -235,9 +260,9 @@ const Retreats = () => {
   const retreatsColumns = getRetreatsColumns(
     formatDate,
     (retreat) => {
-      setSelectedRetreat(retreat);
+      setEditingRetreat(retreat);
       loadRetreatToForm(retreat);
-      setActiveTab("overview");
+      setShowEditRetreatModal(true);
     },
     (id) => setDeleteRetreatConfirm({ isOpen: true, id })
   );
@@ -250,12 +275,9 @@ const Retreats = () => {
           <>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
               <div>
-                <h1 className="text-[clamp(1.5rem,5vw,2rem)] font-bold uppercase text-navy dark:text-white mb-2">
+                <h1 className="text-[clamp(1.5rem,4vw,2rem)] font-bold uppercase text-navy dark:text-white mb-2">
                   Retreats
                 </h1>
-                <p className="text-sm text-black/60 dark:text-white/60">
-                  {retreatsTotal} total retreats
-                </p>
               </div>
               <button
                 onClick={() => setShowCreateModal(true)}
@@ -266,10 +288,10 @@ const Retreats = () => {
               </button>
             </div>
 
-            <div className="mb-8">
+            <div className="bg-white dark:bg-navy/50 mb-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-[clamp(0.8rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
+                  <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                     Year
                   </label>
                   <select
@@ -292,7 +314,7 @@ const Retreats = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[clamp(0.8rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
+                  <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
                     Type
                   </label>
                   <select
@@ -464,6 +486,18 @@ const Retreats = () => {
               setShowCreateModal
             )
           }
+          form={retreatForm}
+          setForm={setRetreatForm}
+        />
+
+        <EditRetreatModal
+          isOpen={showEditRetreatModal}
+          onClose={() => {
+            setShowEditRetreatModal(false);
+            setEditingRetreat(null);
+            resetRetreatForm();
+          }}
+          onSubmit={handleEditRetreatSubmit}
           form={retreatForm}
           setForm={setRetreatForm}
         />

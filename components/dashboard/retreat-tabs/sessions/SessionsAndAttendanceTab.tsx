@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "sonner";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Settings } from "lucide-react";
 import {
   Category,
@@ -37,6 +37,7 @@ const SessionsAndAttendanceTab = ({
   const [setupStep, setSetupStep] = useState<"counts" | "define">("counts");
   const [editMode, setEditMode] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const initialized = useRef(false);
 
   const [sessionCounts, setSessionCounts] = useState<Record<Category, number>>({
     Adult: 7,
@@ -58,7 +59,7 @@ const SessionsAndAttendanceTab = ({
   const setupMode = retreatSessions.length === 0;
 
   useEffect(() => {
-    if (setupMode) {
+    if (setupMode && !initialized.current) {
       const categories: Category[] = ["Adult", "Campus", "Youth", "Children"];
       const emptyTemplates: Record<Category, CategorySessionTemplate[]> = {
         Adult: [],
@@ -78,8 +79,10 @@ const SessionsAndAttendanceTab = ({
       });
 
       setCategoryTemplates(emptyTemplates);
+      initialized.current = true;
     }
-  }, [setupMode, sessionCounts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setupMode]);
 
   const extractExistingData = () => {
     const categories: Category[] = ["Adult", "Campus", "Youth", "Children"];
@@ -186,10 +189,6 @@ const SessionsAndAttendanceTab = ({
     setCategoryTemplates({
       ...categoryTemplates,
       [category]: templates,
-    });
-    setSessionCounts({
-      ...sessionCounts,
-      [category]: templates.length,
     });
   };
 

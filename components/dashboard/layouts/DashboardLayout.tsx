@@ -77,7 +77,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
 
       <div className="min-h-screen bg-white dark:bg-navy transition-colors duration-300">
         <aside
-          className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-100 dark:bg-navy/50 border-r border-black/10 dark:border-white/10 transition-transform duration-300 ${
+          className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-100 dark:bg-navy/50 border-r border-black/0 dark:border-white/10 transition-transform duration-300 ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
           }`}
         >

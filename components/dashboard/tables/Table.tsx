@@ -1,7 +1,7 @@
 import { TableProps } from "@/types/interface/dashboard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const Table = <T extends { _id?: string }>({
+const Table = <T,>({
   columns,
   data,
   onRowClick,
@@ -9,6 +9,14 @@ const Table = <T extends { _id?: string }>({
   loading = false,
   pagination,
 }: TableProps<T>) => {
+  const getRowKey = (row: T, index: number): string => {
+    if (typeof row === "object" && row !== null) {
+      if ("_id" in row && typeof row._id === "string") return row._id;
+      if ("id" in row && typeof row.id === "string") return row.id;
+    }
+    return index.toString();
+  };
+
   const getShowingText = () => {
     if (!pagination || pagination.totalPages === 0) return null;
 
@@ -61,7 +69,7 @@ const Table = <T extends { _id?: string }>({
               ) : (
                 data.map((row, index) => (
                   <tr
-                    key={row._id || index}
+                    key={getRowKey(row, index)}
                     onClick={() => onRowClick?.(row)}
                     className={`border-b border-black/10 dark:border-white/20 ${
                       onRowClick
@@ -75,8 +83,12 @@ const Table = <T extends { _id?: string }>({
                         className="py-4 px-6 text-black/70 dark:text-white/70 truncate max-w-xs"
                       >
                         {column.render
-                          ? column.render(row[column.key as keyof T], row)
-                          : String(row[column.key as keyof T] || "")}
+                          ? column.render(
+                              row[column.key as keyof T],
+                              row,
+                              index
+                            )
+                          : String(row[column.key as keyof T] ?? "")}
                       </td>
                     ))}
                   </tr>

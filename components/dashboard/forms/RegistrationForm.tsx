@@ -31,7 +31,7 @@ const RegistrationForm = ({
 }: RegistrationFormProps) => {
   return (
     <form onSubmit={onSubmit}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
         <div className="md:col-span-2">
           <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Full Name *
@@ -144,7 +144,7 @@ const RegistrationForm = ({
           </select>
         </div>
 
-        <div className="md:col-span-2">
+        <div>
           <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
             Location *
           </label>

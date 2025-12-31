@@ -116,3 +116,24 @@ export interface AdminLoginScreenProps {
     onLogin: (e: FormEvent<HTMLFormElement>) => void;
     title?: string;
 }
+
+export type DailyAttendanceItem = {
+    day: number;
+    date: string;
+    adult: number;
+    youth: number;
+    campus: number;
+    children: number;
+    total: number;
+};
+
+export type SessionDetailsItem = {
+    day: number;
+    sessionNumber: number;
+    sessionName: string;
+    sessionTime: string;
+    category: string;
+    male: number;
+    female: number;
+    total: number;
+};
