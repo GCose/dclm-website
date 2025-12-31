@@ -14,16 +14,7 @@ const Dashboard = () => {
   return (
     <DashboardLayout title="Dashboard">
       <Toaster position="top-right" richColors />
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-[clamp(1.5rem,5vw,2rem)] font-bold uppercase text-navy dark:text-white mb-2">
-            Dashboard
-          </h1>
-          <p className="text-sm text-black/60 dark:text-white/60">
-            Overview of retreat statistics and trends
-          </p>
-        </div>
-
+      <div className="space-y-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
             title="Total Retreats"

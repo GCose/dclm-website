@@ -14,7 +14,7 @@ const StatCard = ({
   }
 
   return (
-    <div className="bg-gray-100 dark:bg-navy/50 border border-white/0 dark:border-white/10 p-6 rounded-lg hover:shadow-lg hover:shadow-blue-100 transition-all duration-300">
+    <div className="bg-gray-100 dark:bg-white/5 p-6 rounded-lg hover:shadow-lg hover:shadow-blue-100 transition-all duration-300">
       <div className="flex items-start justify-between mb-4">
         <Icon size={32} className="text-navy dark:text-white" />
         <div className="text-right">
@@ -23,11 +23,13 @@ const StatCard = ({
           </p>
         </div>
       </div>
-      <h3 className="text-sm uppercase tracking-wider font-bold text-navy dark:text-white mb-1">
+      <h3 className="text-[clamp(0.9rem,4vw,1.1rem)] uppercase tracking-wider font-bold text-navy dark:text-white mb-1">
         {title}
       </h3>
       {subtitle && (
-        <p className="text-xs text-black/60 dark:text-white/60">{subtitle}</p>
+        <p className="text-[clamp(0.8rem,4vw,1rem)] text-black/60 dark:text-white/60">
+          {subtitle}
+        </p>
       )}
     </div>
   );
