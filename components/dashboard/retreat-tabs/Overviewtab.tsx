@@ -70,7 +70,7 @@ const OverviewTab = ({
         </button>
       </div>
 
-      <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-6 rounded-lg">
+      <div className="bg-white dark:bg-navy/50 rounded-lg">
         <h3 className="text-sm font-bold uppercase text-navy dark:text-white mb-4">
           Registration Summary
         </h3>
@@ -128,7 +128,7 @@ const OverviewTab = ({
         </div>
       </div>
 
-      <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-6 rounded-lg">
+      <div className="bg-white dark:bg-navy/50 rounded-lg">
         <h3 className="text-sm font-bold uppercase text-navy dark:text-white mb-4">
           Registration by Category
         </h3>
@@ -173,7 +173,7 @@ const OverviewTab = ({
         </div>
       </div>
 
-      <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-6 rounded-lg">
+      <div className="bg-white dark:bg-navy/50 rounded-lg">
         <h3 className="text-sm font-bold uppercase text-navy dark:text-white mb-4">
           Registration by Nationality
         </h3>
@@ -218,7 +218,7 @@ const OverviewTab = ({
         </div>
       </div>
 
-      <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-6 rounded-lg">
+      <div className="bg-white dark:bg-navy/50 rounded-lg">
         <h3 className="text-sm font-bold uppercase text-navy dark:text-white mb-4">
           Registration by Location
         </h3>
@@ -263,7 +263,7 @@ const OverviewTab = ({
         </div>
       </div>
 
-      <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-6 rounded-lg">
+      <div className="bg-white dark:bg-navy/50 rounded-lg">
         <h3 className="text-sm font-bold uppercase text-navy dark:text-white mb-4">
           Registration by Type
         </h3>
@@ -308,7 +308,7 @@ const OverviewTab = ({
         </div>
       </div>
 
-      <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-6 rounded-lg">
+      <div className="bg-white dark:bg-navy/50 rounded-lg">
         <h3 className="text-sm font-bold uppercase text-navy dark:text-white mb-4">
           Daily Registration Analysis
         </h3>
@@ -373,7 +373,7 @@ const OverviewTab = ({
 
       {reportData.attendanceData && (
         <>
-          <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-6 rounded-lg">
+          <div className="bg-white dark:bg-navy/50 rounded-lg">
             <h3 className="text-sm font-bold uppercase text-navy dark:text-white mb-4">
               Daily Attendance Analysis
             </h3>
@@ -445,7 +445,7 @@ const OverviewTab = ({
             </div>
           </div>
 
-          <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-6 rounded-lg">
+          <div className="bg-white dark:bg-navy/50 rounded-lg">
             <h3 className="text-sm font-bold uppercase text-navy dark:text-white mb-4">
               Average Attendance
             </h3>
@@ -508,7 +508,7 @@ const OverviewTab = ({
           </div>
 
           {reportData.attendanceData.sessionDetails.length > 0 && (
-            <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 p-6 rounded-lg">
+            <div className="bg-white dark:bg-navy/50 rounded-lg">
               <h3 className="text-sm font-bold uppercase text-navy dark:text-white mb-4">
                 Session Attendance Details
               </h3>
