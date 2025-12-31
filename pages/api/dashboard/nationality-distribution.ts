@@ -1,24 +1,25 @@
 import dbConnect from "@/lib/mongodb";
 import Retreat from "@/model/Retreat";
 import Registration from "@/model/Registration";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
+import { authMiddleware, AuthRequest } from "@/middleware/auth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: AuthRequest, res: NextApiResponse) {
     if (req.method !== "GET") {
         return res.status(405).json({ error: "Method not allowed" });
     }
 
     try {
-        const user = await verifyAuth(req);
-        if (!user) {
-            return res.status(401).json({ error: "Unauthorized" });
-        }
-
         const { year, type } = req.query;
 
         await dbConnect();
 
-        const filter: any = {};
+        interface RetreatFilter {
+            year?: number;
+            type?: string;
+        }
+
+        const filter: RetreatFilter = {};
         if (year) filter.year = parseInt(year as string);
         if (type) filter.type = type as string;
 
@@ -49,3 +50,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ error: "Internal server error" });
     }
 }
+
+export default authMiddleware(handler);

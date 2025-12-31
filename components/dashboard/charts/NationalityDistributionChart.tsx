@@ -22,6 +22,11 @@ const COLORS = [
   "#2c3e50",
 ];
 
+interface Retreat {
+  year: number;
+  type: string;
+}
+
 const NationalityDistributionChart = () => {
   const [selectedYear, setSelectedYear] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string>("");
@@ -36,10 +41,10 @@ const NationalityDistributionChart = () => {
     const fetchYears = async () => {
       try {
         const response = await axios.get("/api/retreats");
-        const retreats = response.data.retreats || [];
-        const uniqueYears = [...new Set(retreats.map((r: any) => r.year))].sort(
-          (a, b) => b - a
-        );
+        const retreats: Retreat[] = response.data.retreats || [];
+        const uniqueYears = [
+          ...new Set<number>(retreats.map((r: Retreat) => r.year)),
+        ].sort((a: number, b: number) => b - a);
         setYears(uniqueYears);
       } catch (err) {
         console.error("Error fetching years:", err);
@@ -89,11 +94,12 @@ const NationalityDistributionChart = () => {
         <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white">
           Nationality Distribution
         </h3>
-        <div className="flex gap-3">
+
+        <div className="flex gap-2">
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(e.target.value)}
-            className="px-3 py-2 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white text-sm rounded cursor-pointer focus:outline-none focus:border-navy dark:focus:border-white"
+            className="px-3 py-2 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white rounded focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer text-sm"
           >
             <option value="">All Years</option>
             {years.map((year) => (
@@ -102,10 +108,11 @@ const NationalityDistributionChart = () => {
               </option>
             ))}
           </select>
+
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="px-3 py-2 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white text-sm rounded cursor-pointer focus:outline-none focus:border-navy dark:focus:border-white"
+            className="px-3 py-2 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white rounded focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer text-sm"
           >
             <option value="">All Types</option>
             <option value="Easter">Easter</option>
@@ -116,7 +123,9 @@ const NationalityDistributionChart = () => {
 
       {chartData.length === 0 ? (
         <div className="flex items-center justify-center h-[400px]">
-          <p className="text-black/60 dark:text-white/60">No data available</p>
+          <p className="text-black/60 dark:text-white/60">
+            No nationality data available
+          </p>
         </div>
       ) : (
         <ResponsiveContainer width="100%" height={400}>
@@ -127,13 +136,13 @@ const NationalityDistributionChart = () => {
               cy="50%"
               labelLine={false}
               label={({ name, percent }) =>
-                `${name}: ${(percent * 100).toFixed(0)}%`
+                `${name}: ${((percent ?? 0) * 100).toFixed(0)}%`
               }
               outerRadius={120}
               fill="#8884d8"
               dataKey="value"
             >
-              {chartData.map((entry, index) => (
+              {chartData.map((_, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}

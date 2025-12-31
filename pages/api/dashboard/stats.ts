@@ -1,21 +1,17 @@
 import Retreat from "@/model/Retreat";
 import dbConnect from "@/lib/mongodb";
+import { NextApiResponse } from "next";
 import Registration from "@/model/Registration";
-import { NextApiRequest, NextApiResponse } from "next";
 import AttendanceRecord from "@/model/AttendanceRecord";
 import AttendanceSession from "@/model/AttendanceSession";
+import { authMiddleware, AuthRequest } from "@/middleware/auth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: AuthRequest, res: NextApiResponse) {
     if (req.method !== "GET") {
         return res.status(405).json({ error: "Method not allowed" });
     }
 
     try {
-        const user = await verifyAuth(req);
-        if (!user) {
-            return res.status(401).json({ error: "Unauthorized" });
-        }
-
         await dbConnect();
 
         const totalRetreats = await Retreat.countDocuments();
@@ -79,3 +75,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ error: "Internal server error" });
     }
 }
+
+export default authMiddleware(handler);
