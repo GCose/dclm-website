@@ -1,14 +1,13 @@
 import axios from "axios";
 import { Toaster, toast } from "sonner";
-import { useState, useEffect } from "react";
-import { Edit, Trash2 } from "lucide-react";
 import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
-import { Admin, AdminForm } from "@/types/interface/dashboard";
+import { useState, useEffect } from "react";
 import Table from "@/components/dashboard/tables/Table";
+import { Admin, AdminForm } from "@/types/interface/dashboard";
+import EditAdminModal from "@/components/dashboard/modals/EditAdminModal";
 import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
-import EditAdminModal from "@/components/dashboard/modals/EditAdminModal";
 
 const Admins = () => {
   const [admins, setAdmins] = useState<Admin[]>([]);
@@ -41,12 +40,6 @@ const Admins = () => {
     fetchAdmins();
   }, []);
 
-  const handleEdit = (admin: Admin) => {
-    setEditingAdmin(admin);
-    setAdminForm({ email: admin.email });
-    setShowEditModal(true);
-  };
-
   const handleUpdateAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingAdmin) return;
@@ -66,10 +59,6 @@ const Admins = () => {
         toast.error("Failed to update admin");
       }
     }
-  };
-
-  const handleDeleteClick = (id: string) => {
-    setDeleteConfirm({ isOpen: true, id });
   };
 
   const confirmDelete = async () => {
@@ -115,32 +104,6 @@ const Admins = () => {
       key: "createdAt",
       label: "Created",
       render: (value: unknown) => formatDate(value as string),
-    },
-    {
-      key: "actions",
-      label: "Actions",
-      render: (_: unknown, row: Admin) => (
-        <div className="flex gap-2">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleEdit(row);
-            }}
-            className="p-2 text-navy dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded transition-colors cursor-pointer"
-          >
-            <Edit size={16} />
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDeleteClick(row._id);
-            }}
-            className="p-2 text-burgundy hover:bg-burgundy/10 rounded transition-colors cursor-pointer"
-          >
-            <Trash2 size={16} />
-          </button>
-        </div>
-      ),
     },
   ];
 

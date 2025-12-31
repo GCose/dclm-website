@@ -1,15 +1,10 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { jsPDFWithAutoTable } from "@/types";
 import { ReportData } from "@/types/interface/report";
 import { getDateRange } from "@/utils/retreats/report-helpers";
 
-interface jsPDFWithAutoTable extends jsPDF {
-    lastAutoTable: {
-        finalY: number;
-    };
-}
-
-export const generateRetreatPDF = async (reportData: ReportData) => {
+const generateRetreatPDF = async (reportData: ReportData) => {
     const doc = new jsPDF() as jsPDFWithAutoTable;
     const pageWidth = doc.internal.pageSize.getWidth();
     let yPosition = 20;
@@ -249,27 +244,44 @@ export const generateRetreatPDF = async (reportData: ReportData) => {
             doc.addPage();
             yPosition = 20;
 
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(12);
-            doc.text("SESSION ATTENDANCE DETAILS", 14, yPosition);
-            yPosition += 7;
+            const categories = ["Adult", "Campus", "Youth", "Children"];
 
-            autoTable(doc, {
-                startY: yPosition,
-                head: [["Day", "Session", "Name", "Time", "Category", "Male", "Female", "Total"]],
-                body: reportData.attendanceData.sessionDetails.map(item => [
-                    item.day.toString(),
-                    item.sessionNumber.toString(),
-                    item.sessionName,
-                    item.sessionTime,
-                    item.category,
-                    item.male.toString(),
-                    item.female.toString(),
-                    item.total.toString(),
-                ]),
-                theme: "grid",
-                headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: "bold" },
-                styles: { fontSize: 8 },
+            categories.forEach((category, index) => {
+                const categorySessions = reportData.attendanceData!.sessionDetails.filter(
+                    (session) => session.category === category
+                );
+
+                if (categorySessions.length === 0) return;
+
+                if (index > 0) {
+                    yPosition = doc.lastAutoTable.finalY + 15;
+                    if (yPosition > 240) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                }
+
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(12);
+                const categoryTitle = `${category.toUpperCase()} CHURCH - SESSION ATTENDANCE`;
+                doc.text(categoryTitle, 14, yPosition);
+                yPosition += 7;
+
+                autoTable(doc, {
+                    startY: yPosition,
+                    head: [["Day", "Session Name", "Time", "Male", "Female", "Total"]],
+                    body: categorySessions.map(item => [
+                        item.day.toString(),
+                        item.sessionName,
+                        item.sessionTime,
+                        item.male.toString(),
+                        item.female.toString(),
+                        item.total.toString(),
+                    ]),
+                    theme: "grid",
+                    headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: "bold" },
+                    styles: { fontSize: 9 },
+                });
             });
         }
     }
@@ -296,3 +308,5 @@ export const generateRetreatPDF = async (reportData: ReportData) => {
     const fileName = `${reportData.retreat.year}_${reportData.retreat.type}_Retreat_Report.pdf`;
     doc.save(fileName);
 };
+
+export default generateRetreatPDF;

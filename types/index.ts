@@ -1,3 +1,4 @@
+import jsPDF from "jspdf";
 import { FormEvent, ReactNode } from "react";
 
 export interface IEvent {
@@ -137,3 +138,9 @@ export type SessionDetailsItem = {
     female: number;
     total: number;
 };
+
+export interface jsPDFWithAutoTable extends jsPDF {
+    lastAutoTable: {
+        finalY: number;
+    };
+}

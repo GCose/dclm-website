@@ -217,7 +217,6 @@ const OverviewTab = ({
         <span className="text-sm">{value as string}</span>
       ),
     },
-    { key: "category", label: "Category" },
     { key: "male", label: "Male" },
     { key: "female", label: "Female" },
     {
@@ -347,16 +346,32 @@ const OverviewTab = ({
           </div>
 
           {reportData.attendanceData.sessionDetails.length > 0 && (
-            <div className="bg-white dark:bg-navy/50 rounded-lg">
-              <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white mb-4">
-                Session Attendance Details
-              </h3>
-              <Table
-                columns={sessionDetailsColumns}
-                data={reportData.attendanceData.sessionDetails}
-                emptyMessage="No session details"
-              />
-            </div>
+            <>
+              {["Adult", "Campus", "Youth", "Children"].map((category) => {
+                const categorySessions =
+                  reportData.attendanceData!.sessionDetails.filter(
+                    (session) => session.category === category
+                  );
+
+                if (categorySessions.length === 0) return null;
+
+                return (
+                  <div
+                    key={category}
+                    className="bg-white dark:bg-navy/50 rounded-lg"
+                  >
+                    <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white mb-4">
+                      {category} Church - Session Attendance
+                    </h3>
+                    <Table
+                      columns={sessionDetailsColumns}
+                      data={categorySessions}
+                      emptyMessage={`No ${category} session data`}
+                    />
+                  </div>
+                );
+              })}
+            </>
           )}
         </>
       )}
