@@ -2,6 +2,7 @@ import { Toaster } from "sonner";
 import { requireAuth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
 import StatCard from "@/components/dashboard/StatsCard";
+import { Calendar, Users, TrendingUp, Trophy } from "lucide-react";
 import useDashboardStats from "@/hooks/dashboard/use-dashboard-stats";
 import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 import RegistrationTrendsChart from "@/components/dashboard/charts/RegistrationTrendsChart";
@@ -28,18 +29,21 @@ const Dashboard = () => {
             title="Total Retreats"
             value={stats?.totalRetreats ?? 0}
             subtitle="All time"
+            icon={Calendar}
             loading={loading}
           />
           <StatCard
             title="Avg Registrations"
             value={stats?.avgRegistrationsPerRetreat ?? 0}
             subtitle="Per retreat"
+            icon={Users}
             loading={loading}
           />
           <StatCard
             title="Avg Attendance"
             value={stats?.avgAttendancePerRetreat ?? 0}
             subtitle="Per retreat"
+            icon={TrendingUp}
             loading={loading}
           />
           <StatCard
@@ -54,6 +58,7 @@ const Dashboard = () => {
                 ? `${stats.highestAttended.year} ${stats.highestAttended.type}`
                 : ""
             }
+            icon={Trophy}
             loading={loading}
           />
         </div>
