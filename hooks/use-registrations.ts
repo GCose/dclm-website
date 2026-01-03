@@ -11,7 +11,7 @@ const fetcher = async (url: string): Promise<RegistrationsResponse> => {
 export const useRegistrations = ({ retreatId, page, filters }: UseRegistrationsParams) => {
     const params = new URLSearchParams({
         page: String(page),
-        limit: "20",
+        limit: "30",
     });
 
     if (retreatId) params.append("retreatId", retreatId);

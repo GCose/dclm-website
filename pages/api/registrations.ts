@@ -11,7 +11,7 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
             const { retreatId, page, limit, search, gender, category, nationality, invitedBy, dayRegistered, location } = req.query;
 
             const pageNum = parseInt(page as string) || 1;
-            const limitNum = parseInt(limit as string) || 20;
+            const limitNum = parseInt(limit as string) || 30;
             const skip = (pageNum - 1) * limitNum;
 
             const filter: Record<string, unknown> = {};

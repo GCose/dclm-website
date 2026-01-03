@@ -20,7 +20,7 @@ const Table = <T,>({
   const getShowingText = () => {
     if (!pagination || pagination.totalPages === 0) return null;
 
-    const limit = 20;
+    const limit = 30;
     const start = (pagination.page - 1) * limit + 1;
     const end = Math.min(pagination.page * limit, pagination.total || 0);
     const total = pagination.total || 0;
