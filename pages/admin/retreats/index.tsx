@@ -82,6 +82,7 @@ const Retreats = () => {
     nationality: "",
     invitedBy: "",
     dayRegistered: "",
+    location: "",
   });
 
   const debouncedSearch = useDebounce(regFilters.search, 500);
