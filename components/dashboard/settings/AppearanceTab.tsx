@@ -34,6 +34,8 @@ const AppearanceTab = () => {
   }, [theme]);
 
   const handleThemeChange = (newTheme: Theme) => {
+    if (theme === newTheme) return;
+
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
     toast.success(`Theme changed to ${newTheme}`);

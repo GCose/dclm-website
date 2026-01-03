@@ -52,7 +52,7 @@ const LocationDistributionChart = () => {
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 rounded-lg p-6">
+      <div className="bg-white dark:bg-navy/50 hover:bg-gray-100 hover:dark:bg-white/5 hover:border-none transition-all duration-300 border border-black/10 dark:border-white/10 rounded-lg p-6">
         <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white mb-6">
           Location Distribution
         </h3>
@@ -68,7 +68,7 @@ const LocationDistributionChart = () => {
 
   if (error) {
     return (
-      <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 rounded-lg p-6">
+      <div className="bg-white dark:bg-navy/50 hover:bg-gray-100 hover:dark:bg-white/5 hover:border-none transition-all duration-300 border border-black/10 dark:border-white/10 rounded-lg p-6">
         <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white mb-6">
           Location Distribution
         </h3>
@@ -80,7 +80,7 @@ const LocationDistributionChart = () => {
   }
 
   return (
-    <div className="bg-white dark:bg-navy/50 border border-black/10 dark:border-white/10 rounded-lg p-6">
+    <div className="bg-white dark:bg-navy/50 hover:bg-gray-100 hover:dark:bg-white/5 hover:border-none transition-all duration-300 border border-black/10 dark:border-white/10 rounded-lg p-6">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase text-navy dark:text-white">
           Location Distribution

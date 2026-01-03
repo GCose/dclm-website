@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { RegistrationFormProps } from "@/types/interface/dashboard";
 
 const nationalities = [
@@ -29,8 +30,22 @@ const RegistrationForm = ({
   totalDays,
   submitText,
 }: RegistrationFormProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      await onSubmit(e);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
         <div className="md:col-span-2">
           <label className="block text-sm uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
@@ -42,6 +57,7 @@ const RegistrationForm = ({
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
+            disabled={isSubmitting}
           />
         </div>
 
@@ -59,6 +75,7 @@ const RegistrationForm = ({
               })
             }
             className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
+            disabled={isSubmitting}
           >
             <option value="Male">Male</option>
             <option value="Female">Female</option>
@@ -75,6 +92,7 @@ const RegistrationForm = ({
             value={form.age}
             onChange={(e) => setForm({ ...form, age: e.target.value })}
             className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
+            disabled={isSubmitting}
           />
         </div>
 
@@ -96,6 +114,7 @@ const RegistrationForm = ({
               })
             }
             className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
+            disabled={isSubmitting}
           >
             <option value="Adult">Adult</option>
             <option value="Campus">Campus</option>
@@ -113,6 +132,7 @@ const RegistrationForm = ({
             value={form.nationality}
             onChange={(e) => setForm({ ...form, nationality: e.target.value })}
             className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
+            disabled={isSubmitting}
           >
             <option value="">Select Nationality</option>
             {nationalities.map((nat) => (
@@ -137,6 +157,7 @@ const RegistrationForm = ({
               })
             }
             className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
+            disabled={isSubmitting}
           >
             <option value="Invited">Invited</option>
             <option value="Member">Member</option>
@@ -153,6 +174,7 @@ const RegistrationForm = ({
             value={form.location}
             onChange={(e) => setForm({ ...form, location: e.target.value })}
             className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
+            disabled={isSubmitting}
           >
             <option value="">Select Location</option>
             {locations.map((loc) => (
@@ -173,6 +195,7 @@ const RegistrationForm = ({
             value={form.phone}
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
             className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white"
+            disabled={isSubmitting}
           />
         </div>
 
@@ -187,6 +210,7 @@ const RegistrationForm = ({
               setForm({ ...form, dayRegistered: parseInt(e.target.value) })
             }
             className="w-full px-2 py-3 bg-transparent border-b border-black/20 dark:border-white/20 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white cursor-pointer"
+            disabled={isSubmitting}
           >
             {Array.from({ length: totalDays }, (_, i) => i + 1).map((day) => (
               <option key={day} value={day}>
@@ -199,9 +223,10 @@ const RegistrationForm = ({
 
       <button
         type="submit"
-        className="w-full px-6 py-3 bg-navy dark:bg-white text-white dark:text-navy text-sm uppercase tracking-wider hover:bg-burgundy dark:hover:bg-burgundy dark:hover:text-white transition-colors rounded cursor-pointer"
+        disabled={isSubmitting}
+        className="w-full px-6 py-3 bg-navy dark:bg-white text-white dark:text-navy text-sm uppercase tracking-wider hover:bg-burgundy dark:hover:bg-burgundy dark:hover:text-white transition-colors rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {submitText}
+        {isSubmitting ? "Submitting..." : submitText}
       </button>
     </form>
   );

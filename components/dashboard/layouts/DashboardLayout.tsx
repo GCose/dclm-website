@@ -5,39 +5,33 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useUser } from "@/hooks/use-user";
 import { useState, useEffect } from "react";
-import { LayoutDashboard, Church, Users, Settings, LogOut } from "lucide-react";
 import { DashboardLayoutProps } from "@/types/interface/dashboard";
+import {
+  LayoutDashboard,
+  Church,
+  Users,
+  Settings,
+  LogOut,
+  Menu,
+} from "lucide-react";
 import ConfirmationModal from "@/components/dashboard/modals/ConfirmationModal";
 
 const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
   const router = useRouter();
   const { name, email } = useUser();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("sidebarOpen");
+      return saved !== null ? JSON.parse(saved) : true;
+    }
+    return true;
+  });
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
 
   useEffect(() => {
-    const applyTheme = () => {
-      const savedTheme = localStorage.getItem("theme");
-
-      if (savedTheme === "dark") {
-        document.documentElement.classList.add("dark");
-      } else if (savedTheme === "light") {
-        document.documentElement.classList.remove("dark");
-      } else {
-        const systemPrefersDark = window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches;
-        if (systemPrefersDark) {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
-      }
-    };
-
-    applyTheme();
-  }, []);
+    localStorage.setItem("sidebarOpen", JSON.stringify(sidebarOpen));
+  }, [sidebarOpen]);
 
   const handleSignOutClick = () => {
     setUserDropdownOpen(false);
@@ -78,46 +72,62 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
 
       <div className="min-h-screen bg-white dark:bg-navy transition-colors duration-300">
         <aside
-          className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-100 dark:bg-navy/50 border-r border-black/0 dark:border-white/10 transition-transform duration-300 ${
-            sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          className={`fixed inset-y-0 left-0 z-50 bg-gray-100 dark:bg-navy/50 border-r border-black/0 dark:border-white/10 transition-all duration-300 ${
+            sidebarOpen ? "w-64" : "w-15"
           }`}
         >
           <div className="flex flex-col h-full">
-            <div className="px-4 py-2 border-b border-black/10 dark:border-white/10">
-              <Link href="/" className="flex items-center gap-3">
-                <div className="relative w-12 h-12">
-                  <Image
-                    fill
-                    src="/images/logo.png"
-                    alt="DCLM Logo"
-                    className="object-contain"
-                  />
-                </div>
-                <div>
-                  <h1 className="text-lg font-bold uppercase text-navy dark:text-white">
+            <div
+              className={`border-b border-black/10 dark:border-white/10 ${
+                sidebarOpen ? "px-4 py-2" : "px-2 py-2"
+              }`}
+            >
+              <div
+                className={`flex items-center ${
+                  sidebarOpen ? "gap-3" : "justify-center"
+                }`}
+              >
+                <button
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+                  className="p-2 text-navy dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
+                >
+                  <Menu size={24} />
+                </button>
+                {sidebarOpen && (
+                  <h1 className="text-lg font-bold uppercase text-navy dark:text-white whitespace-nowrap">
                     DCLM Admin
                   </h1>
-                </div>
-              </Link>
+                )}
+              </div>
             </div>
 
-            <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+            <nav
+              className={`flex-1 space-y-2 overflow-y-auto ${
+                sidebarOpen ? "p-4" : "p-2"
+              }`}
+            >
               {navLinks.map((link) => {
                 const Icon = link.icon;
                 return (
                   <Link
                     key={link.path}
                     href={link.path}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                    title={!sidebarOpen ? link.label : undefined}
+                    className={`flex items-center ${
+                      sidebarOpen ? "gap-3 px-4" : "justify-center px-2"
+                    } py-3 rounded-lg transition-colors ${
                       isActive(link.path)
                         ? "bg-navy dark:bg-white text-white dark:text-navy font-bold"
                         : "text-black/70 dark:text-white/70 hover:bg-black/5 dark:hover:bg-white/10"
                     }`}
                   >
                     <Icon size={20} />
-                    <span className="text-sm uppercase tracking-wider">
-                      {link.label}
-                    </span>
+                    {sidebarOpen && (
+                      <span className="text-sm uppercase tracking-wider whitespace-nowrap">
+                        {link.label}
+                      </span>
+                    )}
                   </Link>
                 );
               })}
@@ -125,40 +135,18 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
           </div>
         </aside>
 
-        {sidebarOpen && (
-          <div
-            className="fixed inset-0 bg-black/50 lg:hidden z-40"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
-
-        <div className="lg:pl-64 flex flex-col min-h-screen">
+        <div
+          className={`flex flex-col min-h-screen transition-all duration-300 ${
+            sidebarOpen ? "pl-64" : "pl-15"
+          }`}
+        >
           <header className="sticky top-0 z-30 bg-white dark:bg-navy border-b border-black/10 dark:border-white/10 transition-colors duration-300">
-            <div className="flex items-center justify-between px-6 py-4">
+            <div className="flex items-center justify-between px-6 py-3">
               <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="lg:hidden py-2 text-navy dark:text-white"
-                >
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  </svg>
-                </button>
-
                 <Link
                   href="/"
                   target="_blank"
-                  className="hidden md:block text-sm uppercase tracking-wider text-black/60 dark:text-white/60 hover:text-burgundy dark:hover:text-burgundy transition-colors"
+                  className="text-sm uppercase tracking-wider text-black/60 dark:text-white/60 hover:text-burgundy dark:hover:text-burgundy transition-colors"
                 >
                   View Website
                 </Link>
