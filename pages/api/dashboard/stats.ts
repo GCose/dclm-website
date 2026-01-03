@@ -1,3 +1,4 @@
+import Admin from "@/model/Admin";
 import Retreat from "@/model/Retreat";
 import dbConnect from "@/lib/mongodb";
 import { NextApiResponse } from "next";
@@ -12,9 +13,19 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
     try {
         await dbConnect();
 
-        const totalRetreats = await Retreat.countDocuments();
+        const admin = await Admin.findOne({ email: req.user?.email });
+        if (!admin) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
 
-        const retreats = await Retreat.find().sort({ year: -1, dateFrom: -1 }).lean();
+        const filter: Record<string, unknown> = {};
+        if (admin.role === 'regional_admin') {
+            filter.region = admin.region;
+        }
+
+        const totalRetreats = await Retreat.countDocuments(filter);
+
+        const retreats = await Retreat.find(filter).sort({ year: -1, dateFrom: -1 }).lean();
 
         let latestRetreat = null;
         if (retreats.length > 0) {
@@ -44,7 +55,8 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
         );
 
         const currentYear = new Date().getFullYear();
-        const currentYearRetreats = await Retreat.find({ year: currentYear }).lean();
+        const currentYearFilter = { ...filter, year: currentYear };
+        const currentYearRetreats = await Retreat.find(currentYearFilter).lean();
         const currentYearRetreatIds = currentYearRetreats.map(r => r._id);
         const currentYearTotal = await Registration.countDocuments({
             retreatId: { $in: currentYearRetreatIds }

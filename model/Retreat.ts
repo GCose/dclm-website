@@ -11,6 +11,10 @@ const retreatSchema = new mongoose.Schema(
             enum: ["Easter", "December"],
             required: true,
         },
+        region: {
+            type: String,
+            required: true,
+        },
         status: {
             type: String,
             enum: ["upcoming", "ongoing", "completed"],
@@ -49,7 +53,7 @@ const retreatSchema = new mongoose.Schema(
     }
 );
 
-retreatSchema.index({ year: 1, type: 1 }, { unique: true });
+retreatSchema.index({ year: 1, type: 1, region: 1 }, { unique: true });
 
 export default mongoose.models.Retreat ||
     mongoose.model("Retreat", retreatSchema);

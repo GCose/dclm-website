@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { RegistrationFormProps } from "@/types/interface/dashboard";
+import { getLocationsForRegion } from "@/constants/regions";
 
 const nationalities = [
   "Gambian",
@@ -12,16 +13,9 @@ const nationalities = [
   "Other",
 ];
 
-const locations = [
-  "Santosu",
-  "College",
-  "Kiti",
-  "Kabekel",
-  "Kasasunda",
-  "Jalambang",
-  "Karton",
-  "Medina",
-];
+interface ExtendedRegistrationFormProps extends RegistrationFormProps {
+  retreatRegion: string;
+}
 
 const RegistrationForm = ({
   form,
@@ -29,8 +23,11 @@ const RegistrationForm = ({
   onSubmit,
   totalDays,
   submitText,
-}: RegistrationFormProps) => {
+  retreatRegion,
+}: ExtendedRegistrationFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const locations = getLocationsForRegion(retreatRegion);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

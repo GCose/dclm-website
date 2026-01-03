@@ -9,6 +9,7 @@ const RegistrationModal = ({
   form,
   setForm,
   totalDays,
+  retreatRegion,
 }: RegistrationModalProps) => {
   if (!isOpen) return null;
 
@@ -33,6 +34,7 @@ const RegistrationModal = ({
           onSubmit={onSubmit}
           totalDays={totalDays}
           submitText="Add Registration"
+          retreatRegion={retreatRegion}
         />
       </div>
     </div>

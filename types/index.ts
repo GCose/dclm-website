@@ -15,6 +15,8 @@ export interface IAdmin {
     name: string;
     email: string;
     password: string;
+    role: 'super_admin' | 'regional_admin';
+    region?: string;
     createdAt?: Date;
     updatedAt?: Date;
 }

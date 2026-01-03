@@ -14,7 +14,7 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
         }
 
         if (req.method === "POST") {
-            const { name, email, password } = req.body;
+            const { name, email, password, role, region } = req.body;
 
             if (!name || !email || !password) {
                 return res.status(400).json({ error: "Name, email and password are required" });
@@ -24,6 +24,14 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
                 return res.status(400).json({ error: "Password must be at least 6 characters" });
             }
 
+            if (role && !['super_admin', 'regional_admin'].includes(role)) {
+                return res.status(400).json({ error: "Invalid role" });
+            }
+
+            if (role === 'regional_admin' && !region) {
+                return res.status(400).json({ error: "Region is required for regional admins" });
+            }
+
             const existingAdmin = await Admin.findOne({ email });
             if (existingAdmin) {
                 return res.status(400).json({ error: "Email already in use" });
@@ -31,18 +39,36 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
 
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            const admin = await Admin.create({
+            const adminData: {
+                name: string;
+                email: string;
+                password: string;
+                role?: string;
+                region?: string;
+            } = {
                 name,
                 email,
                 password: hashedPassword
-            });
+            };
+
+            if (role) {
+                adminData.role = role;
+            }
+
+            if (role === 'regional_admin' && region) {
+                adminData.region = region;
+            }
+
+            const admin = await Admin.create(adminData);
 
             return res.status(201).json({
                 message: "Admin created successfully",
                 admin: {
                     _id: admin._id,
                     name: admin.name,
-                    email: admin.email
+                    email: admin.email,
+                    role: admin.role,
+                    region: admin.region
                 }
             });
         }

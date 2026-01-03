@@ -24,7 +24,9 @@ export interface Retreat {
     dateTo: string;
     venue: string;
     theme?: string;
+    region: string;
     createdAt: string;
+    updatedAt: string;
 }
 
 export interface RetreatForm {
@@ -92,6 +94,7 @@ export interface RegistrationModalProps {
     onClose: () => void;
     onSubmit: (e: React.FormEvent) => void;
     form: RegistrationForm;
+    retreatRegion: string;
     setForm: React.Dispatch<React.SetStateAction<RegistrationForm>>;
     totalDays: number;
 }
@@ -102,6 +105,7 @@ export interface RegistrationFormProps {
     onSubmit: (e: React.FormEvent) => void;
     totalDays: number;
     submitText: string;
+    retreatRegion: string;
 }
 
 export interface RegistrationsTableProps {
@@ -325,7 +329,10 @@ export interface EditRetreatFormProps {
 
 export interface Admin {
     _id: string;
+    name: string;
     email: string;
+    role: 'super_admin' | 'regional_admin';
+    region?: string;
     createdAt: string;
     updatedAt: string;
 }

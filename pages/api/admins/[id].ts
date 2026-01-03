@@ -10,10 +10,18 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
         await dbConnect();
 
         if (req.method === "PATCH") {
-            const { email } = req.body;
+            const { email, role, region } = req.body;
 
             if (!email) {
                 return res.status(400).json({ error: "Email is required" });
+            }
+
+            if (role && !['super_admin', 'regional_admin'].includes(role)) {
+                return res.status(400).json({ error: "Invalid role" });
+            }
+
+            if (role === 'regional_admin' && !region) {
+                return res.status(400).json({ error: "Region is required for regional admins" });
             }
 
             const existingAdmin = await Admin.findOne({ email, _id: { $ne: id } });
@@ -23,7 +31,12 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
 
             const admin = await Admin.findByIdAndUpdate(
                 id,
-                { email },
+                {
+                    email,
+                    ...(role && { role }),
+                    ...(role === 'super_admin' && { region: undefined }),
+                    ...(role === 'regional_admin' && region && { region })
+                },
                 { new: true }
             ).select('-password');
 

@@ -1,3 +1,4 @@
+import Admin from "@/model/Admin";
 import Retreat from "@/model/Retreat";
 import dbConnect from "@/lib/mongodb";
 import { NextApiResponse } from "next";
@@ -21,10 +22,19 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
     try {
         await dbConnect();
 
+        const admin = await Admin.findOne({ email: req.user?.email });
+        if (!admin) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+
         if (req.method === "GET") {
             const { page, limit, year, type } = req.query;
 
             const filter: Record<string, unknown> = {};
+
+            if (admin.role === 'regional_admin') {
+                filter.region = admin.region;
+            }
 
             if (year) filter.year = parseInt(year as string);
             if (type) filter.type = type;
@@ -74,8 +84,19 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
             const { dateFrom, dateTo } = req.body;
             const status = computeRetreatStatus(new Date(dateFrom), new Date(dateTo));
 
+            let region = req.body.region;
+
+            if (admin.role === 'regional_admin') {
+                region = admin.region;
+            }
+
+            if (!region) {
+                return res.status(400).json({ error: "Region is required" });
+            }
+
             const retreat = await Retreat.create({
                 ...req.body,
+                region,
                 status,
                 createdBy: req.user?.email,
             });

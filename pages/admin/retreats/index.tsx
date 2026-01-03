@@ -513,6 +513,7 @@ const Retreats = () => {
           }
           form={regForm}
           setForm={setRegForm}
+          retreatRegion={selectedRetreat?.region || "Brikama"}
           totalDays={selectedRetreat?.totalDays || 1}
         />
 
@@ -523,6 +524,7 @@ const Retreats = () => {
             setEditingRegistration(null);
             resetRegForm();
           }}
+          retreatRegion={selectedRetreat?.region || "Brikama"}
           onSubmit={(e) =>
             handleUpdateRegistration(
               e,

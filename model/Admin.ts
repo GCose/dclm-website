@@ -15,6 +15,14 @@ const AdminSchema = new Schema<IAdmin>({
         type: String,
         required: true
     },
+    role: {
+        type: String,
+        enum: ['super_admin', 'regional_admin'],
+        default: 'regional_admin'
+    },
+    region: {
+        type: String
+    }
 }, {
     timestamps: true
 });
