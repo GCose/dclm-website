@@ -22,14 +22,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             if (!user) {
                 return res.status(401).json({
-                    error: "Invalid credentials"
+                    error: "Invalid email."
                 })
             }
 
             const isPasswordValid = await compare(password, user.password);
             if (!isPasswordValid) {
                 return res.status(401).json({
-                    error: "Invalid credentials"
+                    error: "Invalid password"
                 })
             }
 

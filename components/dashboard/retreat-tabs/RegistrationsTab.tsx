@@ -77,12 +77,24 @@ const RegistrationsTab = ({
     "Other",
   ];
 
+  const locations = [
+    "Santosu",
+    "College",
+    "Kiti",
+    "Kabekel",
+    "Kasasunda",
+    "Jalambang",
+    "Karton",
+    "Medina",
+  ];
+
   const hasActiveFilters =
     filters.gender ||
     filters.category ||
     filters.nationality ||
     filters.invitedBy ||
-    filters.dayRegistered;
+    filters.dayRegistered ||
+    filters.location;
 
   const clearFilters = () => {
     onFiltersChange({
@@ -92,6 +104,7 @@ const RegistrationsTab = ({
       nationality: "",
       invitedBy: "",
       dayRegistered: "",
+      location: "",
     });
   };
 
@@ -144,7 +157,7 @@ const RegistrationsTab = ({
       </div>
 
       <div className="mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
           <div>
             <label className="block text-[clamp(0.8rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
               Gender
@@ -196,6 +209,26 @@ const RegistrationsTab = ({
               {nationalities.map((nat) => (
                 <option key={nat} value={nat}>
                   {nat}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[clamp(0.8rem,2vw,0.9rem)] uppercase tracking-wider text-navy dark:text-white/80 font-bold mb-2">
+              Location
+            </label>
+            <select
+              value={filters.location}
+              onChange={(e) =>
+                onFiltersChange({ ...filters, location: e.target.value })
+              }
+              className="w-full px-3 py-2 bg-white dark:bg-navy border border-black/10 dark:border-white/10 text-navy dark:text-white focus:outline-none focus:border-navy dark:focus:border-white rounded cursor-pointer"
+            >
+              <option value="">All</option>
+              {locations.map((loc) => (
+                <option key={loc} value={loc}>
+                  {loc}
                 </option>
               ))}
             </select>

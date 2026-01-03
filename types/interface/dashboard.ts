@@ -84,6 +84,7 @@ export interface RegistrationFilters {
     nationality: string;
     invitedBy: string;
     dayRegistered: string;
+    location: string;
 }
 
 export interface RegistrationModalProps {
@@ -371,8 +372,7 @@ export interface RegistrationTrend {
     December: number;
 }
 
-export
-    interface NationalityDistribution {
+export interface NationalityDistribution {
     nationality: string;
     count: number;
 }
@@ -439,4 +439,14 @@ export interface RetreatsResponse {
         limit: number;
         totalPages: number;
     };
+}
+
+export interface LocationDistribution {
+    location: string;
+    count: number;
+}
+
+export interface UseLocationDistributionProps {
+    year?: string;
+    type?: string;
 }

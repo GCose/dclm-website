@@ -21,6 +21,7 @@ export const useRegistrations = ({ retreatId, page, filters }: UseRegistrationsP
     if (filters.nationality) params.append("nationality", filters.nationality);
     if (filters.invitedBy) params.append("invitedBy", filters.invitedBy);
     if (filters.dayRegistered) params.append("dayRegistered", filters.dayRegistered);
+    if (filters.location) params.append("location", filters.location);
 
     const key = retreatId ? `/api/registrations?${params.toString()}` : null;
 

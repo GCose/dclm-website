@@ -7,6 +7,7 @@ import useDashboardStats from "@/hooks/dashboard/use-dashboard-stats";
 import DashboardLayout from "@/components/dashboard/layouts/DashboardLayout";
 import RegistrationTrendsChart from "@/components/dashboard/charts/RegistrationTrendsChart";
 import NationalityDistributionChart from "@/components/dashboard/charts/NationalityDistributionChart";
+import LocationDistributionChart from "@/components/dashboard/charts/LocationDistributionChart";
 
 const Dashboard = () => {
   const { stats, loading } = useDashboardStats();
@@ -57,6 +58,10 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <RegistrationTrendsChart />
           <NationalityDistributionChart />
+        </div>
+
+        <div className="grid grid-cols-1">
+          <LocationDistributionChart />
         </div>
       </div>
     </DashboardLayout>

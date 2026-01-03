@@ -8,7 +8,7 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
         await dbConnect();
 
         if (req.method === "GET") {
-            const { retreatId, page, limit, search, gender, category, nationality, invitedBy, dayRegistered } = req.query;
+            const { retreatId, page, limit, search, gender, category, nationality, invitedBy, dayRegistered, location } = req.query;
 
             const pageNum = parseInt(page as string) || 1;
             const limitNum = parseInt(limit as string) || 20;
@@ -23,6 +23,7 @@ async function handler(req: AuthRequest, res: NextApiResponse) {
             if (nationality) filter.nationality = nationality;
             if (invitedBy) filter.invitedBy = invitedBy;
             if (dayRegistered) filter.dayRegistered = parseInt(dayRegistered as string);
+            if (location) filter.location = location;
 
             const [registrations, total] = await Promise.all([
                 Registration.find(filter)
