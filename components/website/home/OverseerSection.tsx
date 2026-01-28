@@ -48,7 +48,7 @@ const OverseerSection = () => {
           <div ref={imageRef} className="relative w-full aspect-3/4">
             <Image
               fill
-              src="/images/home/RO.jpg"
+              src="/images/home/ro2.png"
               alt="Regional Overseer"
               className="object-cover"
             />
