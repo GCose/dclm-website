@@ -80,7 +80,7 @@ const CreateEvent = () => {
     setFetchingEvents(true);
     try {
       const { data } = await axios.get<EventsResponse>(
-        `/api/events?page=${page}&limit=15`
+        `/api/events?page=${page}&limit=15`,
       );
       setEvents(data.events);
       setPagination(data.pagination);
@@ -122,7 +122,7 @@ const CreateEvent = () => {
       await axios.post("/api/logout");
       setAuthenticated(false);
       toast.success("Logged out successfully", { id: logoutToast });
-      router.push("/create-EVENT");
+      router.push("/create-event");
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Failed to logout", { id: logoutToast });
@@ -167,7 +167,7 @@ const CreateEvent = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       if (data.status === "success") {
@@ -421,7 +421,7 @@ const CreateEvent = () => {
                   <div className="flex gap-2">
                     {Array.from(
                       { length: pagination.totalPages },
-                      (_, i) => i + 1
+                      (_, i) => i + 1,
                     ).map((page) => (
                       <button
                         key={page}
